@@ -46,10 +46,10 @@
             <el-tabs v-model="activeName">
                 <el-tab-pane label="全部评价(33)" name="first">
                     <el-row>
-                        <el-col class="headPortrait" :span="9">
+                        <el-col class="headPortrait" :span="2">
                             <img src="../assets/images/portrait.jpg" alt="">
                         </el-col>
-                        <el-col>
+                        <el-col :span="19">
                             <el-col>
                                 <ul class="custormReply">
                                     <li>
@@ -62,11 +62,24 @@
                                         </el-rate>
                                     </li>
                                     <li>味道好</li>
-                                    <li class="">鸡腿一个，鸡蛋一个，面包一个</li>
-                                    <li></li>
+                                    <li class="lastAppraise">鸡腿一个，鸡蛋一个，面包一个</li>
+                                    <li class="AppraiseBox"><span class="AppraiseTitle">您的回复：</span><span>感谢您的支持。。。。</span></li>
+                                    <ul clas="">
+                                        <li>
+                                            
+                                        </li>
+                                        <li>
+                                            
+                                        </li>
+                                    </ul>
                                 </ul>
                             </el-col>
                             <el-col></el-col>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-row>2017-09-09</el-row>
+                            <el-row> <el-button type="" size="small">回复</el-button></el-row>
+                        </el-col>
                         </el-col>
                     </el-row>
                 </el-tab-pane>
@@ -133,5 +146,16 @@ export default {
     }
     .custormReply{
         list-style: none;
+        margin:0;
+        padding-left:10px
+    }
+    .lastAppraise{
+        color: green
+    }
+    .AppraiseTitle{
+        color: red
+    }
+    .AppraiseBox{
+        margin-top: 5px
     }
 </style>

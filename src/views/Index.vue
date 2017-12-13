@@ -77,7 +77,7 @@
                         <li class="receiveOrder"><el-button  type="success" size="small">一键接单</el-button></li>
                     </ul>
                 </li>
-                <li @click="changeClass(0)" :class=" type==1 ? 'active' : ''">
+                <li @click="changeClass(index)" :class=" activeIndex==index ? 'active' : ''" v-for="index in 3">
                     <el-row>
                         <el-col :span="10">
                             <el-col class="headPortrait" :span="9">
@@ -100,29 +100,7 @@
                         </el-col>
                     </el-row>
                 </li>
-                <li @click="changeClass(0)" :class=" type==1 ? 'active' : ''">
-                    <el-row>
-                        <el-col :span="10">
-                            <el-col class="headPortrait" :span="9">
-                                <img src="../assets/images/portrait.jpg" alt="">
-                            </el-col>
-                            <el-col :span="9" class="headerTitle">
-                                <el-row>张晓天</el-row>
-                                <el-row class="address">四川成店铺下你下发</el-row>
-                            </el-col>
-
-                        </el-col>
-                        <el-col :span="10">
-                            <el-col >
-                                <el-row>备注：多放辣椒</el-row>
-                                <el-row class="address">发票：四川成店铺下你下发</el-row>
-                            </el-col>
-                        </el-col>
-                        <el-col :span="4"class="phone">
-                            <i class="fa fa-phone">191919191911</i>
-                        </el-col>
-                    </el-row>
-                </li>
+               
             </ul>
         </el-row>
     </el-row>
@@ -131,12 +109,12 @@
     export default {
         data: function () {
             return {
-                type: 1
+                activeIndex: 1
             }
         },
         methods: {
             changeClass(index) {
-                this.type = index
+                this.activeIndex = index
             }
         }
     }
@@ -304,7 +282,7 @@
         color: #13ce66;
     }
     .active{
-        background-color: rgba(248, 248, 248, 0.4);
+        background-color: lightgrey;
         border-left: 2px solid #13ce66;
     }
     .headerTitle{
