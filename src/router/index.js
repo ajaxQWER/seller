@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-const NotFound = r => require.ensure([],() => r(require('../views/404.vue')), 'NotFound');
-const Login = r => require.ensure([],() => r(require('../views/Login.vue')), 'Login');
-const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home');
-const Index = r => require.ensure([],() => r(require('../views/Index.vue')), 'Index');
-const Goods = r => require.ensure([],() => r(require('../views/Goods.vue')), 'Goods');
-const Order = r => require.ensure([],() => r(require('../views/Order.vue')), 'Order');
 
-=======
 const NotFound = r => require.ensure([],() => r(require('../views/404.vue')), 'NotFound'); //404
 const Login = r => require.ensure([],() => r(require('../views/Login.vue')), 'Login'); //登录
 const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home'); //Home
@@ -21,7 +13,6 @@ const GoodsCategory = r => require.ensure([],() => r(require('../views/GoodsCate
 const Setting = r => require.ensure([],() => r(require('../views/Setting.vue')), 'Setting'); //设置
 const Notice = r => require.ensure([],() => r(require('../views/Notice.vue')), 'Notice'); //通知中心
 const Bonus = r => require.ensure([],() => r(require('../views/Bonus.vue')), 'Bonus'); //红包设置
->>>>>>> 9ec80084cd6f3a4364ef3dbbccf0ea25719ea96a
 let routes = [{
     path: '/login',
     component: Login,
@@ -64,12 +55,7 @@ let routes = [{
     children: [
         { path: '/order', component: Order, name: '订单' },
     ]
-<<<<<<< HEAD
-},
 
-
-{
-=======
 }, {
     path: '/',
     component: Home,
@@ -143,7 +129,6 @@ let routes = [{
         { path: '/bonus', component: Bonus, name: '红包设置' },
     ]
 },{
->>>>>>> 9ec80084cd6f3a4364ef3dbbccf0ea25719ea96a
     path: '*',
     hidden: true,
     redirect: { path: '/404' }

@@ -304,7 +304,7 @@
         color: #13ce66;
     }
     .active{
-        background-color: #ffffff;
+        background-color: rgba(248, 248, 248, 0.4);
         border-left: 2px solid #13ce66;
     }
     .headerTitle{
