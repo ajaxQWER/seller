@@ -16,6 +16,7 @@ export default {
 <style lang="scss">
 html{
 	height: 100%;
+	background-color: #f5f5f5;
 }
 body {
 	height: 100%;

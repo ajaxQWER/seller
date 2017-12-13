@@ -1,6 +1,6 @@
 <template>
     <el-row class="container">
-        <el-col :span="24" class="header">
+        <el-row class="header">
             <el-col class="logo">
                 <el-col :span="10" :class="collapsed?'logo-collapse-width':'logo-width'">
                     <router-link to="/index" class="router-link">
@@ -18,8 +18,8 @@
                     </el-dropdown>
                 </el-col>
             </el-col>
-        </el-col>
-        <el-col :span="15" class="main">
+        </el-row>
+        <el-row class="main">
             <!--导航菜单-->
             <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
                 <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened router v-if="!collapsed">
@@ -42,7 +42,12 @@
                     </el-col>
                 </div>
             </section>
-        </el-col>
+        </el-row>
+        <el-row class="footer-bar">
+            <p>鑫圆共享电子商务股份有限公司©2017 &nbsp; 蜀ICP备17032496号-4 <br><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001128" class="beian-link">
+                <img src="../assets/images/beian-gov.png"/>川公网安备 51019002001128号</a>
+            </p>
+        </el-row>
         <!-- 修改密码 -->
         <el-dialog title="修改密码" :visible.sync="dialog" size="tiny" @close="closeDialog" class="dialog">
             <el-form :model="password" label-width="100px" ref="newVideo">
@@ -197,18 +202,18 @@ export default {
     .main {
         width: 1200px;
         display: flex;
-        position: absolute;
-        left: 50%;
-        margin-left: -600px;
-        top: 60px;
-        bottom: 0px;
+        //position: absolute;
+        //left: 50%;
+        margin: 0 auto;
+        //top: 60px;
+        //bottom: 0px;
         overflow: hidden;
         aside {
             flex: 0 0 230px;
             width: 230px;
             .el-menu {
                 border-radius: 0;
-                height: 815px;
+                height: 800px;
                 background-color: #fffffe;
             }
             .collapsed {
@@ -264,6 +269,26 @@ export default {
             color: #fff;
         }
     }
+    .footer-bar{
+        width: 100%;
+        margin-top: 40px;
+        text-align: center;
+        background-color: #fff;
+        p{
+            color: #333;
+            line-height: 1.5;
+            .beian-link{
+                text-decoration: none;
+                color: #333;
+                img{
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}
+.el-menu-item{
+    border-left: 3px solid transparent;
 }
 .el-menu-item.is-active{
     color: #1eaa4d;
