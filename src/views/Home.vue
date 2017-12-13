@@ -265,6 +265,9 @@ export default {
         }
     }
 }
+.el-menu-item{
+    border-left: 3px solid transparent;
+}
 .el-menu-item.is-active{
     color: #1eaa4d;
     background-color: #d8f3e0;
