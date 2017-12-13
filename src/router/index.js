@@ -4,6 +4,7 @@ const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home
 const Index = r => require.ensure([],() => r(require('../views/Index.vue')), 'Index');
 const Goods = r => require.ensure([],() => r(require('../views/Goods.vue')), 'Goods');
 const Order = r => require.ensure([],() => r(require('../views/Order.vue')), 'Order');
+
 let routes = [{
     path: '/login',
     component: Login,
@@ -48,22 +49,8 @@ let routes = [{
         { path: '/order', component: Order, name: '订单' },
     ]
 },
- // {
-//     path: '/',
-//     component: Home,
-//     name: '店铺管理',
-//     iconCls: 'fa fa-shopping-bag', //图标样式class
-//     children: [ {
-//         path: '/shopAuditLogs',
-//         component: ShopAuditLogs,
-//         name: '审核日志'
-//     }, {
-//         path: '/shopAuditDetail',
-//         component: ShopAuditDetail,
-//         name: '店铺审核详情',
-//         hidden: true
-//     }]
-// },
+
+
 {
     path: '*',
     hidden: true,
