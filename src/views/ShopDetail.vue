@@ -118,7 +118,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 	.input_width{
 		width: 360px;
 	}

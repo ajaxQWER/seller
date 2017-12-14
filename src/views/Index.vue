@@ -87,7 +87,6 @@
                                 <el-row>张晓天</el-row>
                                 <el-row class="address">四川成店铺下你下发</el-row>
                             </el-col>
-
                         </el-col>
                         <el-col :span="10">
                             <el-col >
@@ -100,7 +99,7 @@
                         </el-col>
                     </el-row>
                 </li>
-               
+
             </ul>
         </el-row>
     </el-row>
@@ -282,7 +281,7 @@
         color: #13ce66;
     }
     .active{
-        background-color: lightgrey;
+        background-color: #fbfbfb;
         border-left: 2px solid #13ce66;
     }
     .headerTitle{
