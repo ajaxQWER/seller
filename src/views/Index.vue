@@ -100,7 +100,7 @@
                         </el-col>
                     </el-row>
                 </li>
-               
+
             </ul>
         </el-row>
     </el-row>
@@ -282,7 +282,7 @@
         color: #13ce66;
     }
     .active{
-        background-color: lightgrey;
+        background-color: #fbfbfb;
         border-left: 2px solid #13ce66;
     }
     .headerTitle{
