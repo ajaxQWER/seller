@@ -338,4 +338,5 @@ export default {
     .cancelReplay{
         color: #5e7382;
     }
+
 </style>

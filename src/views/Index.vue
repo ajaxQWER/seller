@@ -87,7 +87,6 @@
                                 <el-row>张晓天</el-row>
                                 <el-row class="address">四川成店铺下你下发</el-row>
                             </el-col>
-
                         </el-col>
                         <el-col :span="10">
                             <el-col >
