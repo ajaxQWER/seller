@@ -87,7 +87,23 @@
                         </el-col>
                     </el-row>
                     <el-row class="bgColorW bgH">
-                        <el-row class="">
+                        <el-row class="printerSetting">
+                            <el-col :span="22">
+                                <el-row>
+                                    <el-col :span="2">设备名称</el-col>
+                                    <el-col :span="8">易联云k4(777777)</el-col>
+                                    <el-col :span="4">易联云k4</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="2">设备状态</el-col>
+                                    <el-col :span="8">58mm/2份/在线</el-col>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="2">
+                                <el-button size="small">删除设备</el-button>
+                            </el-col>
+                        </el-row>
+                        <el-row class="printerSetting">
                             <el-col :span="22">
                                 <el-row>
                                     <el-col :span="2">设备名称</el-col>
@@ -104,23 +120,6 @@
                             </el-col>
                         </el-row>
                     </el-row>
-                    <el-row>
-                        <el-col :span="22">
-                            <el-row>
-                                <el-col :span="2">设备名称</el-col>
-                                <el-col :span="8">易联云k4(777777)</el-col>
-                                <el-col :span="4">易联云k4</el-col>
-                            </el-row>
-                            <el-row>
-                                <el-col :span="2">设备状态</el-col>
-                                <el-col :span="8">58mm/2份/在线</el-col>
-                            </el-row>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button size="small">删除设备</el-button>
-                        </el-col>
-                    </el-row>
-                </el-row>
                 </el-row>
             </el-form>
         </el-row>
@@ -156,8 +155,7 @@ export default {
     .bgH{
         padding:10px 0px 10px 20px;
     }
-    .printerSetting>li{
-        list-style: none;
+    .printerSetting{
         border-bottom: 1px solid lightgrey;
     }
 </style>
