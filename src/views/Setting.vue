@@ -81,7 +81,7 @@
                             <span>打印机设置</span>
                         </el-col>
                         <el-col :span="2">
-                            <el-button type="success" size="mini">
+                            <el-button type="success" size="mini" @click="addPrinterBtn">
                                 添加打印机
                             </el-button>
                         </el-col>
@@ -123,6 +123,30 @@
                 </el-row>
             </el-form>
         </el-row>
+        <!--添加打印机-->
+        <el-dialog :title="'添加打印机'" :visible.sync="addPrinterDialog" size="tiny" class="dialog">
+            <el-form :model="addPrinterForm" label-width="120px">
+                <el-form-item label="设备类型">
+                    <el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">
+                        <el-option label="一" value="shanghai"></el-option>
+                        <el-option label="二" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="设备编号">
+                    <el-input type="text" v-model="addPrinterForm.printerType" auto-complete="off" placeholder="单行输入"></el-input>
+                </el-form-item>
+                <el-form-item label="设备密码">
+                    <el-input type="text" v-model="addPrinterForm.printerTypel" auto-complete="off" placeholder="请输入6-12位"></el-input>
+                </el-form-item>
+                <el-form-item label="打印数量">
+                    <el-input type="text" v-model="addPrinterForm.printerType" auto-complete="off" placeholder=""></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelAddPrinter" size="small">取 消</el-button>
+                <el-button type="primary" @click="saveAddPrinter" :loading="addLoading" size="small">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-row>
 </template>
 <script>
@@ -133,9 +157,30 @@ export default {
                 oldSecretkey:'',
                 newSecretkey:'',
                 paymentMethods:''
-            }
+            },
+            addPrinterForm:{
+                printerType:''
+            },
+            addLoading:false,
+            addPrinterDialog:false,
         }
     },
+    methods:{
+        //取消保存打印机
+        cancelAddPrinter(){
+            this.addPrinterDialog = false
+        },
+        //保存打印机
+        saveAddPrinter(){
+            this.addPrinterDialog = false
+            // this.addLoading=true
+        },
+        // 点击添加打印机按钮
+        addPrinterBtn(){
+            this.addPrinterDialog = true
+        }
+
+    }
 }
 </script>
 <style scoped>
@@ -157,5 +202,9 @@ export default {
     }
     .printerSetting{
         border-bottom: 1px solid lightgrey;
+    }
+    .dialog-footer{
+        background-color: rgba(238, 238, 238, 0.4);
+       line-height: 40px;
     }
 </style>
