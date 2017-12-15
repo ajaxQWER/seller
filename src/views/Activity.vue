@@ -4,7 +4,7 @@
 			<p class="activitySize">活动设置</p>
 			<p class="activityColor">活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置</p>
 		</el-row>
-		<el-button class="addButton" size="small" type="success">添加活动</el-button>
+		<el-button class="addButton" size="small" type="success" @click="addActivity">添加活动</el-button>
 		<el-row class="content">
 			<div v-for="(item,index) in total">
 				<el-row class="activityContent" v-if="item.state">
@@ -54,6 +54,23 @@
 			</el-row>
 			</div>
 		</el-row>
+		<el-dialog :title="'添加活动'" :visible.sync="addDialog" size="tiny" @close="closeAddDialog" class="dialog">
+			<el-button>默认按钮</el-button>
+			<el-button>默认按钮</el-button>
+			<el-button>默认按钮</el-button>
+			<el-button>默认按钮</el-button>
+			<el-button>默认按钮</el-button>
+			<el-button>默认按钮</el-button>
+            <el-form label-width="120px">
+                <el-form-item label="活动名称">
+                    <el-input></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeAddDialog">取 消</el-button>
+                <el-button type="primary" @click="closeAddDialog" >确 定</el-button>
+            </div>
+        </el-dialog>
 		<el-row>
             <el-col class="pagination">
                 <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout=" prev, pager, next, jumper" :total="counts">
@@ -73,6 +90,7 @@ export default {
         		pageId:1,
         		pageSize: 10,
         	},
+        	addDialog:false,
         	counts:50,
             total:[{state:true},{state:true},{state:true},{state:true}]
         }
@@ -90,6 +108,12 @@ export default {
     	currentChange: function(val) {
             this.params.pageId = val;
         },
+        closeAddDialog(){
+        	this.addDialog = false
+        },
+        addActivity(){
+        	this.addDialog = true
+        }
     }
 }
 </script>
