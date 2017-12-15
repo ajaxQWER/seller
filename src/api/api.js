@@ -63,3 +63,11 @@ export const getRealtimestatistics = params => {
 export const getOrderList = params => {
     return ajax.get('seller/order/', params);
 };
+//获取订单详情
+export const getOrderById = orderId => {
+    return ajax.get('seller/order/' + orderId);
+};
+//取消订单
+export const cancelOrderById = params => {
+    return ajax.put('seller/order/orderCancel', params);
+};

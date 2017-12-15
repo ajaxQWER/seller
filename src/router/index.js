@@ -5,6 +5,7 @@ const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home
 const Index = r => require.ensure([],() => r(require('../views/Index.vue')), 'Index'); //首页
 const Goods = r => require.ensure([],() => r(require('../views/Goods.vue')), 'Goods'); //商品
 const Order = r => require.ensure([],() => r(require('../views/Order.vue')), 'Order'); //订单
+const OrderDetail = r => require.ensure([],() => r(require('../views/OrderDetail.vue')), 'OrderDetail'); //订单详情
 const Appraisement = r => require.ensure([],() => r(require('../views/Appraisement.vue')), 'Appraisement'); //评价
 const BusinessAnalysis = r => require.ensure([],() => r(require('../views/BusinessAnalysis.vue')), 'BusinessAnalysis'); //营业分析
 const ShopDetail = r => require.ensure([],() => r(require('../views/ShopDetail.vue')), 'ShopDetail'); //门店信息
@@ -54,6 +55,7 @@ let routes = [{
     iconCls: 'fa fa-shopping-cart',
     children: [
         { path: '/order', component: Order, name: '订单' },
+        { path: '/OrderDetail', component: OrderDetail, name: '订单详情' },
     ]
 
 }, {
