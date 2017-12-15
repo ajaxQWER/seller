@@ -4,145 +4,57 @@
             <span>综合评分</span>
             <el-row>
                 <el-col :span="4" :offset="2">
-                    <el-row class="grade">4.8</el-row>
-                    <el-row class="gradeIntro">高于商圈20%的商家</el-row>
+                    <el-row class="grades">{{appraiseTotal.comprehensiveApprise}}</el-row>
+                    <el-row class="gradeIntro">高于商圈{{appraiseTotal.businessCircleRatio*100}}%的商家</el-row>
                 </el-col>
                 <el-col :span="12">
-                    <ul class="Reply">
+                    <el-row class="Reply">
                         <el-row>
-                            <el-col :span="6">
-                                <span class="replyText">评价回复(40%)</span>
+                            <el-col :span="7">
+                                <span class="replyText">近7天评价回复率：{{appraiseTotal.reversionRate*100}}%</span>
                             </el-col>
-                            <el-col :span="16">
-                                <el-progress :text-inside="true" :stroke-width="12" :percentage="70" class="Replyschedule"></el-progress>
+                            <el-col :span="14">
+                                <el-progress :text-inside="true" :stroke-width="12" :percentage="parseFloat(appraiseTotal.reversionRate*100) " class="Replyschedule"></el-progress>
                             </el-col>
                         </el-row>
-                        <li>
                             <el-row>
-                                <el-col :span="6">
-                                    <span class="replyText">评价回复(40%)</span>
+                                <el-col :span="7">
+                                    <span class="replyText">近7天差评回复率：{{appraiseTotal.reviewRate*100}}%</span>
                                 </el-col>
-                                <el-col :span="16">
-                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="70" class="Replyschedule"></el-progress>
+                                <el-col :span="14">
+                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="appraiseTotal.reviewRate*100" status="exception"></el-progress>
                                 </el-col>
                             </el-row>
-                        </li>
-                        <li>
-                            <el-row>
-                                <el-col :span="6">
-                                    <span class="replyText">差频率(40%)</span>
-                                </el-col>
-                                <el-col :span="16">
-                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="50" status="exception"></el-progress>
-                                </el-col>
-                            </el-row>
-                        </li>
-                    </ul>
+                    </el-row>
                 </el-col>
-                <el-col :span="6"></el-col>
             </el-row>
         </el-row>
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName">
-                <el-tab-pane label="全部评价(33)" name="first">
+                <el-tab-pane label="全部评价(33)" name="0">
                     <el-row>
                         <ul class="clientRepalyContainer">
-                            <li>
+                            <li v-for="(item,index) in commentList" :key="index">
                                 <el-row>
                                     <el-col class="headPortrait" :span="2">
-                                        <img src="../assets/images/portrait.jpg" alt="">
+                                        <img :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
                                     </el-col>
                                     <el-col :span="19">
                                         <el-col>
                                             <ul class="custormReply">
                                                 <li>
-                                                    <el-rate
-                                                        v-model="value5"
-                                                        disabled
-                                                        show-text
-                                                        text-color="#ff9900"
-                                                        text-template="{value}">
-                                                    </el-rate>
+                                                    <el-row>
+                                                        <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
+                                                    </el-row>
                                                 </li>
-                                                <li>味道好</li>
-                                                <li class="lastAppraise">鸡腿一个，鸡蛋一个，面包一个</li>
+                                                <li>{{item.contentShopAppraise}}</li>
+                                                <li class="lastAppraise">{{item.orderName}}</li>
                                                 <li class="AppraiseBox"><span class="AppraiseTitle">您的回复：</span><span>感谢您的支持。。。。</span></li>
                                             </ul>
                                         </el-col>
                                     </el-col>
                                     <el-col :span="3" class="replyInfo">
-                                        <el-row>2017-09-09</el-row>
-                                        <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply">回复</el-button></el-row>
-                                    </el-col>
-                                </el-row>
-                                <el-row class="clientRepalyContent">
-                                    <ul class="clientRepaly">
-                                        <li>
-                                            <el-col :span="19">
-                                                <el-row> 羊肉套饭</el-row>
-                                                <el-row class="evaluate">美味。。。。。。</el-row>
-                                            </el-col>
-                                            <el-col :span="5" class="grade">
-                                                <el-rate
-                                                    v-model="value5"
-                                                    disabled
-                                                    show-text
-                                                    text-color="#ff9900"
-                                                    text-template="{value}">
-                                                </el-rate></el-col>
-                                        </li>
-                                        <li>
-                                            <el-col :span="19">
-                                                <el-row> 羊肉套饭</el-row>
-                                                <el-row class="evaluate">美味。。。。。。</el-row>
-                                            </el-col>
-                                            <el-col :span="5" class="grade">
-                                                <el-rate
-                                                    v-model="value5"
-                                                    disabled
-                                                    show-text
-                                                    text-color="#ff9900"
-                                                    text-template="{value}">
-                                                </el-rate></el-col>
-                                        </li>
-                                    </ul>
-                                </el-row>
-                                <el-row v-show="replay">
-                                    <el-row class="replyBox" >
-                                        <el-input  type="textarea"  placeholder="请输入内容"></el-input>
-                                    </el-row>
-                                    <el-row class="replayBtn">
-                                        <el-col :span="1" :offset="19" class="cancelReplay" @click.native="cancelReplay">取消</el-col>
-                                        <el-col :span="3"><el-button type="primary" size="mini">发表回复</el-button></el-col>
-                                    </el-row>
-                                </el-row>
-
-                            </li>
-                            <li>
-                                <el-row>
-                                    <el-col class="headPortrait" :span="2">
-                                        <img src="../assets/images/portrait.jpg" alt="">
-                                    </el-col>
-                                    <el-col :span="19">
-                                        <el-col>
-                                            <ul class="custormReply">
-                                                <li>
-                                                    <el-rate
-                                                        v-model="value5"
-                                                        disabled
-                                                        show-text
-                                                        text-color="#ff9900"
-                                                        text-template="{value}">
-                                                    </el-rate>
-                                                </li>
-                                                <li>味道好</li>
-                                                <li class="lastAppraise">鸡腿一个，鸡蛋一个，面包一个</li>
-                                                <li class="AppraiseBox"><span class="AppraiseTitle">您的回复：</span><span>感谢您的支持。。。。</span></li>
-                                            </ul>
-                                        </el-col>
-                                    </el-col>
-                                    <el-col :span="3" class="replyInfo">
-                                        <el-row>2017-09-09</el-row>
+                                        <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
                                         <el-row class="replyBtn"><el-button type="success" size="small">回复</el-button></el-row>
                                     </el-col>
                                 </el-row>
@@ -198,12 +110,57 @@
     </el-row>
 </template>
 <script>
+    import {getShopAppraiseHead,getShopAppraise,getShopAppraiseById,commentReply} from '@/api/api'
 export default {
     data: function() {
         return {
-            activeName: 'first',
+            activeName: '0',
             value5: 3.7,
-            replay:false
+            replay:false,
+            appraiseTotal:"",
+        	commentsAppraise: false,
+                pageId: 1,
+            pageSize: 5,
+            counts: 0,
+            shopAppraise: '',
+            reply: '',
+            commentList: [],
+            init: true,
+            allLoaded: false,
+            canLoad: false,
+            isEmpty: false,
+            replyIndex: 1,
+            starIndex: 1,
+            filterObj: [{
+                name: '全部',
+                shopAppraise: '',
+                index: 1
+            },{
+                name: '一星',
+                shopAppraise: '1',
+                index: 2
+            },{
+                name: '二星',
+                shopAppraise: '2',
+                index: 3
+            },{
+                name: '三星',
+                shopAppraise: '3',
+                index: 4
+            },{
+                name: '四星',
+                shopAppraise: '4',
+                index: 5
+            },{
+                name: '五星',
+                shopAppraise: '5',
+                index: 6
+            }],
+            popupVisible3: false,
+            shopAppraiseId: 0,
+            commentContent: '',
+            imgPopup: false,
+            bigImgUrl: ''
         }
     },
     methods:{
@@ -218,7 +175,55 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
-        }
+        },
+        //获取评价的头部信息
+        getHeadInfo(){
+            getShopAppraiseHead().then(res => {
+                console.log(res)
+                if(res.comprehensiveApprise){
+                    this.appraiseTotal = res;
+                }else{
+                    this.appraiseTotal = {
+                        businessCircleRatio: 0,
+                        comprehensiveApprise: 0,
+                        reversionRate: 0,
+                        reviewRate: 0
+                    }
+                }
+            })
+        },
+        //获取评价信息
+        showShopAppraise(){
+            getShopAppraise({params:{shopAppraise:this.shopAppraise, reply: this.reply,commentsAppraise: this.commentsAppraise, pageSize: this.pageSize, pageId: this.pageId}}).then(res => {
+                console.log(res)
+                console.log(444)
+                this.counts = res.count;
+                if(this.init){
+                    this.commentList = res.list
+                }else{
+                    this.commentList = [].concat.apply(this.commentList, res.list)
+                }
+                console.log(this.commentList)
+                if(res.count == 0){
+                    this.isEmpty = true;
+                    this.allLoaded = true;
+                }else{
+                    this.isEmpty = false;
+                    this.canLoad = true;
+                }
+                if(Math.ceil(this.counts / this.pageSize) == this.pageId){
+                    this.allLoaded = true;
+                    this.canLoad = false;
+                    return;
+                }
+            })
+        },
+    },
+    create(){
+    },
+    mounted(){
+        this.getHeadInfo();
+        this.showShopAppraise()
     }
 }
 </script>
@@ -231,6 +236,10 @@ export default {
     .grade{
         font-size: 30px;
         color: red;
+    }
+    .grades{
+        font-size: 30px;
+        color: red
     }
     .gradeIntro{
         color: rgba(62, 83, 113, 0.76);
@@ -253,13 +262,13 @@ export default {
     }
     .headPortrait{
         width: 40px;
-        width: 40px;
+        height: 40px;
         border-radius: 20px;
     }
     .headPortrait>img{
         width: 40px;
-        width: 40px;
-        border-radius: 25px;
+        height: 40px;
+        border-radius: 20px;
     }
     .AppraisementContent{
         background-color: white;
@@ -337,6 +346,9 @@ export default {
     }
     .cancelReplay{
         color: #5e7382;
+    }
+    .scores-img{
+        padding-left: 5px;
     }
 
 </style>
