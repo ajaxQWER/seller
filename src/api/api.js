@@ -12,8 +12,8 @@ var ajax = axios.create({
 //添加一个请求拦截器
 ajax.interceptors.request.use(function(config) {
     //在请求发出之前进行一些操作
-    if (sessionStorage.getItem('jwt')) {
-        config.headers.TOKEN = sessionStorage.getItem('jwt');
+    if (localStorage.getItem('jwt')) {
+        config.headers.TOKEN = localStorage.getItem('jwt');
     }
     return config;
 }, function(err) {
@@ -51,21 +51,15 @@ ajax.interceptors.response.use(function(res) {
     return Promise.reject(err);
 });
 
-//调度员登录
+//商家登录
 export const dispatherLogin = params => {
-    return ajax.post('handler/dispatcher/login', params);
+    return ajax.post('seller/seller/loginByCode', params);
 };
-
-//获取骑手列表
-export const getRiderLists = params => {
-    return ajax.get('handler/rider', params);
-};
-
-//获取订单列表
-export const getOrderLists = params => {
-    return ajax.get('handler/order', params);
+//首页数据
+export const getRealtimestatistics = params => {
+    return ajax.get('seller/realtimestatistics', params);
 };
 //获取订单列表
-export const getOrderDetail = orderId => {
-    return ajax.get('handler/order/' + orderId);
+export const getOrderList = params => {
+    return ajax.get('seller/order/', params);
 };

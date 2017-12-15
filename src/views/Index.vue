@@ -2,41 +2,43 @@
     <el-row class="bg">
         <div class="titleContaier">
             <div class="titleImg">
-                <img src="../assets/images/title.jpg" alt="">
+                <img :src="UPLOADURL+'/shopLogo/'+loginShopId+'.png/shopLogo.png'"  alt="">
             </div>
             <div class="titleText">
                 <ul>
-                    <li><h3>小词小令</h3></li>
-                    <li class="status onBusiness">
-                        <span class="onBusinessText">营业中</span>
-                    </li>
-                    <li class="status">
-                        <span class="unBound">未绑定</span>
-                    </li>
+                    <li><h3>{{loginUser}}</h3></li>
+                    <ul class="admin-shop-status" v-if="shopSalesData">
+                        <li class="status onBusiness">
+                            <img :src="printerStatusImg" alt="">
+                        </li>
+                        <li class="status">
+                            <img :src="shopStatusImg" alt="">
+                        </li>
+                    </ul>
                 </ul>
-                <span class="intro">门店简介：*************************************************</span>
+                <!--<span class="intro">门店简介：*************************************************</span>-->
             </div>
-            <div class="QRcodeconContainer">
-                <div class="QRcode">
-                    <img src="../assets/images/ew.png" alt="">
-                </div>
-                <div class="logo">
-                    <img src="../assets/images/logo1.png" alt="">
-                </div>
-                <div class="download"><p class="fa fa-arrow-circle-down">下载到手机</p></div>
-            </div>
+            <!--<div class="QRcodeconContainer">-->
+                <!--<div class="QRcode">-->
+                    <!--<img src="../assets/images/ew.png" alt="">-->
+                <!--</div>-->
+                <!--<div class="logo">-->
+                    <!--<img src="../assets/images/logo1.png" alt="">-->
+                <!--</div>-->
+                <!--<div class="download"><p class="fa fa-arrow-circle-down">下载到手机</p></div>-->
+            <!--</div>-->
         </div>
         <el-row class="contentContainer">
             <el-col :span="8">
                 <div class="turnoverContainer">
                     <ul class="turnover">
                         <li class="titleText">今日营业额</li>
-                        <li class="totalNum">5555.00</li>
-                        <li><i class="fa fa-long-arrow-up"></i> <i class="fa fa-jpy"></i>983.00</li>
-                        <li>
-                            <span>在线支付：<i class="fa fa-jpy"></i>983.00</span>
-                            <span>到货付款：<i class="fa fa-jpy"></i>983.00</span>
-                        </li>
+                        <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.todayTurnover)}}</li>
+                        <li>昨日 <i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.yesterdayTurnover)}}</li>
+                        <!--<li>-->
+                            <!--<span>在线支付：<i class="fa fa-jpy"></i>983.00</span>-->
+                            <!--<span>到货付款：<i class="fa fa-jpy"></i>983.00</span>-->
+                        <!--</li>-->
                     </ul>
                 </div>
             </el-col>
@@ -44,12 +46,12 @@
                 <div class="turnoverContainer Containermar ContainerT">
                     <ul class="turnover">
                         <li class="titleText">今日订单</li>
-                        <li class="totalNum">5555.00</li>
-                        <li>比昨日同时间下降 <i class="fa fa-long-arrow-down"></i></li>
-                        <li>
-                            <span>按时送达：983</span>
-                            <span>延误送达：983</span>
-                        </li>
+                        <li class="totalNum">{{shopSalesData.todayOrderQuantity}}</li>
+                        <li>昨日{{shopSalesData.yesterdayOrderQuantity}}</li>
+                        <!--<li>-->
+                            <!--<span>按时送达：983</span>-->
+                            <!--<span>延误送达：983</span>-->
+                        <!--</li>-->
                     </ul>
                 </div>
             </el-col>
@@ -57,11 +59,11 @@
                 <div class="turnoverContainer Containermar ContainerK">
                     <ul class="turnover">
                         <li class="titleText">可用余额</li>
-                        <li class="totalNum">5555.00</li>
-                        <li><i class="fa fa-arrow-up"></i> <i class="fa fa-jpy"></i>983.00</li>
-                        <li>
-                            <span>可提现额度：<i class="fa fa-jpy"></i>983.00</span>
-                        </li>
+                        <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.availableBalance) || 0}}</li>
+                        <li> 可提现<i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.amountWithdrawal)}}</li>
+                        <!--<li>-->
+                            <!--<span>可提现额度：<i class="fa fa-jpy"></i>983.00</span>-->
+                        <!--</li>-->
                     </ul>
                 </div>
             </el-col>
@@ -105,16 +107,51 @@
     </el-row>
 </template>
 <script>
+    import { getRealtimestatistics } from '@/api/api'
     export default {
         data: function () {
             return {
-                activeIndex: 1
+                activeIndex: 1,
+                loginShopId: JSON.parse(localStorage.getItem('seller')).shopId,
+                loginUser: localStorage.getItem('shopName'),
+                shopSalesData:null,
+                shopStatusImg:'',
+                printerStatusImg:''
             }
         },
         methods: {
             changeClass(index) {
                 this.activeIndex = index
+            },
+            // 获取店铺实时统计
+            getRealtimestatisticsData(){
+                getRealtimestatistics().then(res => {
+                    console.log(res)
+                    this.shopSalesData = res;
+                    if (res.operatingState) {
+                        this.shopStatusImg ='/static/images/shop-open.png';
+                    } else {
+                        this.shopStatusImg = '/static/images/shop-close.png';
+                    }
+                    this.printerStatusImg = '/static/images/' + res.printerStatus.toLowerCase() + '.png';
+                })
+            },
+            formatMoney: function(money) {
+                money = parseFloat((money + "").replace(/[^\d\.-]/g, "")).toFixed(2) + "";
+                var l = money.split(".")[0].split("").reverse();
+                var r = money.split(".")[1];
+                var t = "";
+                for (var i = 0; i < l.length; i++) {
+                    t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+                }
+                return t.split("").reverse().join("") + "." + r;
             }
+        },
+        mounted(){
+            this.getRealtimestatisticsData()
+        },
+        create(){
+            this.getRealtimestatisticsData()
         }
     }
 </script>
@@ -289,5 +326,8 @@
     }
     .msgBox{
         margin-left: -5px;
+    }
+    .admin-shop-status>li{
+        list-style: none;
     }
 </style>
