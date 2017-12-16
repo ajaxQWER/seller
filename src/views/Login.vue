@@ -41,7 +41,6 @@ export default {
                         localStorage.setItem('seller', JSON.stringify(data.seller));
                         localStorage.setItem('jwt', data.jwt);
                         localStorage.setItem('shopName',data.shopName)
-
                         this.$router.push({
                             path: '/index'
                         });

@@ -79,3 +79,15 @@ export const getShopAppraiseHead = () => {
 export const getShopAppraise = params => {
     return ajax.get('seller/shopAppraise', params);
 };
+//店家回复
+export const commentReply = params => {
+    return ajax.put('seller/reply', params);
+};
+//通知中心
+export const getNoticeLists = params => {
+    return ajax.get('seller/notice', params);
+};
+//删除某条通知
+export const deleteNoticeById = id => {
+    return ajax.delete('seller/notice/' + id);
+};

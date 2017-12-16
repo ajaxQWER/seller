@@ -2,7 +2,7 @@
     <el-row class="bg">
         <el-tabs v-model="activeName" @tab-click="getOrderListData">
             <el-tab-pane label="全部订单" name="0">
-                <el-row v-loading="loading">
+                <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
                             <el-input
@@ -84,9 +84,12 @@
                         </el-pagination>
                     </el-row>
                 </el-row>
+                <el-row v-else class="empty">
+                    <img src="../assets/images/empty-img.png" alt="">
+                </el-row>
             </el-tab-pane>
             <el-tab-pane label="新订单(55)" name="1">
-                <el-row>
+                <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
                             <el-input
@@ -99,7 +102,8 @@
                         </el-col>
                     </el-row>
                     <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index" @click="showOrderInfo(item,index)">
+                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
+                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
                             <el-row class="orderTitle">
                                 <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
                                 <el-col :span="10">订单号：{{item.orderNum}}</el-col>
@@ -144,10 +148,8 @@
                                         <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
                                         <td rowspan="2">
                                             <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
-                                            <el-row><el-button size="mini" @click="orderCancel(item.orderId)">取消订单</el-button>
-                                            </el-row>
-                                            <!--<el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>-->
-                                            <!--<el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>-->
+                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
+                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
                                         </td>
                                     </tr>
                                     <!--<tr>-->
@@ -158,6 +160,7 @@
                                     </tbody>
                                 </table>
                             </el-row>
+                            <!--</router-link>-->
                         </li>
                     </ul>
                     <el-row class="PaginationBox">
@@ -167,10 +170,13 @@
                             :total="counts">
                         </el-pagination>
                     </el-row>
+                </el-row>
+                <el-row v-else class="empty">
+                    <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="进行中(55)" name="2">
-                <el-row>
+                <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
                             <el-input
@@ -183,7 +189,8 @@
                         </el-col>
                     </el-row>
                     <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index" @click="showOrderInfo(item,index)">
+                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
+                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
                             <el-row class="orderTitle">
                                 <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
                                 <el-col :span="10">订单号：{{item.orderNum}}</el-col>
@@ -240,6 +247,7 @@
                                     </tbody>
                                 </table>
                             </el-row>
+                            <!--</router-link>-->
                         </li>
                     </ul>
                     <el-row class="PaginationBox">
@@ -249,10 +257,13 @@
                             :total="counts">
                         </el-pagination>
                     </el-row>
+                </el-row>
+                <el-row v-else class="empty">
+                    <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="已完成(55)" name="3">
-                <el-row>
+                <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
                             <el-input
@@ -265,7 +276,8 @@
                         </el-col>
                     </el-row>
                     <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index" @click="showOrderInfo(item,index)">
+                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
+                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
                             <el-row class="orderTitle">
                                 <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
                                 <el-col :span="10">订单号：{{item.orderNum}}</el-col>
@@ -322,6 +334,7 @@
                                     </tbody>
                                 </table>
                             </el-row>
+                            <!--</router-link>-->
                         </li>
                     </ul>
                     <el-row class="PaginationBox">
@@ -332,9 +345,12 @@
                         </el-pagination>
                     </el-row>
                 </el-row>
+                <el-row v-else class="empty">
+                    <img src="../assets/images/empty-img.png" alt="">
+                </el-row>
             </el-tab-pane>
             <el-tab-pane label="已取消(55)" name="4">
-                <el-row>
+                <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
                             <el-input
@@ -347,7 +363,8 @@
                         </el-col>
                     </el-row>
                     <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index" @click="showOrderInfo(item,index)">
+                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
+                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
                             <el-row class="orderTitle">
                                 <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
                                 <el-col :span="10">订单号：{{item.orderNum}}</el-col>
@@ -404,6 +421,7 @@
                                     </tbody>
                                 </table>
                             </el-row>
+                            <!--</router-link>-->
                         </li>
                     </ul>
                     <el-row class="PaginationBox">
@@ -413,6 +431,9 @@
                             :total="counts">
                         </el-pagination>
                     </el-row>
+                </el-row>
+                <el-row v-else class="empty">
+                    <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
         </el-tabs>
@@ -733,5 +754,9 @@ export default {
     }
     .link {
         text-decoration: none;
+    }
+    .empty{
+        padding: 30px;
+        text-align: center;
     }
 </style>

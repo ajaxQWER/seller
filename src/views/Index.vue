@@ -101,7 +101,6 @@
                         </el-col>
                     </el-row>
                 </li>
-
             </ul>
         </el-row>
     </el-row>
@@ -114,7 +113,7 @@
                 activeIndex: 1,
                 loginShopId: JSON.parse(localStorage.getItem('seller')).shopId,
                 loginUser: localStorage.getItem('shopName'),
-                shopSalesData:null,
+                shopSalesData:"",
                 shopStatusImg:'',
                 printerStatusImg:''
             }
