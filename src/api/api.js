@@ -117,14 +117,20 @@ export const updateBonusById = (id,params) => {
 }
 //查询商品分类列表
 export const getGoodsCategory = params => {
+<<<<<<< HEAD
     return ajax.get('/seller/goodsCategory', params);
 }
+=======
+    return ajax.get('seller/goodsCategory', params);
+};
+>>>>>>> 184c0a4187ffbce3ac3c6bddd1290a5c7640e9c0
 //添加商品分类
 export const addGoodsCategory = params => {
-    return ajax.put('/seller/goodsCategory', params);
+    return ajax.put('seller/goodsCategory', params);
 };
 //删除商品分类
 export const deleteGoodsCategoryById = goodsCategoryId => {
+<<<<<<< HEAD
     return ajax.delete('/seller/goodsCategory/' + goodsCategoryId);
 }
 //商品分类
@@ -159,3 +165,15 @@ export const updateGoodsById = (goodsId,params) => {
 export const addGoods = params => {
     return ajax.put('seller/goods', params);
 };
+=======
+    return ajax.delete('seller/goodsCategory/' + goodsCategoryId);
+};
+//编辑商品分类
+export const updateGoodsCategoryById = params => {
+    return ajax.post('seller/goodsCategory/' + params.goodsCategoryId , params);
+};
+//获取商品分类详情
+export const getGoodsCategoryDetail = goodsCategoryId => {
+    return ajax.get('seller/goodsCategory/' + goodsCategoryId);
+};
+>>>>>>> 184c0a4187ffbce3ac3c6bddd1290a5c7640e9c0
