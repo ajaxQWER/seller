@@ -95,3 +95,15 @@ export const getNoticeLists = params => {
 export const deleteNoticeById = id => {
     return ajax.delete('seller/notice/' + id);
 };
+//查询商品分类列表
+export const getGoodsCategory = params => {
+    return ajax.get('/seller/goodsCategory', params);
+};
+//添加商品分类
+export const addGoodsCategory = params => {
+    return ajax.put('/seller/goodsCategory', params);
+};
+//删除商品分类
+export const deleteGoodsCategoryById = goodsCategoryId => {
+    return ajax.delete('/seller/goodsCategory/' + goodsCategoryId);
+};
