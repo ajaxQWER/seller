@@ -7,7 +7,7 @@
                     <el-input type="text" v-model="ruleForm.sellerName" auto-complete="off" placeholder="用户名" :maxlength="11"></el-input>
                 </el-form-item>
                 <el-form-item prop="checkPass" label="验证码">
-                    <el-input class="code-input" type="password" v-model="ruleForm.code" auto-complete="off" placeholder="验证码" :maxlength="4"></el-input>
+                    <el-input class="code-input" type="text" v-model="ruleForm.code" auto-complete="off" placeholder="验证码" :maxlength="4"></el-input>
                     <el-button type="primary" class="get-code-btn" @click="getCode" :disabled="isClickGetCode">获取验证码</el-button>
                 </el-form-item>
                 <el-form-item style="width:100%;">
