@@ -52,8 +52,12 @@ ajax.interceptors.response.use(function(res) {
 });
 
 //商家登录
-export const dispatherLogin = params => {
+export const userLogin = params => {
     return ajax.post('seller/seller/loginByCode', params);
+};
+//获取验证码
+export const getPhoneCode = phoneNumber => {
+    return ajax.post('commons/phoneCode/' + phoneNumber);
 };
 //首页数据
 export const getRealtimestatistics = params => {

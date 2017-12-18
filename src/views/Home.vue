@@ -8,9 +8,12 @@
                         <span class="txt">商家中心</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4" class="userinfo">
-                    <el-dropdown trigger="hover">
-                        <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
+                <el-col :span="7" class="userinfo">
+                    <el-dropdown trigger="click">
+                        <div>
+                            <img :src="UPLOADURL + '/shopLogo/' + shopId + '.png/shopLogo.png'" alt="" class="avator">
+                            <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
+                        </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item @click.native="updateSecretkey">修改密码</el-dropdown-item>
                             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
@@ -71,7 +74,8 @@ export default {
     data: function() {
         return {
             collapsed: false,
-            sysUserName: '1',
+            shopId: 0,
+            sysUserName: '',
             password: {
                 oldSecretkey: '',
                 secretkey: ''
@@ -92,8 +96,8 @@ export default {
             });
         },
         clearStorage: function(){
-            sessionStorage.removeItem('user');
-            sessionStorage.removeItem('jwt');
+            localStorage.removeItem('user');
+            localStorage.removeItem('jwt');
             this.$router.push('/login');
         },
         closeDialog: function(){
@@ -120,11 +124,12 @@ export default {
         }
     },
     mounted: function() {
-        var user = sessionStorage.getItem('user');
-        if (user) {
-            user = JSON.parse(user);
-            this.sysUserName = user.username || '';
-        }
+        this.sysUserName = localStorage.getItem('shopName') || '';
+        this.shopId = JSON.parse(localStorage.getItem('seller')).shopId;
+        // if (seller) {
+            // seller = JSON.parse(seller);
+            // this.sysUserName = seller.sellerName || '';
+        // }
     },
 }
 </script>
@@ -146,6 +151,7 @@ export default {
             .userinfo-inner {
                 cursor: pointer;
                 color: #fff;
+                vertical-align: middle;
             }
         }
         .logo {
@@ -154,7 +160,7 @@ export default {
             position: absolute;
             left: 50%;
             margin-left: -600px;
-            font-size: 22px;
+            font-size: 0;
             //border-color: rgba(238, 241, 146, 0.3);
             //border-right-width: 1px;
             //border-right-style: solid;
@@ -178,7 +184,15 @@ export default {
                 margin-left: 18px;
                 border-left: 2px solid #fffffe;
                 padding-left: 15px;
+                vertical-align: middle;
             }
+        }
+        .avator{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            vertical-align: middle;
+            cursor: pointer;
         }
         .logo-width {
             width: 231px;
