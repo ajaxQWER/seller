@@ -92,8 +92,8 @@ export default {
             });
         },
         clearStorage: function(){
-            sessionStorage.removeItem('user');
-            sessionStorage.removeItem('jwt');
+            localStorage.removeItem('user');
+            localStorage.removeItem('jwt');
             this.$router.push('/login');
         },
         closeDialog: function(){
@@ -120,7 +120,7 @@ export default {
         }
     },
     mounted: function() {
-        var user = sessionStorage.getItem('user');
+        var user = localStorage.getItem('user');
         if (user) {
             user = JSON.parse(user);
             this.sysUserName = user.username || '';

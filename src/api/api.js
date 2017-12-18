@@ -91,3 +91,23 @@ export const getNoticeLists = params => {
 export const deleteNoticeById = id => {
     return ajax.delete('seller/notice/' + id);
 };
+//获取红包列表
+export const getBonusLists = params => {
+    return ajax.get('seller/coupon', params);
+};
+//添加红包
+export const addBonus = params => {
+    return ajax.put('seller/coupon', params);
+};
+//删除红包
+export const deleteBonusById = id => {
+    return ajax.delete('seller/coupon/' + id);
+};
+//查询红包详情
+export const getBonusById = id => {
+    return ajax.get('seller/coupon/' + id);
+};
+//编辑红包
+export const updateBonusById = (id,params) => {
+    return ajax.post('seller/coupon/' + id, params);
+};

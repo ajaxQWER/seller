@@ -1,6 +1,6 @@
 <template>
     <el-form :model="ruleForm" ref="ruleForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-        <h3 class="title">共享点餐调度平台</h3>
+        <h3 class="title">共享点餐商家平台</h3>
         <el-form-item prop="account">
             <el-input type="text" v-model="ruleForm.sellerName" auto-complete="off" placeholder="用户名"></el-input>
         </el-form-item>

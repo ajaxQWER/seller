@@ -9,41 +9,28 @@
                 <el-button type="success" size="small" @click="addNewBouns">添加红包</el-button>
             </el-col>
         </el-row>
-        <el-row class="bonusContentBox">
+        <el-row class="bonusContentBox"v-if="bonusList.length>0">
             <ul class="bonusContent">
-                <li>
+                <li v-for="(item, index) in bonusList " :key="index">
                     <el-row>
                         <el-col :span="2">
                             <img src="../assets/images/envelopes.png" alt="">
                         </el-col>
                         <el-col :span="19">
-                            <el-row><i class="fa fa-jpy"></i> 66 <span class="actives">(满30元可用)</span></el-row>
-                            <el-row class="bonusNameBox"><span class="bonusName">红包名称： <span>Lorem ipsum dolor sit.</span> </span></el-row>
-                            <el-row>2017-09-09 到期</el-row>
+                            <el-row><i class="fa fa-jpy"></i> {{item.money}} <span class="actives">{{item.minimum?'满'+item.minimum+'元可用':'任意金额可用'}}</span></el-row>
+                            <el-row class="bonusNameBox"><span class="bonusName">红包名称： <span>{{item.couponName}}</span> </span></el-row>
+                            <el-row>{{item.endTime?(moment(item.endTime).format('YYYY-MM-DD HH:mm')+'到期'):'无限期'}}</el-row>
                         </el-col>
                         <el-col :span="3" class="operation">
-                            <el-button type="text" @click="editBouns">编辑</el-button>
-                            <el-button type="text">删除</el-button>
-                        </el-col>
-                    </el-row>
-                </li>
-                <li>
-                    <el-row>
-                        <el-col :span="2">
-                            <img src="../assets/images/envelopes.png" alt="">
-                        </el-col>
-                        <el-col :span="19">
-                            <el-row><i class="fa fa-jpy"></i> 66 <span class="actives">(满30元可用)</span></el-row>
-                            <el-row class="bonusNameBox"><span class="bonusName">红包名称：<span>Lorem ipsum dolor sit.</span></span></el-row>
-                            <el-row>2017-09-09 到期</el-row>
-                        </el-col>
-                        <el-col :span="3" class="operation">
-                            <el-button type="text">编辑</el-button>
-                            <el-button type="text">删除</el-button>
+                            <el-button type="text" @click="editBouns(item.couponId)">编辑</el-button>
+                            <el-button type="text"  @click="deleteBonus(item.couponId)">删除</el-button>
                         </el-col>
                     </el-row>
                 </li>
             </ul>
+        </el-row>
+        <el-row v-else class="empty">
+            <img src="../assets/images/empty-img.png" alt="">
         </el-row>
         <!--编辑/修改红包-->
         <el-dialog :title="isAdd?'新增红包':'修改红包'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
@@ -84,12 +71,16 @@
     </el-row>
 </template>
 <script>
+    import {getBonusLists,deleteBonusById} from '@/api/api'
 export default {
     data: function() {
         return {
             isAdd: true,
             addDialog:false,
             addLoading:false,
+            pageId: 1,
+            counts: 0,
+            bonusList:'',
             addBonusForm:{
                 name:''
             }
@@ -115,7 +106,20 @@ export default {
         // 点击添加红包按钮
         addNewBouns(){
             this.addDialog = true;
+        },
+        //获取红包列表
+        getBonusList: function(){
+            getBonusLists({params: {pageSize: 10,pageId:this.pageId}}).then(res => {
+                this.bonusList = res.list;
+            })
+        },
+        //删除红包
+        deleteBonus(couponId){
+
         }
+    },
+    mounted(){
+        this.getBonusList()
     }
 }
 </script>
@@ -156,5 +160,9 @@ export default {
     .operation{
         text-align: right;
         padding-right: 18px;
+    }
+    .empty{
+        padding: 30px;
+        text-align: center;
     }
 </style>
