@@ -238,6 +238,7 @@
 export default {
     data: function() {
         return {
+            headerImage: '',
             activeName: '0',
             value5: 3.7,
             replay:false,

@@ -18,7 +18,7 @@
             <el-col :span="5" :offset="8">
                 <el-col :span="8">回收站</el-col>
                 <el-col :span="8">批量管理</el-col>
-                <el-button :span="8" size="mini" type="success" @click="addGoods">添加商品</el-button>
+                <router-link :to="'/editGoods'"><el-button :span="8" size="mini" type="success" @click="addGoods">添加商品</el-button></router-link>
             </el-col>
         </el-row>
         <el-row class="dishType">
@@ -132,6 +132,7 @@ export default {
         color: white;
         border: 5px;
         padding: 5px;
+        border-radius: 5px;
     }
     .Type{
         text-align: center;

@@ -169,3 +169,4 @@ export const getGoodsCategoryDetail = goodsCategoryId => {
     return ajax.get('seller/goodsCategory/' + goodsCategoryId);
 };
 
+
