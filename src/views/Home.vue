@@ -8,9 +8,12 @@
                         <span class="txt">商家中心</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4" class="userinfo">
-                    <el-dropdown trigger="hover">
-                        <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
+                <el-col :span="7" class="userinfo">
+                    <el-dropdown trigger="click">
+                        <div>
+                            <img :src="UPLOADURL + '/shopLogo/' + shopId + '.png/shopLogo.png'" alt="" class="avator">
+                            <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
+                        </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item @click.native="updateSecretkey">修改密码</el-dropdown-item>
                             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
@@ -68,10 +71,11 @@
 <script>
 // import {updatePwd} from '@/api/api';
 export default {
-    data: function() {
+    data: function () {
         return {
             collapsed: false,
-            sysUserName: '1',
+            shopId: 0,
+            sysUserName: '',
             password: {
                 oldSecretkey: '',
                 secretkey: ''
@@ -81,7 +85,7 @@ export default {
     },
     methods: {
         //退出登录
-        logout: function() {
+        logout: function () {
             var _this = this;
             this.$confirm('确认退出吗?', '提示', {
                 type: 'info'
@@ -91,25 +95,25 @@ export default {
 
             });
         },
-        clearStorage: function(){
+        clearStorage: function () {
             localStorage.removeItem('user');
             localStorage.removeItem('jwt');
             this.$router.push('/login');
         },
-        closeDialog: function(){
+        closeDialog: function () {
             this.password = {
                 oldSecretkey: '',
                 secretkey: ''
             }
         },
-        cancel: function(){
+        cancel: function () {
             this.dialog = false;
         },
-        updateSecretkey: function(){
+        updateSecretkey: function () {
             this.dialog = true;
         },
-        update: function(){
-            updatePwd(this.password).then(data=>{
+        update: function () {
+            updatePwd(this.password).then(data => {
                 this.$message({
                     message: '修改成功',
                     type: 'success'
@@ -119,13 +123,14 @@ export default {
             })
         }
     },
-    mounted: function() {
+    mounted: function () {
         var user = localStorage.getItem('user');
         if (user) {
             user = JSON.parse(user);
             this.sysUserName = user.username || '';
         }
-    },
+
+    }
 }
 </script>
 <style scoped lang="scss">
@@ -146,6 +151,7 @@ export default {
             .userinfo-inner {
                 cursor: pointer;
                 color: #fff;
+                vertical-align: middle;
             }
         }
         .logo {
@@ -154,7 +160,7 @@ export default {
             position: absolute;
             left: 50%;
             margin-left: -600px;
-            font-size: 22px;
+            font-size: 0;
             //border-color: rgba(238, 241, 146, 0.3);
             //border-right-width: 1px;
             //border-right-style: solid;
@@ -178,7 +184,15 @@ export default {
                 margin-left: 18px;
                 border-left: 2px solid #fffffe;
                 padding-left: 15px;
+                vertical-align: middle;
             }
+        }
+        .avator{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            vertical-align: middle;
+            cursor: pointer;
         }
         .logo-width {
             width: 231px;

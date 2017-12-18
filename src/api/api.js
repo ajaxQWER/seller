@@ -52,8 +52,12 @@ ajax.interceptors.response.use(function(res) {
 });
 
 //商家登录
-export const dispatherLogin = params => {
+export const userLogin = params => {
     return ajax.post('seller/seller/loginByCode', params);
+};
+//获取验证码
+export const getPhoneCode = phoneNumber => {
+    return ajax.post('commons/phoneCode/' + phoneNumber);
 };
 //首页数据
 export const getRealtimestatistics = params => {
@@ -110,4 +114,15 @@ export const getBonusById = id => {
 //编辑红包
 export const updateBonusById = (id,params) => {
     return ajax.post('seller/coupon/' + id, params);
+//查询商品分类列表
+export const getGoodsCategory = params => {
+    return ajax.get('/seller/goodsCategory', params);
 };
+//添加商品分类
+export const addGoodsCategory = params => {
+    return ajax.put('/seller/goodsCategory', params);
+};
+//删除商品分类
+export const deleteGoodsCategoryById = goodsCategoryId => {
+    return ajax.delete('/seller/goodsCategory/' + goodsCategoryId);
+}
