@@ -89,11 +89,8 @@ export default {
         }
     },
     created(){
-        // this.getNoticeListData({ pageId: this.pageId });
-    },
-    mounted(){
         this.getNoticeListData();
-    }
+    },
 }
 </script>
 <style scoped>

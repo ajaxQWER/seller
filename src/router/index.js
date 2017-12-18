@@ -4,6 +4,7 @@ const Login = r => require.ensure([],() => r(require('../views/Login.vue')), 'Lo
 const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home'); //Home
 const Index = r => require.ensure([],() => r(require('../views/Index.vue')), 'Index'); //首页
 const Goods = r => require.ensure([],() => r(require('../views/Goods.vue')), 'Goods'); //商品
+const editGoods = r => require.ensure([],() => r(require('../views/editGoods.vue')), 'editGoods'); //商品编辑
 const Order = r => require.ensure([],() => r(require('../views/Order.vue')), 'Order'); //订单
 const OrderDetail = r => require.ensure([],() => r(require('../views/OrderDetail.vue')), 'OrderDetail'); //订单详情
 const Appraisement = r => require.ensure([],() => r(require('../views/Appraisement.vue')), 'Appraisement'); //评价
@@ -45,7 +46,8 @@ let routes = [{
     leaf: true, //只有一个节点
     iconCls: 'fa fa-shopping-bag',
     children: [
-        { path: '/rider', component: Goods, name: '商品' }
+        { path: '/goods', component: Goods, name: '商品' },
+        { path: '/editGoods', component: editGoods, name: '商品编辑' }
     ]
 }, {
     path: '/',

@@ -146,10 +146,7 @@
                 return t.split("").reverse().join("") + "." + r;
             }
         },
-        mounted(){
-            this.getRealtimestatisticsData()
-        },
-        create(){
+        created(){
             this.getRealtimestatisticsData()
         }
     }

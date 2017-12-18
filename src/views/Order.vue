@@ -586,10 +586,8 @@ export default {
         },
     },
     created(){
-    },
-    mounted(){
         this.getOrderListData({pageId: this.pageId, orderStatus: this.orderStatus })
-    }
+    },
 }
 
 </script>

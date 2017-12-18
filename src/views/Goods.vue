@@ -18,34 +18,51 @@
             <el-col :span="5" :offset="8">
                 <el-col :span="8">回收站</el-col>
                 <el-col :span="8">批量管理</el-col>
-                <el-button :span="8" size="mini" type="success">添加商品</el-button>
+                <el-button :span="8" size="mini" type="success" @click="addGoods">添加商品</el-button>
             </el-col>
         </el-row>
         <el-row class="dishType">
-            <el-col :span="3" class="Type" ><span >商家分类：</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(1)" :class=" type==1 ? 'activeType' : ''">推荐菜品</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(2)" :class=" type==2 ? 'activeType' : ''">特色菜系</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(3)" :class=" type==3 ? 'activeType' : ''">汤品系列</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(4)" :class=" type==4 ? 'activeType' : ''">拌菜系列</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(5)" :class=" type==5 ? 'activeType' : ''">甜品系列</span></el-col>
-            <el-col :span="3" class="Type"><span @click="changeType(6)" :class=" type==6 ? 'activeType' : ''">酒水系列</span></el-col>
-            <el-col :span="3"class="Type"><span @click="changeType(7)" :class=" type==7 ? 'activeType' : ''">热菜系列</span></el-col>
+            <el-col :span="2" class="Type" ><span >商家分类：</span></el-col>
+            <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  ><span  @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span></el-col>
         </el-row>
-        <el-row>
-            <el-col>
-                <el-row></el-row>
+        <el-row class="goodsContentBox" v-if="goodsList.length>0">
+            <el-col :span="8" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
+                <el-row class="chageBtn">
+                    <el-checkbox></el-checkbox>
+                    <el-button type="text">上架</el-button>
+                    <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
+                    <!--<el-button type="text">编辑</el-button>-->
+                    <el-button type="text">删除</el-button>
+                </el-row>
+                <el-row class="goodsContentText">
+                    <el-col class="goodsImg" :span="10">
+                        <img :src="UPLOADURL + item.goodsImgUrl+'/goods.png'" alt="">
+                    </el-col>
+                    <el-col :span="14">
+                        <el-row class="goodsName">{{item.goodsName}}</el-row>
+                        <el-row class="goodsPrice"><i class="fa fa-jpy"></i>{{item.goodsPrice}}</el-row>
+                        <el-row class="goodsSales ">月销量：{{item.goodsSales}}</el-row>
+                    </el-col>
+                </el-row>
             </el-col>
-            <el-col></el-col>
-            <el-col></el-col>
+        </el-row>
+        <el-row v-else class="empty">
+            <img src="../assets/images/empty-img.png" alt="">
         </el-row>
     </el-row>
 </template>
 <script>
+import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods} from '@/api/api'
 export default {
     data: function() {
         return {
             searchGoods:'',
-            type:1
+            type:1,
+            pageId:1,
+            pageSize:10,
+            counts:0,
+            goodsList:[],
+            goodsCategoryLists:''  //分类列表(title)
         }
     },
     methods:{
@@ -55,7 +72,48 @@ export default {
         },
         changeType(index){
             this.type=index
+        },
+
+        //获取商品列表
+        getGoodsLists(id){
+            getGoodsLists({params: {pageSize: 999999, goodsClassId: id}}).then( res =>{
+                this.goodsList = res.list;
+            })
+        },
+        //获取商品title列表
+        getGoodsCategoryListsData(){
+            var paramas={
+                pageSize:99999,
+            }
+            getGoodsCategoryLists(paramas).then( res =>{
+                console.log(res)
+                console.log(33333)
+                this.getGoodsLists(res.list[0].goodsCategoryId)
+                this.goodsCategoryLists = res.list;
+                this.goodsCategoryLists.forEach(function(item,index){
+                    item.isActiveItem = false;
+                    if(index == 0){
+                        item.isActiveItem = true
+                    }
+                })
+            })
+        },
+        getGoodsById(id,index){
+            this.goodsCategoryLists.forEach(function(item,current){
+                item['isActiveItem'] = false;
+                if(index == current){
+                    item['isActiveItem'] = true;
+                }
+            })
+            this.getGoodsLists(id)
+        },
+        addGoods(){
+
         }
+    },
+    created(){
+        this.getGoodsLists();
+        this.getGoodsCategoryListsData()
     }
 }
 </script>
@@ -67,6 +125,7 @@ export default {
     .dishType{
         padding: 10px;
         margin-top: 5px;
+        margin-bottom: 10px;
     }
     .activeType{
         background-color: #13ce66;
@@ -77,5 +136,33 @@ export default {
     .Type{
         text-align: center;
     }
-
+    .chageBtn{
+        background-color: #f4f4f4;
+        padding-left: 10px;
+    }
+    .goodsContent{
+        border: 1px solid lavender;
+    }
+    .goodsContentText{
+        padding: 10px;
+    }
+    .goodsImg>img{
+        width: 100px;
+        height: 100px;
+        border-radius: 5px
+    }
+    .goodsPrice{
+        margin: 5px 0px 5px 0px;
+        color: red;
+    }
+    .goodsSales{
+        color: #8c939d;
+    }
+    .goodsContentBox{
+        margin-bottom: 10px;
+    }
+    .empty{
+        padding: 30px;
+        text-align: center;
+    }
 </style>

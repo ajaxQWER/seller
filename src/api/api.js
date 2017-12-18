@@ -114,10 +114,11 @@ export const getBonusById = id => {
 //编辑红包
 export const updateBonusById = (id,params) => {
     return ajax.post('seller/coupon/' + id, params);
+}
 //查询商品分类列表
 export const getGoodsCategory = params => {
     return ajax.get('/seller/goodsCategory', params);
-};
+}
 //添加商品分类
 export const addGoodsCategory = params => {
     return ajax.put('/seller/goodsCategory', params);
@@ -126,3 +127,35 @@ export const addGoodsCategory = params => {
 export const deleteGoodsCategoryById = goodsCategoryId => {
     return ajax.delete('/seller/goodsCategory/' + goodsCategoryId);
 }
+//商品分类
+export const getGoodsCategoryLists = params => {
+    return ajax.get('seller/goodsCategory', params);
+};
+//获取商品列表
+export const getGoodsLists = params => {
+    return ajax.get('seller/goods', params);
+};
+//删除商品
+export const deleteGoodsById = id => {
+    return ajax.delete('seller/goods/' + id);
+};
+//下架商品
+export const soldOutGoods = paramas => {
+    return ajax.post('seller/goods/soldOut', paramas);
+};
+//上架商品
+export const putAwayGoods = paramas => {
+    return ajax.post('seller/goods/putaway', paramas);
+};
+//查询商品详情
+export const getGoodsById = id => {
+    return ajax.get('seller/goods/' + id);
+};
+//修改商品
+export const updateGoodsById = (goodsId,params) => {
+    return ajax.post('seller/goods/' + goodsId, params);
+};
+//添加商品
+export const addGoods = params => {
+    return ajax.put('seller/goods', params);
+};

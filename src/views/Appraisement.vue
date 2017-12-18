@@ -320,7 +320,6 @@ export default {
         //获取评价信息
         showShopAppraise(tab){
             console.log(tab)
-            console.log(11111)
                 switch (tab.index) {
                 case '0':
                     this.reply = '';
@@ -388,12 +387,10 @@ export default {
             })
         },
     },
-    create(){
-    },
-    mounted(){
+    created(){
         this.getHeadInfo();
         this.showShopAppraise()
-    }
+    },
 }
 </script>
 <style scoped>
