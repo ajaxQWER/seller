@@ -71,7 +71,7 @@
 <script>
 // import {updatePwd} from '@/api/api';
 export default {
-    data: function() {
+    data: function () {
         return {
             collapsed: false,
             shopId: 0,
@@ -85,7 +85,7 @@ export default {
     },
     methods: {
         //退出登录
-        logout: function() {
+        logout: function () {
             var _this = this;
             this.$confirm('确认退出吗?', '提示', {
                 type: 'info'
@@ -95,25 +95,25 @@ export default {
 
             });
         },
-        clearStorage: function(){
+        clearStorage: function () {
             localStorage.removeItem('user');
             localStorage.removeItem('jwt');
             this.$router.push('/login');
         },
-        closeDialog: function(){
+        closeDialog: function () {
             this.password = {
                 oldSecretkey: '',
                 secretkey: ''
             }
         },
-        cancel: function(){
+        cancel: function () {
             this.dialog = false;
         },
-        updateSecretkey: function(){
+        updateSecretkey: function () {
             this.dialog = true;
         },
-        update: function(){
-            updatePwd(this.password).then(data=>{
+        update: function () {
+            updatePwd(this.password).then(data => {
                 this.$message({
                     message: '修改成功',
                     type: 'success'
@@ -123,14 +123,14 @@ export default {
             })
         }
     },
-    mounted: function() {
-        this.sysUserName = localStorage.getItem('shopName') || '';
-        this.shopId = JSON.parse(localStorage.getItem('seller')).shopId;
-        // if (seller) {
-            // seller = JSON.parse(seller);
-            // this.sysUserName = seller.sellerName || '';
-        // }
-    },
+    mounted: function () {
+        var user = localStorage.getItem('user');
+        if (user) {
+            user = JSON.parse(user);
+            this.sysUserName = user.username || '';
+        }
+
+    }
 }
 </script>
 <style scoped lang="scss">

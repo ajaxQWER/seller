@@ -38,6 +38,13 @@
         <el-row v-else class="empty">
             <img src="../assets/images/empty-img.png" alt="">
         </el-row>
+        <el-row class="PaginationBox">
+            <el-pagination
+                @current-change="currentChange"
+                :current-page="pageId"
+                :total="counts">
+            </el-pagination>
+        </el-row>
     </el-row>
 </template>
 <script>
@@ -52,6 +59,11 @@ export default {
         }
     },
     methods:{
+        //分页
+        currentChange(val) {
+            this.pageId = val;
+            this.getNoticeListData(val)
+        },
         getNoticeListData(){
             getNoticeLists({ params: { pageSize: 10, pageId: this.pageId } }).then(res => {
                 this.noticeList = res.list;
@@ -129,5 +141,9 @@ export default {
     .empty{
         padding: 30px;
         text-align: center;
+    }
+    .PaginationBox{
+        text-align: right;
+        margin-bottom: 20px;
     }
 </style>
