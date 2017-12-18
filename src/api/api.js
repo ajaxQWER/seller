@@ -114,6 +114,7 @@ export const getBonusById = id => {
 //编辑红包
 export const updateBonusById = (id,params) => {
     return ajax.post('seller/coupon/' + id, params);
+}
 //查询商品分类列表
 export const getGoodsCategory = params => {
     return ajax.get('seller/goodsCategory', params);
