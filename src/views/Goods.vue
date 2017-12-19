@@ -29,10 +29,9 @@
             <el-col :span="8" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
                 <el-row class="chageBtn">
                     <el-checkbox></el-checkbox>
-                    <el-button type="text">上架</el-button>
+                    <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)">{{formatStatus(item.goodsStatus)}}</el-button>
                     <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
-                    <!--<el-button type="text">编辑</el-button>-->
-                    <el-button type="text">删除</el-button>
+                    <el-button type="text" @click="deleteGoods(item.goodsId,index)">删除</el-button>
                 </el-row>
                 <el-row class="goodsContentText">
                     <el-col class="goodsImg" :span="10">
@@ -98,6 +97,14 @@ export default {
                 })
             })
         },
+        formatStatus: function(status){
+            switch (status) {
+                case 'PUTAWAY':
+                    return '下架';
+                case 'SOLD_OUT':
+                    return '上架';
+            }
+        },
         getGoodsById(id,index){
             this.goodsCategoryLists.forEach(function(item,current){
                 item['isActiveItem'] = false;
@@ -106,6 +113,77 @@ export default {
                 }
             })
             this.getGoodsLists(id)
+        },
+        //上架或者下架商品
+        soldOut: function(id,index,status){
+            var soldStatus = this.formatStatus(status);
+            const h = this.$createElement;
+            this.$msgbox({
+                title: '提示',
+                message: h('p', null, [
+                    h('span', null, '确定'+soldStatus+'该商品?'),
+                ]),
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                beforeClose: (action, instance, done) => {
+                    if (action === 'confirm') {
+                        instance.confirmButtonLoading = true;
+                        instance.confirmButtonText = '执行中...';
+                        setTimeout(() => {
+                            done();
+                            setTimeout(() => {
+                                instance.confirmButtonLoading = false;
+                            }, 300);
+                        }, 3000);
+                    } else {
+                        done();
+                    }
+                }
+            }).then(action => {
+                if(status==='PUTAWAY'){
+                    soldOutGoods([id]).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '操作成功!'
+                        });
+                        this.goodsList[index].goodsStatus = 'SOLD_OUT'
+                    })
+                }else if(status==='SOLD_OUT'){
+                    putAwayGoods([id]).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '操作成功!'
+                        });
+                        this.goodsList[index].goodsStatus = 'PUTAWAY'
+                    })
+                }
+                this.$message({
+                    type: 'info',
+                    message: 'action: ' + action
+                });
+            });
+        },
+        //删除商品
+        deleteGoods(id,index){
+            this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deleteGoodsById(id).then(() => {
+                    this.getGoodsLists();
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         addGoods(){
 

@@ -2,7 +2,7 @@
     <el-row>
         <el-row class="bgColorW">
             <span>账号</span>
-            <span class="countName">******</span>
+            <span class="countName">{{loginUser}}</span>
         </el-row>
         <el-row>
             <el-form  :model="settingForm">
@@ -87,36 +87,20 @@
                         </el-col>
                     </el-row>
                     <el-row class="bgColorW bgH">
-                        <el-row class="printerSetting">
+                        <el-row class="printerSetting" v-for="(item,index) in printerList" :key="index">
                             <el-col :span="22">
                                 <el-row>
                                     <el-col :span="2">设备名称</el-col>
-                                    <el-col :span="8">易联云k4(777777)</el-col>
-                                    <el-col :span="4">易联云k4</el-col>
+                                    <el-col :span="8">{{item.deviceName}}</el-col>
+                                    <el-col :span="4">{{formatType(item.printerType)}}</el-col>
                                 </el-row>
                                 <el-row>
                                     <el-col :span="2">设备状态</el-col>
-                                    <el-col :span="8">58mm/2份/在线</el-col>
+                                    <el-col :span="8">{{formatPageType(item.printerPageType)}}/{{item.copies}}份/{{formatStatus(item.printerStatus)}}</el-col>
                                 </el-row>
                             </el-col>
                             <el-col :span="2">
-                                <el-button size="small">删除设备</el-button>
-                            </el-col>
-                        </el-row>
-                        <el-row class="printerSetting">
-                            <el-col :span="22">
-                                <el-row>
-                                    <el-col :span="2">设备名称</el-col>
-                                    <el-col :span="8">易联云k4(777777)</el-col>
-                                    <el-col :span="4">易联云k4</el-col>
-                                </el-row>
-                                <el-row>
-                                    <el-col :span="2">设备状态</el-col>
-                                    <el-col :span="8">58mm/2份/在线</el-col>
-                                </el-row>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button size="small">删除设备</el-button>
+                                <el-button size="small" @click="deletePrinter(item.printerId,index)">删除设备</el-button>
                             </el-col>
                         </el-row>
                     </el-row>
@@ -128,18 +112,28 @@
             <el-form :model="addPrinterForm" label-width="120px">
                 <el-form-item label="设备类型">
                     <el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">
-                        <el-option label="一" value="shanghai"></el-option>
-                        <el-option label="二" value="beijing"></el-option>
+                        <el-option label="" :disabled="item.disabled" value="item.value" v-for="(item,index) in printerTypes">{{item.name}}</el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备编号">
-                    <el-input type="text" v-model="addPrinterForm.printerType" auto-complete="off" placeholder="单行输入"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入"></el-input>
                 </el-form-item>
                 <el-form-item label="设备密码">
-                    <el-input type="text" v-model="addPrinterForm.printerTypel" auto-complete="off" placeholder="请输入6-12位"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位"></el-input>
+                </el-form-item>
+                <el-form-item label="纸张规则">
+                    <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
+                        <el-option label="" value="item.value" v-for="(item,index) in printerPageTypes" :disabled="item.disabled">{{item.name}}</el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="打印数量">
-                    <el-input type="text" v-model="addPrinterForm.printerType" auto-complete="off" placeholder=""></el-input>
+                    <el-select v-model="addPrinterForm.copies">
+                        <el-option disabled value="2">请选择</el-option>
+                        <el-option v-for="n in 9">{{n}}</el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="设备备注">
+                    <el-input type="text" v-model="addPrinterForm.deviceRemark" auto-complete="off" placeholder="请单行输入"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -150,19 +144,53 @@
     </el-row>
 </template>
 <script>
+import { getPrinterLists, deletePrinterById,addPrinter } from '@/api/api';
 export default {
     data: function() {
         return {
             settingForm:{
                 oldSecretkey:'',
                 newSecretkey:'',
-                paymentMethods:''
+                paymentMethods:'',
+                // 打印机
+                pageId: 1,
+                counts: 0,
+                printerList: [],
+                pageSize:10,
             },
             addPrinterForm:{
-                printerType:''
+                copies: 1,
+                deviceId: null,
+                deviceName: null,
+                deviceRemark: null,
+                deviceSecretKey: null,
+                printerId: 0,
+                printerPageType: "MM58",
+                printerType: "CLOUD_YILIANYUN_K4",
+                shopId: 0
             },
             addLoading:false,
             addPrinterDialog:false,
+            loginUser: JSON.parse(localStorage.getItem('seller')).sellerName,
+            printerList:'',
+            printerTypes: [{
+                name: '易联云K4',
+                value: 'CLOUD_YILIANYUN_K4',
+                disabled: false,
+            },{
+                name: 'USB',
+                value: 'USB',
+                disabled: true,
+            }],
+            printerPageTypes: [{
+                name: '58mm',
+                value: 'MM58',
+                disabled: false,
+            },{
+                name: '80mm',
+                value: 'MM80',
+                disabled: true,
+            }]
         }
     },
     methods:{
@@ -174,12 +202,86 @@ export default {
         saveAddPrinter(){
             this.addPrinterDialog = false
             // this.addLoading=true
+            addPrinter(this.addPrinterForm).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '添加成功!'
+                });
+            })
         },
         // 点击添加打印机按钮
         addPrinterBtn(){
             this.addPrinterDialog = true
-        }
+        },
+        // 获取打印机列表
+        getPrinterList: function(printer) {
+            getPrinterLists({ params: { pageSize: 10, pageId: this.pageId } }).then(res => {
+                this.printerList = res.list;
+                this.counts = res.count;
+            })
+        },
+        //删除打印机
+        deletePrinter(id, index){
+            this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deletePrinterById(id, index).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.pageId = 1;
+                    this.getPrinterList({ pageId: this.pageId });
+                })
 
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        formatPageType: function (type) {
+            switch (type){
+                case 'MM58':
+                    return '58mm';
+                case 'MM80':
+                    return '80mm';
+                default:
+                    return '';
+            }
+        },
+        formatStatus: function (status) {
+            switch (status){
+                case 'UNBIND':
+                    return '未绑定';
+                case 'ONLINE':
+                    return '在线';
+                case 'OFFLINE':
+                    return '离线';
+                case 'ABNORMALITY':
+                    return '异常';
+                case 'PAPER_DEFICIENCY':
+                    return '缺纸';
+                default:
+                    return '';
+            }
+        },
+        formatType: function (type) {
+            switch (type){
+                case 'CLOUD_YILIANYUN_K4':
+                    return '易联云K4';
+                case 'USB':
+                    return 'USB';
+                default:
+                    return '';
+            }
+        },
+    },
+    created(){
+        this.getPrinterList()
     }
 }
 </script>

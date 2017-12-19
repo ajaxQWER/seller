@@ -115,6 +115,8 @@ export const getBonusById = id => {
 export const updateBonusById = (id,params) => {
     return ajax.post('seller/coupon/' + id, params);
 }
+
+
 //查询商品分类列表
 export const getGoodsCategory = params => {
     return ajax.get('/seller/goodsCategory', params);
@@ -167,6 +169,30 @@ export const updateGoodsCategoryById = params => {
 //获取商品分类详情
 export const getGoodsCategoryDetail = goodsCategoryId => {
     return ajax.get('seller/goodsCategory/' + goodsCategoryId);
+};
+//文件上传 前台文件需要设置一个path属性
+export const uploadFiles = params => {
+    return ajax.post('commons/upload' + params.path, params);
+};
+//获取打印机列表
+export const getPrinterLists = params => {
+    return ajax.get('seller/printer', params);
+};
+//获取打印机详情
+export const getPrinterById = printerId => {
+    return ajax.get('seller/printer/' + printerId);
+};
+//添加打印机
+export const addPrinter = params => {
+    return ajax.put('seller/printer', params);
+};
+//删除打印机
+export const deletePrinterById = printerId => {
+    return ajax.delete('seller/printer/' + printerId);
+};
+//编辑打印机
+export const updatePrinter = (printerId,params) => {
+    return ajax.post('seller/printer/' + printerId, params);
 };
 
 

@@ -22,7 +22,7 @@
                             <el-row>{{item.endTime?(moment(item.endTime).format('YYYY-MM-DD HH:mm')+'到期'):'无限期'}}</el-row>
                         </el-col>
                         <el-col :span="3" class="operation">
-                            <el-button type="text" @click="editBouns(item.couponId)">编辑</el-button>
+                            <el-button type="text" @click="editBouns(item)">编辑</el-button>
                             <el-button type="text"  @click="deleteBonus(item.couponId)">删除</el-button>
                         </el-col>
                     </el-row>
@@ -36,31 +36,37 @@
         <el-dialog :title="isAdd?'新增红包':'修改红包'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
             <el-form :model="addBonusForm" label-width="120px">
                 <el-form-item label="红包名称">
-                    <el-input type="text" v-model="addBonusForm.name" auto-complete="off" placeholder="单行输入"></el-input>
+                    <el-input type="text" v-model="addBonusForm.couponName" auto-complete="off" placeholder="单行输入"></el-input>
                 </el-form-item>
                 <el-form-item label="自助领取">
-                    <el-radio-group v-model="addBonusForm.name">
-                        <el-radio label='允许'></el-radio>
-                        <el-radio label="不允许"></el-radio>
+                    <el-radio-group>
+                        <el-radio label='允许' v-model="addBonusForm.pickUpType" value="HAND"></el-radio>
+                        <el-radio label="不允许" v-model="addBonusForm.pickUpType" value="CONSUME"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="金额类型">
+                    <el-radio-group >
+                        <el-radio :label='FIXED' v-model="addBonusForm.couponMoneyType">固定</el-radio>
+                        <el-radio :label="RANDOM"  v-model="addBonusForm.couponMoneyType">随机</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="红包金额">
-                    <el-input type="text" v-model="addBonusForm.name" auto-complete="off" placeholder="单行输入"></el-input>
+                    <el-input type="text" v-model="addBonusForm.money" auto-complete="off" placeholder="单行输入"></el-input>
                 </el-form-item>
                 <el-form-item label="使用时间">
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addBonusForm.name" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择日期" v-model="addBonusForm.startTime" style="width: 100%;"></el-date-picker>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="11">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addBonusForm.name" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择日期" v-model="addBonusForm.endTime" style="width: 100%;"></el-date-picker>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="最大领取数量">
-                    <el-input type="text" v-model="addBonusForm.name" auto-complete="off" placeholder="留空为不限制"></el-input>
+                    <el-input type="text" v-model="addBonusForm.maxPickUpNumber" auto-complete="off" placeholder="留空为不限制"></el-input>
                 </el-form-item>
                 <el-form-item label="最低消费额度">
-                    <el-input type="text" v-model="addBonusForm.name" auto-complete="off" placeholder="留空为不限制"></el-input>
+                    <el-input type="text" v-model="addBonusForm.minimum" auto-complete="off" placeholder="最低消费额度"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -71,7 +77,7 @@
     </el-row>
 </template>
 <script>
-    import {getBonusLists,deleteBonusById} from '@/api/api'
+    import {getBonusLists,deleteBonusById,addBonus,updateBonusById,getBonusById} from '@/api/api'
 export default {
     data: function() {
         return {
@@ -82,7 +88,14 @@ export default {
             counts: 0,
             bonusList:'',
             addBonusForm:{
-                name:''
+                couponName:'',
+                pickUpType:'',
+                couponMoneyType:'FIXED',
+                money:'',
+                startTime:'',
+                endTime:'',
+                maxPickUpNumber:'',
+                minimum:''
             }
         }
     },
@@ -98,10 +111,45 @@ export default {
         },
         saveAddBonus(){
             this.addLoading = true;
+            if (this.isAdd) {
+                addBonus(this.addBonusForm).then(data => {
+                    this.getBonusList();
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                })
+            } else {
+                updateBonusById(this.addBonusForm).then(data => {
+                    this.getBonusList();
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                }).catch(err => {
+                    console.error(err)
+                })
+            }
         },
         //点击编辑红包按钮
-        editBouns(){
+        editBouns(row){
+            this.isAdd = false;
             this.addDialog = true;
+            console.log(row)
+            console.log(455)
+            this.addBonusForm = {
+                couponName:row.couponName,
+                pickUpType:row.pickUpType,
+                couponMoneyType:row.couponMoneyType,
+                money:row.money,
+                startTime:row.startTime,
+                endTime:row.endTime,
+                maxPickUpNumber:row.maxPickUpNumber,
+                minimum:row.minimum,
+                couponId:row.couponId
+            }
         },
         // 点击添加红包按钮
         addNewBouns(){
@@ -115,7 +163,25 @@ export default {
         },
         //删除红包
         deleteBonus(couponId){
+            this.$confirm('此操作将永久删除该红包, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                deleteBonusById(couponId).then(() => {
+                    this.getBonusList()
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                })
 
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     },
     mounted(){

@@ -3,9 +3,9 @@
       <el-form :model="editGoodsForm" label-width="80px" :rules="editGoodsFormRules" ref="editGoodsForms">
           <el-row class="uploadImgTitle">上传商品图片</el-row>
           <el-row class="uploadImgBox">
-              <!--<el-col :span="4">-->
-                  <!--<img class="goods-imgage" :src="UPLOADURL + editGoodsForm.goodsImgUrl" alt="商品图片">-->
-              <!--</el-col>-->
+              <el-col :span="4">
+                  <img class="goods-imgage" :src="editGoodsForm.goodsImgUrl" alt="商品图片">
+              </el-col>
               <el-col :span="20">
                   <el-upload
                       class="avatar-uploader"
@@ -13,9 +13,8 @@
                       :show-file-list="false"
                       :on-success="handleAvatarSuccess"
                       :before-upload="beforeAvatarUpload">
-                      <img v-if="editGoodsForm.goodsImgUrl" :src="UPLOADURL + editGoodsForm.goodsImgUrl" class="avatar">
-                      <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-                      <img v-else :src="imageUrl" class="avatar">
+                      <!--<img v-if="editGoodsForm.goodsImgUrl" :src="UPLOADURL + editGoodsForm.goodsImgUrl" class="avatar">-->
+                      <i v-if class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
               </el-col>
           </el-row>
@@ -56,9 +55,7 @@
                     feeMeals:'',
                     goodsContent:'',
                     goodsImgUrl:''
-
                 },
-                imageUrl: '',
                 goodsId:'',
                 editGoodsFormRules:{
                     goodsName:[
@@ -105,13 +102,10 @@
             //上传图片
             handleAvatarSuccess(res, file) {
                 this.editGoodsForm.goodsImgUrl = file.url
-                console.log(res)
-                console.log(file)
             },
             beforeAvatarUpload(file) {
             //     const isJPG = file.type === 'image/jpeg';
                 const isLt2M = file.size / 1024 / 1024 < 2;
-            //
             //     if (!isJPG) {
             //         this.$message.error('上传头像图片只能是 JPG 格式!');
             //     }
@@ -121,18 +115,16 @@
                 return isLt2M;
             }
         },
-
         created(){
             var goodsId = this.$route.query.goodsId;
             this.goodsId = goodsId;
             if (goodsId) {getGoodsById(goodsId).then(res => {
                 console.log(res)
                     this.editGoodsForm = res.goods;
-
+                    this.editGoodsForm.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
                 })
             }
         }
-
     }
 </script>
 <style scoped>
