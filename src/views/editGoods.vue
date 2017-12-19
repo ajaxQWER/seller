@@ -9,7 +9,7 @@
               <el-col :span="20">
                   <el-upload
                       class="avatar-uploader"
-                      action="https://jsonplaceholder.typicode.com/posts/"
+                      action="http://api.test.gongxiangdiancan.com/commons/upload/goods"
                       :show-file-list="false"
                       :on-success="handleAvatarSuccess"
                       :before-upload="beforeAvatarUpload">
@@ -101,14 +101,14 @@
             },
             //上传图片
             handleAvatarSuccess(res, file) {
-                this.editGoodsForm.goodsImgUrl = file.url
+                this.editGoodsForm.goodsImgUrl = res.data.originalUrl
             },
             beforeAvatarUpload(file) {
             //     const isJPG = file.type === 'image/jpeg';
                 const isLt2M = file.size / 1024 / 1024 < 2;
             //     if (!isJPG) {
             //         this.$message.error('上传头像图片只能是 JPG 格式!');
-            //     }
+            //     }  q2  
                 if (!isLt2M) {
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
