@@ -1,7 +1,7 @@
 <template>
     <el-row class="bg">
         <el-tabs v-model="activeName" @tab-click="getOrderListData">
-            <el-tab-pane label="全部订单" name="0">
+            <el-tab-pane :label="'全部订单'+ totalOrderCount" name="0">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -453,6 +453,7 @@ export default {
             pageId: 1,
             counts: 0,
             orderStatus: '',
+            totalOrderCount : 0,
             orderList: [],
             canLoad: false,
             isEmpty: false,
@@ -509,6 +510,7 @@ export default {
                 console.log(res.list)
                 if (this.init) {
                     this.orderList = res.list
+                    this.totalOrderCount = res.count
                 } else {
                     this.orderList = [].concat.apply(this.orderList, res.list)
                 }

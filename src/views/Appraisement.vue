@@ -14,7 +14,7 @@
                                 <span class="replyText">近7天评价回复率：{{appraiseTotal.reversionRate*100}}%</span>
                             </el-col>
                             <el-col :span="14">
-                                <el-progress :text-inside="true" :stroke-width="12" :percentage="parseFloat(appraiseTotal.reversionRate*100) " class="Replyschedule"></el-progress>
+                                <el-progress :text-inside="true" :stroke-width="12" :percentage="reversionRate " class="Replyschedule"></el-progress>
                             </el-col>
                         </el-row>
                             <el-row>
@@ -22,7 +22,7 @@
                                     <span class="replyText">近7天差评回复率：{{appraiseTotal.reviewRate*100}}%</span>
                                 </el-col>
                                 <el-col :span="14">
-                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="appraiseTotal.reviewRate*100" status="exception"></el-progress>
+                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="reviewRate " status="exception"></el-progress>
                                 </el-col>
                             </el-row>
                     </el-row>
@@ -321,7 +321,10 @@ export default {
         //获取评价信息
         showShopAppraise(tab){
             console.log(tab)
-                switch (tab.index) {
+            if (!tab || !tab.index) {
+                return false
+            }
+            switch (tab.index) {
                 case '0':
                     this.reply = '';
                     this.activeName = '0';
@@ -392,6 +395,14 @@ export default {
         this.getHeadInfo();
         this.showShopAppraise()
     },
+    computed : {
+        reversionRate : function(){
+            return parseInt(this.appraiseTotal.reversionRate*100) || 0
+        },
+        reviewRate : function(){
+            return parseInt(this.appraiseTotal.reviewRate*100) || 0
+        }
+    }
 }
 </script>
 <style scoped>

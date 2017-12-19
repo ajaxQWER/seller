@@ -39,15 +39,15 @@
                     <el-input type="text" v-model="addBonusForm.couponName" auto-complete="off" placeholder="单行输入"></el-input>
                 </el-form-item>
                 <el-form-item label="自助领取">
-                    <el-radio-group>
-                        <el-radio label='允许' v-model="addBonusForm.pickUpType" value="HAND"></el-radio>
-                        <el-radio label="不允许" v-model="addBonusForm.pickUpType" value="CONSUME"></el-radio>
+                    <el-radio-group v-model="addBonusForm.pickUpType">
+                        <el-radio label='允许'  value="HAND"></el-radio>
+                        <el-radio label="不允许"  value="CONSUME"></el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="金额类型">
-                    <el-radio-group >
-                        <el-radio :label='FIXED' v-model="addBonusForm.couponMoneyType">固定</el-radio>
-                        <el-radio :label="RANDOM"  v-model="addBonusForm.couponMoneyType">随机</el-radio>
+                    <el-radio-group v-model="addBonusForm.couponMoneyType">
+                        <el-radio label='FIXED' >固定</el-radio>
+                        <el-radio label="RANDOM" >随机</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="红包金额">

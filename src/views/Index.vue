@@ -128,11 +128,11 @@
                     console.log(res)
                     this.shopSalesData = res;
                     if (res.operatingState) {
-                        this.shopStatusImg ='/static/images/shop-open.png';
+                        this.shopStatusImg ='../assets/images/shop-open.png';
                     } else {
-                        this.shopStatusImg = '/static/images/shop-close.png';
+                        this.shopStatusImg = '../assets/images/shop-close.png';
                     }
-                    this.printerStatusImg = '/static/images/' + res.printerStatus.toLowerCase() + '.png';
+                    this.printerStatusImg = '../assets/images/' + res.printerStatus.toLowerCase() + '.png';
                 })
             },
             formatMoney: function(money) {
