@@ -1,10 +1,10 @@
 <template>
   <el-row>
-      <el-form :model="editGoodsForm" label-width="80px" :rules="editGoodsFormRules" ref="editGoodsForms">
+      <el-form :model="editGoodsForm" label-width="80px" >
           <el-row class="uploadImgTitle">上传商品图片</el-row>
           <el-row class="uploadImgBox">
               <el-col :span="4">
-                  <img class="goods-imgage" :src="editGoodsForm.goodsImgUrl" alt="商品图片">
+                  <img class="goods-imgage" :src="editGoodsForm.goods.showImgUrl" alt="商品图片">
               </el-col>
               <el-col :span="20">
                   <el-upload
@@ -19,26 +19,26 @@
               </el-col>
           </el-row>
           <el-form-item label="商品名称" class="goodsItem">
-              <el-input type="text" v-model="editGoodsForm.goodsName" placeholder="请输入商品名称，最多20字"></el-input>
+              <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入商品名称，最多20字"></el-input>
           </el-form-item>
           <el-form-item label="商品分类" class="goodsItem">
-              <el-select v-model="editGoodsForm.goodsClassNames" placeholder="请选择"  multiple filterable  allow-create>
+              <el-select v-model="editGoodsForm.goodsCategoryIdList" placeholder="请选择"  multiple filterable  allow-create>
                   <el-option
-                      v-for="item in goodsCategoryLists"
-                      :key="item.goodsCategoryId"
+                      v-for="(item,index) in goodsCategoryLists"
+                      :key="index"
                       :label="item.goodsCategoryName"
                       :value="item.goodsCategoryId">
                   </el-option>
               </el-select>
           </el-form-item>
           <el-form-item label="商品价格" class="goodsItem">
-              <el-input type="text" v-model="editGoodsForm.goodsPrice" placeholder="请输入商品价格"></el-input>
+              <el-input type="text" v-model="editGoodsForm.goods.goodsPrice" placeholder="请输入商品价格"></el-input>
           </el-form-item>
           <el-form-item label="餐盒费" class="goodsItem">
-              <el-input type="text" v-model="editGoodsForm.feeMeals" placeholder="请输入餐盒费"></el-input>
+              <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入餐盒费"></el-input>
           </el-form-item>
           <el-form-item label="商品介绍" class="goodsItem">
-              <el-input type="textarea" v-model="editGoodsForm.goodsContent" placeholder="请输入商品简介，最多255字"></el-input>
+              <el-input type="textarea" v-model="editGoodsForm.goods.goodsContent" placeholder="请输入商品简介，最多255字"></el-input>
           </el-form-item>
       </el-form>
       <el-row>
@@ -51,33 +51,37 @@
     export default {
         data: function () {
             return {
+                saveImgUrl:'',
                 editGoodsForm:{
-                    goodsName:'',
-                    goodsCatogery:'',
-                    goodsClassNames:'',
-                    goodsPrice:'',
-                    feeMeals:'',
-                    goodsContent:'',
-                    goodsImgUrl:''
+                    goods: {
+                        feeMeals: '',
+                        goodsClassNames: "",
+                        goodsContent: "",
+                        showImgUrl: "",
+                        goodsName: "",
+                        goodsPrice: '',
+                        goodsStatus: "SOLD_OUT",
+                    },
+                    goodsCategoryIdList: []
                 },
                 goodsId:'',
-                editGoodsFormRules:{
-                    goodsName:[
-                        { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    ],
-                    goodsClassNames:[
-                        { required: true, message: '请选择商品分类', trigger: 'blur' },
-                    ],
-                    goodsPrice:[
-                        { required: true, message: '请输入价格', trigger: 'blur' },
-                    ],
-                    feeMeals:[
-                        { required: true, message: '请输入餐盒费', trigger: 'blur' },
-                    ],
-                    goodsContent:[
-                        { required: true, message: '请输入商品简介', trigger: 'blur' },
-                    ],
-                },
+                // editGoodsFormRules:{
+                //     goodsName:[
+                //         { required: true, message: '请输入商品名称', trigger: 'blur' },
+                //     ],
+                //     goodsClassNames:[
+                //         { required: true, message: '请选择商品分类', trigger: 'blur' },
+                //     ],
+                //     goodsPrice:[
+                //         { required: true, message: '请输入价格', trigger: 'blur' },
+                //     ],
+                //     feeMeals:[
+                //         { required: true, message: '请输入餐盒费', trigger: 'blur' },
+                //     ],
+                //     goodsContent:[
+                //         { required: true, message: '请输入商品简介', trigger: 'blur' },
+                //     ],
+                // },
                 goodsCategoryLists:[]
             }
         },
@@ -90,26 +94,43 @@
                 this.dialogVisible = true;
             },
             saveEditGoodsInfo(){
+                //debugger
                 //编辑
                 if (this.goodsId) {
-                        updateGoodsById(this.goodsId, this.editGoodsForm).then(() => {
-                        this.$message.success("保存成功")
+                    console.log(666)
+                        updateGoodsById(this.goodsId, paramas).then(() => {
+                        this.$message.success("操作成功")
                     })
                 }else{
-                    this.$refs['editGoodsForms'].validate((valide)=>{
-                        if (valide) {
-                            addGoods(this.editGoodsForm).then(() => {
-                                this.$message.success('操作成功');
-                            })
+                    //新增
+                    var paramas={
+                        feeMeals:this.editGoodsForm.goods.feeMeals,
+                        goodsClassNames:this.editGoodsForm.goods.goodsClassNames,
+                        goodsContent:this.editGoodsForm.goods.goodsContent,
+                        goodsImgUrl:this.saveImgUrl,
+                        goodsName:this.editGoodsForm.goods.goodsName,
+                        goodsPrice:this.editGoodsForm.goods.goodsPrice,
+                        goodsStatus:this.editGoodsForm.goods.goodsStatus,
+                    }
+                    // this.editGoodsForm.goods.goodsImgUrl=JSON.parse(JSON.stringify(this.saveImgUrl))
+                    console.log(this.saveImgUrl)
+                    console.log(5555)
+                    var names = [];
+                    this.goodsCategoryLists.forEach((item) => {
+                        if(this.editGoodsForm.goodsCategoryIdList.indexOf(item.goodsCategoryId) != -1){
+                            names.push(item.goodsCategoryName)
                         }
+                    })
+                    this.editGoodsForm.goods.goodsClassNames = names.join(",");
+                    addGoods(paramas).then(() => {
+                        this.$message.success('操作成功');
                     })
                 }
             },
-
             //上传图片
             handleAvatarSuccess(res, file) {
-                this.editGoodsForm.goodsImgUrl = this.UPLOADURL+res.data.originalUrl
-                // this.editGoodsForm.goodsImgUrl = res.data.originalUrl
+                this.editGoodsForm.goods.showImgUrl = this.UPLOADURL+res.data.originalUrl
+                this.saveImgUrl = res.data.originalUrl
                 this.$message.success('上传成功');
             },
             beforeAvatarUpload(file) {
@@ -138,7 +159,7 @@
             this.goodsId = goodsId;
             if (goodsId) {getGoodsById(goodsId).then(res => {
                     this.editGoodsForm = res.goods;
-                    this.editGoodsForm.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
+                    this.editGoodsForm.goods.showImgUrl=this.UPLOADURL+res.goods.showImgUrl
                 })
             }
         }
