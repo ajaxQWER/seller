@@ -23,7 +23,7 @@
                         </el-col>
                         <el-col :span="3" class="operation">
                             <el-button type="text" @click="editBouns(item)">编辑</el-button>
-                            <el-button type="text"  @click="deleteBonus(item.couponId)">删除</el-button>
+                            <el-button type="text"  @click="deleteBonus(item.couponId)" style="color: red">删除</el-button>
                         </el-col>
                     </el-row>
                 </li>
@@ -40,8 +40,8 @@
                 </el-form-item>
                 <el-form-item label="自助领取">
                     <el-radio-group v-model="addBonusForm.pickUpType">
-                        <el-radio label='允许'  value="HAND"></el-radio>
-                        <el-radio label="不允许"  value="CONSUME"></el-radio>
+                        <el-radio label='HAND'>允许</el-radio>
+                        <el-radio label="CONSUME">不允许</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="金额类型">
@@ -89,13 +89,14 @@ export default {
             bonusList:'',
             addBonusForm:{
                 couponName:'',
-                pickUpType:'',
+                pickUpType:'HAND',
                 couponMoneyType:'FIXED',
                 money:'',
                 startTime:'',
                 endTime:'',
                 maxPickUpNumber:'',
-                minimum:''
+                minimum:'',
+                couponId:""
             }
         }
     },
@@ -104,12 +105,44 @@ export default {
         closeaddDialog: function() {
             this.isAdd = true;
             this.addLoading = false;
+            this.addBonusForm={
+                couponName:'',
+                    pickUpType:'HAND',
+                    couponMoneyType:'FIXED',
+                    money:'',
+                    startTime:'',
+                    endTime:'',
+                    maxPickUpNumber:'',
+                    minimum:'',
+                    couponId:""
+            }
         },
         //取消添加分类
         cancelAddBonus: function() {
             this.addDialog = false;
         },
         saveAddBonus(){
+            if (!this.addBonusForm.couponName) {
+                this.$message({
+                    message: '请输入红包名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if (this.addBonusForm.couponMoneyType == 'FIXED' && !this.addBonusForm.money) {
+                this.$message({
+                    message: '请输入红包金额',
+                    type: 'warning'
+                })
+                return;
+            }
+            if (this.addBonusForm.endTime && this.addBonusForm.startTime > this.addBonusForm.endTime) {
+                this.$message({
+                    message: '结束时间不能小于开始时间',
+                    type: 'warning'
+                })
+                return;
+            }
             this.addLoading = true;
             if (this.isAdd) {
                 addBonus(this.addBonusForm).then(data => {
@@ -119,6 +152,12 @@ export default {
                         type: 'success'
                     })
                     this.addDialog = false;
+                }).catch(data =>{
+                    this.$message({
+                        message: data.message,
+                        type: 'error'
+                    })
+                    this.addLoading = false;
                 })
             } else {
                 updateBonusById(this.addBonusForm).then(data => {
@@ -128,8 +167,12 @@ export default {
                         type: 'success'
                     })
                     this.addDialog = false;
-                }).catch(err => {
-                    console.error(err)
+                }).catch(data => {
+                    this.$message({
+                        message: data.message,
+                        type: 'error'
+                    })
+                    this.addLoading = false;
                 })
             }
         },
@@ -137,8 +180,6 @@ export default {
         editBouns(row){
             this.isAdd = false;
             this.addDialog = true;
-            console.log(row)
-            console.log(455)
             this.addBonusForm = {
                 couponName:row.couponName,
                 pickUpType:row.pickUpType,
@@ -183,6 +224,14 @@ export default {
                 });
             });
         }
+    },
+    created(){
+        //最大日期和最小日期限制在当年
+        // var thisYear = new Date().getFullYear();
+        // var thisStartDate = thisYear + '-01-01';
+        // var thisEndDate = thisYear + 4 + '-12-31';
+        // this.startDate = new Date(thisStartDate);
+        // this.endDate = new Date(thisEndDate);
     },
     mounted(){
         this.getBonusList()

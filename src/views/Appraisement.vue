@@ -31,7 +31,7 @@
         </el-row>
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName" @tab-click="showShopAppraise">
-                <el-tab-pane label="全部评价(33)" name="0">
+                <el-tab-pane label="全部评价" name="0">
                     <el-row  v-if="commentList.length>0">
                         <ul class="clientRepalyContainer">
                             <li v-for="(item,index) in commentList" :key="index">
@@ -97,7 +97,7 @@
                             <img src="../assets/images/empty-img.png" alt="">
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="未回复(33)" name="1">
+                <el-tab-pane label="未回复" name="1">
                     <el-row  v-if="commentList.length>0">
                         <ul class="clientRepalyContainer">
                             <li v-for="(item,index) in commentList" :key="index">
@@ -163,7 +163,7 @@
                         <img src="../assets/images/empty-img.png" alt="">
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="已回复(33)" name="2">
+                <el-tab-pane label="已回复" name="2">
                     <el-row  v-if="commentList.length>0">
                         <ul class="clientRepalyContainer">
                             <li v-for="(item,index) in commentList" :key="index">

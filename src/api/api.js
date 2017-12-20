@@ -112,8 +112,8 @@ export const getBonusById = id => {
     return ajax.get('seller/coupon/' + id);
 };
 //编辑红包
-export const updateBonusById = (id,params) => {
-    return ajax.post('seller/coupon/' + id, params);
+export const updateBonusById = (params) => {
+    return ajax.post('seller/coupon/' + params.couponId, params);
 }
 
 
@@ -191,8 +191,8 @@ export const deletePrinterById = printerId => {
     return ajax.delete('seller/printer/' + printerId);
 };
 //编辑打印机
-export const updatePrinter = (printerId,params) => {
-    return ajax.post('seller/printer/' + printerId, params);
+export const updatePrinter = (params) => {
+    return ajax.post('seller/printer/' + params.printerId, params);
 };
 
 

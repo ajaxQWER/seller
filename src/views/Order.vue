@@ -1,7 +1,7 @@
 <template>
     <el-row class="bg">
         <el-tabs v-model="activeName" @tab-click="getOrderListData">
-            <el-tab-pane :label="'全部订单'+ totalOrderCount" name="0">
+            <el-tab-pane :label="'全部订单'+ '('+totalOrderCount+')'" name="0">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -88,7 +88,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="新订单(55)" name="1">
+            <el-tab-pane :label="'新订单'+ '('+totalOrderCount+')'" name="1">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -175,7 +175,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="进行中(55)" name="2">
+            <el-tab-pane :label="'进行中'+ '('+totalOrderCount+')'" name="2">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -262,7 +262,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="已完成(55)" name="3">
+            <el-tab-pane :label="'已完成'+ '('+totalOrderCount+')'" name="3">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -349,7 +349,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="已取消(55)" name="4">
+            <el-tab-pane :label="'已取消'+ '('+totalOrderCount+')'" name="4">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">

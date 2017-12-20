@@ -31,7 +31,7 @@
                     <el-checkbox></el-checkbox>
                     <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)">{{formatStatus(item.goodsStatus)}}</el-button>
                     <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
-                    <el-button type="text" @click="deleteGoods(item.goodsId,index)">删除</el-button>
+                    <el-button type="text" @click="deleteGoods(item.goodsId)">删除</el-button>
                 </el-row>
                 <el-row class="goodsContentText">
                     <el-col class="goodsImg" :span="10">
@@ -160,12 +160,12 @@ export default {
                 }
                 this.$message({
                     type: 'info',
-                    message: 'action: ' + action
+                    message: 'action: '+ action
                 });
             });
         },
         //删除商品
-        deleteGoods(id,index){
+        deleteGoods(id){
             this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
