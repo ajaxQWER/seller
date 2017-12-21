@@ -56,8 +56,8 @@ export default {
             },
             updateGoodsCategorys:{
             	 goodsCategoryId: 0,
-							 goodsCategoryName: "",
-							 sortOrder: 0
+				 goodsCategoryName: "",
+				 sortOrder: 0
             },
             counts: 0,
             addDialog: false,
@@ -87,6 +87,7 @@ export default {
     			this.addDialog = true
     		},
     		closeAddDialog(){
+                this.getGoodsCategorys()
     			this.addDialog = false
     		},
         //分页
@@ -140,3 +141,8 @@ export default {
 }
 
 </script>
+<style scoped>
+    .pagination{
+        float: right;
+    }
+</style>

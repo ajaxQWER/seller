@@ -194,5 +194,17 @@ export const deletePrinterById = printerId => {
 export const updatePrinter = (params) => {
     return ajax.post('seller/printer/' + params.printerId, params);
 };
+//获取活动列表
+export const getActivity = params => {
+    return ajax.get('seller/activity', params);
+};
+//删除活动列表
+export const deleteActivity = activityId => {
+    return ajax.delete('seller/activity/' + activityId);
+};
+//添加活动列表
+export const addActivity = params => {
+    return ajax.put('seller/activity/' , params);
+};
 
 
