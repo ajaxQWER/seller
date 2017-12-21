@@ -47,7 +47,6 @@ export default {
                         console.log(data)
                         console.log(4444)
                         localStorage.setItem('seller', JSON.stringify(data.seller));
-                        localStorage.setItem('shopId', JSON.stringify(data.seller.shopId));
                         localStorage.setItem('jwt', data.jwt);
                         localStorage.setItem('shopName',data.shopName)
                         localStorage.setItem('shopId',data.seller.shopId)
