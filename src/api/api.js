@@ -206,5 +206,11 @@ export const deleteActivity = activityId => {
 export const addActivity = params => {
     return ajax.put('seller/activity/' , params);
 };
-
-
+//查询活动详情
+export const getActivityDetails = activityId => {
+    return ajax.get('seller/activity/' + activityId);
+};
+//修改活动内容
+export const updateActivityDetails = params => {
+    return ajax.post('seller/activity/' + params.activityId , params);
+};

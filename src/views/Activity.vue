@@ -4,7 +4,7 @@
 			<p class="activitySize">活动设置</p>
 			<p class="activityColor">活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置</p>
 		</el-row>
-		<el-button class="addButton" size="small" type="success" @click="addActivity">添加活动</el-button>
+		<el-button class="addButton" size="small" type="success" @click="showAddActivity">添加活动</el-button>
 		<el-row class="content">
 			<div v-for="(item,index) in activityList">
 				<el-row class="activityContent" v-if="item.state">
@@ -17,7 +17,7 @@
 						<div class="discount">有效期：{{moment(item.beginTime).format('YYYY-MM-DD')}} 至 {{item.endTime?moment(item.endTime).format('YYYY-MM-DD'):'长期'}}</div>
 					</el-col>
 					<el-col :span="2">
-						<el-button type="text" @click="handleClick(index)">编辑</el-button>
+						<el-button type="text" @click="handleClick(item.activityId,index)">编辑</el-button>
 	                    <el-button type="text" @click="deleteActivitys(item.activityId)">删除</el-button>
 					</el-col>
 				</el-row>
@@ -26,7 +26,7 @@
 						<img src="../assets/images/discount_03.png" height="66" width="69" class="imgP">
 					</el-col>
 					<el-col :span="12" :offset="1">
-						<el-form label-width="120px">
+						<el-form label-width="120px" v-if="item.activityType == 'FIRST'">
 			                <el-form-item label="活动名称">
 			                    <el-input width="100"></el-input>
 			                </el-form-item>
@@ -42,6 +42,67 @@
 			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
+			            <el-form label-width="120px" v-if="item.activityType == 'DELGOLD'">
+			                <el-form-item label="活动名称">
+			                    <el-input width="100"></el-input>
+			                </el-form-item>
+			                <el-form-item label="开始时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="结束时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="立减金额">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
+			            </el-form>
+			            <el-form label-width="120px" v-if="item.activityType == 'COMPLIMENTARY'">
+			                <el-form-item label="活动名称">
+			                    <el-input width="100"></el-input>
+			                </el-form-item>
+			                <el-form-item label="开始时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="结束时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="立减金额">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
+			            </el-form>
+			            <el-form label-width="120px" v-if="item.activityType == 'COMPLIMENTARY'">
+			                <el-form-item label="活动名称">
+			                    <el-input width="100"></el-input>
+			                </el-form-item>
+			                <el-form-item label="开始时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="结束时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="立减金额">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
+			            </el-form>
+			            <el-form label-width="120px" v-if="item.activityType == 'SPECIFIC'">
+			                <el-form-item label="活动名称">
+			                    <el-input width="100"></el-input>
+			                </el-form-item>
+			                <el-form-item label="开始时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-form-item label="结束时间">
+			                    <el-input></el-input>
+			                </el-form-item>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
+			            </el-form>
 					</el-col>
 				</el-row>
 			</div>
@@ -51,141 +112,110 @@
             </el-col>
 		</el-row>
 		<el-dialog :title="'添加活动'" :visible.sync="addDialog" size="tiny" @close="closeAddDialog" class="dialog">
-			<el-button class="btn" @click="fullPurchase">购满就送</el-button>
-			<el-button class="btn" @click="firstSingleExemption">首单免减</el-button>
-			<el-button class="btn" @click="delGold">购满就减</el-button>
-			<el-button class="btn" @click="specialPrices">特价商品</el-button>
-			<el-button class="btn" @click="sale">折扣商品</el-button>
-			<el-button class="btn" @click="specific">其他</el-button>
+			<el-form :inline="true">
+				<el-form-item label="活动类型" label-width="120px">
+					<el-select @change="change(value)" v-model="value" placeholder="请选择">
+					    <el-option v-for="(item,index) in activityTypes" :key="index" :label="item.label" :value="item.value"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
 			<div v-if="state=='fullPurchase'">
 				<el-form label-position="none" label-width="120px">
-	            	<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
+	                <el-form-item label="活动时间">
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="选择日期" v-model="beginTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					</el-form-item>
 	                <el-form-item label="最低金额">
-	                    <el-input type="number"></el-input>
+	                    <el-input v-model="full"></el-input>
 	                </el-form-item>
 	                <el-form-item label="选择红包">
-	                    <el-input></el-input>
+	                    <el-select v-model="couponId" placeholder="请选择">
+						    <el-option v-for="(item,index) in options" :key="index" :label="item.couponName" :value="item.couponId"></el-option>
+						</el-select>
 	                </el-form-item>
 	                <el-form-item label="红包数量">
-	                    <el-input type="number"></el-input>
+	                    <el-input v-model="couponCount"></el-input>
 	                </el-form-item>
 	            </el-form>
 			</div>
 			<div v-if="state=='firstSingleExemption'">
 				<el-form label-position="none" label-width="120px">
-					<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
+	                <el-form-item label="活动时间">
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="选择日期" v-model="beginTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					</el-form-item>
 	                <el-form-item label="立减金额">
-	                    <el-input type="number"></el-input>
+	                    <el-input v-model="money"></el-input>
 	                </el-form-item>
 	            </el-form>
 			</div>
 			<div v-if="state=='delGold'">
 				<el-form label-position="none" label-width="120px">
-					<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
-	                <el-form-item label="最低金额">
-	                    <el-input type="number"></el-input>
-	                </el-form-item>
-	            </el-form>
-			</div>
-			<div v-if="state=='specialPrices'">
-				<el-form label-position="none" label-width="120px">
-					<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
-	                <el-form-item label="最低金额">
-	                    <el-input type="number"></el-input>
+					<el-form-item label="活动时间">
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="选择日期" v-model="beginTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					</el-form-item>
+	                <el-form-item label="购满">
+	                	<el-col :span="10">
+					      <el-input v-model="full"></el-input>
+					    </el-col>
+					    <el-col class="line" :span="3" style="text-align:center;">立减</el-col>
+					    <el-col :span="10">
+					      <el-input v-model="subtract"></el-input>
+					    </el-col>
 	                </el-form-item>
 	            </el-form>
 			</div>
 			<div v-if="state=='sale'">
 				<el-form label-position="none" label-width="120px">
-					<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
-	                <el-form-item label="最低金额">
-	                    <el-input type="number"></el-input>
+	                <el-form-item label="活动时间">
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="选择日期" v-model="beginTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					</el-form-item>
+	                <el-form-item label="活动名称">
+	                    <el-input v-model="activityName"></el-input>
 	                </el-form-item>
 	            </el-form>
 			</div>
 			<div v-if="state=='specific'">
 				<el-form label-position="none" label-width="120px">
-					<el-form-item label="活动时间" :inline="true">
-	                    <el-date-picker
-					      type="date"
-					      placeholder="选择日期"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-					    <i class="el-icon-minus"></i>
-					    <el-date-picker
-					      type="date"
-					      placeholder="无限制"
-					      :picker-options="pickerOptions0">
-					    </el-date-picker>
-	                </el-form-item>
-	                <el-form-item label="最低金额">
-	                    <el-input type="number"></el-input>
+	                <el-form-item label="活动时间">
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="选择日期" v-model="beginTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+					    <el-col :span="10">
+					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
+					    </el-col>
+					</el-form-item>
+	                <el-form-item label="活动名称">
+	                    <el-input v-model="activityName"></el-input>
 	                </el-form-item>
 	            </el-form>
 			</div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="closeAddDialog">取 消</el-button>
-                <el-button type="primary" @click="closeAddDialog" >确 定</el-button>
+                <el-button type="primary" @click="addActivitys" >确 定</el-button>
             </div>
         </el-dialog>
 	</el-row>
@@ -194,10 +224,17 @@
   <!-- [首单立减'FIRST', 购满就减'DELGOLD', 购满就送'COMPLIMENTARY', 特价商品'SPECIALPRICES', 折扣商品'SALE', 其他'SPECIFIC'] -->
 
 <script>
-import { getActivity , deleteActivity , addActivity } from "@/api/api.js"
+import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails} from "@/api/api.js"
 export default {
 	created(){
 		this.getActivitys()
+		let bonusParams = {
+			pageId:1,
+			pageSize:9999
+		}
+		getBonusLists({params:bonusParams}).then(res =>{
+			this.options = res.list
+		})
 	},
     data: function() {
         return {
@@ -211,16 +248,53 @@ export default {
 	            return time.getTime() < Date.now() - 8.64e7;
 	          }
 	        },
+	        typeName:"",
+	        couponCount:"",
+	        couponId:"",
+	        full:"",
+            beginTime: '',
+            endTime: '',
+            money:"",
+            activityName:"",
+            subtract: "",
+            activityObj:[{
+            	full:"",
+            	subtract:""
+            }],
+
+
+
+
 	        activityId:"",
 	        state:"",
         	addDialog:false,
         	counts:0,
-            activityList:[]
+            activityList:[],
+            value:"",
+            options: [],
+            activityTypes:[{
+            	label:"购满就送",
+            	value:1
+            },{
+            	label:"首单立减",
+            	value:2
+            },{
+            	label:"购满就减",
+            	value:3
+            },{
+            	label:"折扣商品",
+            	value:4
+            },{
+            	label:"其他",
+            	value:5
+            },]
         }
     },
     methods:{
-    	handleClick(index){
+    	async handleClick(activityId,index){
     		this.activityList[index].state = false
+    		const data = await getActivityDetails(activityId)
+    		console.log(data)
     	},
     	saveUpdateActivity(index){
     		this.activityList[index].state = true
@@ -233,35 +307,29 @@ export default {
             this.getActivitys()
         },
         closeAddDialog(){
+        	this.value = ""
         	this.addDialog = false
         	this.state = ""
         },
-        addActivity(){
+        showAddActivity(){
         	this.addDialog = true
         },
-        //购满就送
-        fullPurchase(){
-        	this.state = "fullPurchase"
+        change(val){
+        	if(val == 1){
+        		this.state = "fullPurchase"
+        	}else if(val == 2){
+        		this.state = "firstSingleExemption"
+        	}else if(val == 3){
+        		this.state = "delGold"
+        	}else if(val == 4){
+        		this.state = "sale"
+        	}else if(val == 5){
+        		this.state = "specific"
+        	}
         },
-        //首单免减
-        firstSingleExemption(){
-        	this.state = "firstSingleExemption"
-        },
-        //购买立减
-        delGold(){
-        	this.state = "delGold"
-        },
-        //特价商品
-        specialPrices(){
-        	this.state = "specialPrices"
-        },
-        //折扣商品
-        sale(){
-        	this.state = "sale"
-        },
-        //其他
-        specific(){
-        	this.state = "specific"
+        //时间格式化
+        formatDate(date){
+        	return new Date(date).getTime()
         },
         //获取店铺活动列表
         async getActivitys(){
@@ -272,7 +340,6 @@ export default {
     		this.activityList = data.map((item) =>{
     			return {...item,...state}
     		})
-    		console.log(res)
         },
         //删除店铺活动
         async deleteActivitys(activityId){
@@ -287,8 +354,6 @@ export default {
 					return '购满就减';
 				case 'COMPLIMENTARY':
 					return '购满就送';
-				case 'SPECIALPRICES':
-					return '特价商品';
 				case 'SALE':
 					return '折扣商品';
 				case 'SPECIFIC':
@@ -304,10 +369,119 @@ export default {
 					return 'type-2';
 				case 'SALE':
 				case 'SPECIFIC':
-				case 'SPECIALPRICES':
 					return 'type-1';
 			}
-		},	
+		},
+		//增加店铺活动
+		async addActivitys(){
+			var activityParams = {}
+			console.log(this.value)
+			//购满就送
+			if(this.value==1&&!this.full==""&&!this.couponId==""&&!this.couponCount==""){
+				activityParams = {
+		        	activityContent:{
+		        		typeName:"sharefood.models.activity.activity.entity.ComplimentaryActivityData",
+		        		couponCount: this.couponCount,
+	                    couponId: this.couponId,
+	                    full: this.full,
+		        	},
+		        	activityType: 'COMPLIMENTARY',
+	                beginTime: this.formatDate(this.beginTime),
+	                endTime:  this.formatDate(this.endTime),
+	                isValid: true
+		        }
+		        await addActivity(activityParams)
+				this.addDialog = false
+				this.getActivitys()
+				this.typeName = ""
+		        this.couponCount = ""
+		        this.couponId = ""
+		        this.full = ""
+	            this.beginTime = ''
+	            this.endTime = ''
+			}else if(this.value == 2){
+				activityParams = {
+	                activityContent: {
+	                	typeName: "sharefood.models.activity.activity.entity.FirstActivityData",
+	                    money: this.money
+	                },
+	                activityType: "FIRST",
+	                beginTime: this.formatDate(this.beginTime),
+	                endTime: this.formatDate(this.endTime),
+	                isValid: true
+	            }
+	            await addActivity(activityParams)
+	            this.addDialog = false
+				this.getActivitys()
+				this.money=""
+				this.beginTime = ''
+	            this.endTime = ''
+			}else if(this.value == 3){
+				//添加买满就减有问题
+				this.activityObj.push({
+					full:this.full,
+					subtract:this.subtract
+				})
+				activityParams = {
+		        	activityContent:{
+		        		typeName:"sharefood.models.activity.activity.entity.DelgoldActivityData",
+		        		delgolds : this.activityObj
+		        	},
+		        	activityType: 'DELGOLD',
+	                beginTime: this.formatDate(this.beginTime),
+	                endTime:  this.formatDate(this.endTime),
+	                isValid: true
+		        }
+		        await addActivity(activityParams)
+				this.addDialog = false
+				this.getActivitys()
+		        this.full = ""
+		        this.subtract = ""
+	            this.beginTime = ''
+	            this.endTime = ''
+			}else if(this.value == 4){
+				activityParams = {
+	                activityContent: {
+                		typeName: "sharefood.models.activity.activity.entity.SaleActivityData"
+	                },
+	                activityType: 'SALE',
+	                beginTime: this.formatDate(this.beginTime),
+	                endTime: this.formatDate(this.endTime),
+	                activityName: this.activityName,
+	                isValid: true
+	            }
+	            await addActivity(activityParams)
+	            this.addDialog = false
+				this.getActivitys()
+				this.activityName=""
+				this.beginTime = ''
+	            this.endTime = ''
+			}else if(this.value == 5){
+				activityParams = {
+					activityContent: {
+	                	typeName: "sharefood.models.activity.activity.entity.SpecificActivityData",
+	                    content: this.activityName
+	                },
+	                activityType: "SPECIFIC",
+	                beginTime: this.formatDate(this.beginTime),
+		            endTime: this.formatDate(this.endTime),
+		            activityName: this.activityName,
+	                isValid: true
+				}
+                await addActivity(activityParams)
+	            this.addDialog = false
+				this.getActivitys()
+				this.activityName=""
+				this.beginTime = ''
+	            this.endTime = ''
+			}else{
+				this.$message({
+                    type: 'error',
+                    message: '信息不完整，请填写完整'
+                });
+			}
+			
+		}	
 	}
 }
 </script>
@@ -375,5 +549,8 @@ export default {
 	}
 	form{
 		margin-top: 1em
+	}
+	.el-date-editor.el-input{
+		width:100%;
 	}
 </style>
