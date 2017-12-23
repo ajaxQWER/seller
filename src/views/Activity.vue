@@ -170,15 +170,23 @@
 					        <el-date-picker type="date" placeholder="无限制" v-model="endTime" :picker-options="pickerOptions0"></el-date-picker>
 					    </el-col>
 					</el-form-item>
-	                <el-form-item label="购满">
-	                	<el-col :span="10">
-					      <el-input v-model="full"></el-input>
-					    </el-col>
-					    <el-col class="line" :span="3" style="text-align:center;">立减</el-col>
-					    <el-col :span="10">
-					      <el-input v-model="subtract"></el-input>
-					    </el-col>
-	                </el-form-item>
+	                <div v-for="(item,index) in activityObj">
+	                	<el-form-item label="购满">
+		                	<el-col :span="5">
+						      <el-input v-model="item.full"></el-input>
+						    </el-col>
+						    <el-col class="line" :span="3" style="text-align:center;">立减</el-col>
+						    <el-col :span="5">
+						      <el-input v-model="item.subtract"></el-input>
+						    </el-col>
+						    <el-col :span="5">
+						      <el-button @click="addDelGold">增加</el-button>
+						    </el-col>
+						    <el-col :span="5">
+						      <el-button @click="delAddDelGold(index)">删除</el-button>
+						    </el-col>
+		                </el-form-item>
+	                </div>
 	            </el-form>
 			</div>
 			<div v-if="state=='sale'">
@@ -256,10 +264,10 @@ export default {
             endTime: '',
             money:"",
             activityName:"",
-            subtract: "",
+            // subtract: "",
             activityObj:[{
-            	full:"",
-            	subtract:""
+            	full:null,
+            	subtract:null
             }],
 
 
@@ -287,10 +295,27 @@ export default {
             },{
             	label:"其他",
             	value:5
-            },]
+            }]
         }
     },
     methods:{
+    	addDelGold(){
+    		if(this.activityObj.length < 5){
+    			this.activityObj.push({
+	    			full:null,
+	            	subtract:null
+	    		})
+	    	}else{
+	    		this.$message({
+                    type: 'error',
+                    message: '不能超过5个'
+                });
+	    	}
+    		
+    	},
+    	delAddDelGold(index){
+    		this.activityObj.splice(index, 1)
+    	},
     	async handleClick(activityId,index){
     		this.activityList[index].state = false
     		const data = await getActivityDetails(activityId)
@@ -375,7 +400,6 @@ export default {
 		//增加店铺活动
 		async addActivitys(){
 			var activityParams = {}
-			console.log(this.value)
 			//购满就送
 			if(this.value==1&&!this.full==""&&!this.couponId==""&&!this.couponCount==""){
 				activityParams = {
@@ -417,11 +441,6 @@ export default {
 				this.beginTime = ''
 	            this.endTime = ''
 			}else if(this.value == 3){
-				//添加买满就减有问题
-				this.activityObj.push({
-					full:this.full,
-					subtract:this.subtract
-				})
 				activityParams = {
 		        	activityContent:{
 		        		typeName:"sharefood.models.activity.activity.entity.DelgoldActivityData",
@@ -436,7 +455,10 @@ export default {
 				this.addDialog = false
 				this.getActivitys()
 		        this.full = ""
-		        this.subtract = ""
+		        this.activityObj = [{
+		        	full:null,
+	            	subtract:null
+		        }]
 	            this.beginTime = ''
 	            this.endTime = ''
 			}else if(this.value == 4){
