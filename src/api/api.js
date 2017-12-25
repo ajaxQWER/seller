@@ -211,6 +211,6 @@ export const getActivityDetails = activityId => {
     return ajax.get('seller/activity/' + activityId);
 };
 //修改活动内容
-export const updateActivityDetails = params => {
-    return ajax.post('seller/activity/' + params.activityId , params);
+export const updateActivityDetails = (activityId,params) => {
+    return ajax.post('seller/activity/' + activityId , params);
 };

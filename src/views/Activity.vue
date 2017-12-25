@@ -6,7 +6,7 @@
 		</el-row>
 		<el-button class="addButton" size="small" type="success" @click="showAddActivity">添加活动</el-button>
 		<el-row class="content">
-			<div v-for="(item,index) in activityList">
+			<div v-for="(item,index) in activityList" :key="index">
 				<el-row class="activityContent" v-if="item.state">
 					<el-col :span="2">
 						<img src="../assets/images/discount_03.png" height="66" width="69" class="imgP">
@@ -17,7 +17,7 @@
 						<div class="discount">有效期：{{moment(item.beginTime).format('YYYY-MM-DD')}} 至 {{item.endTime?moment(item.endTime).format('YYYY-MM-DD'):'长期'}}</div>
 					</el-col>
 					<el-col :span="2">
-						<el-button type="text" @click="handleClick(item.activityId,index)">编辑</el-button>
+						<el-button type="text" @click="handleClick(item,index)">编辑</el-button>
 	                    <el-button type="text" @click="deleteActivitys(item.activityId)">删除</el-button>
 					</el-col>
 				</el-row>
@@ -26,81 +26,100 @@
 						<img src="../assets/images/discount_03.png" height="66" width="69" class="imgP">
 					</el-col>
 					<el-col :span="12" :offset="1">
-						<el-form label-width="120px" v-if="item.activityType == 'FIRST'">
-			                <el-form-item label="活动名称">
-			                    <el-input width="100"></el-input>
-			                </el-form-item>
+						<el-form label-width="120px" v-if="item.activityType == 'FIRST'" v-model="firstActivity">
 			                <el-form-item label="开始时间">
-			                    <el-input></el-input>
+			                    <el-date-picker type="date" v-model="firstActivity.beginTime" :picker-options="pickerOptions0"></el-date-picker>
 			                </el-form-item>
 			                <el-form-item label="结束时间">
-			                    <el-input></el-input>
+			                    <el-date-picker type="date" v-model="firstActivity.endTime" :picker-options="pickerOptions0"></el-date-picker>
 			                </el-form-item>
 			                <el-form-item label="立减金额">
-			                    <el-input></el-input>
+			                    <el-input v-model="firstActivity.activityContent.money"></el-input>
 			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
-			            <el-form label-width="120px" v-if="item.activityType == 'DELGOLD'">
-			                <el-form-item label="活动名称">
-			                    <el-input width="100"></el-input>
-			                </el-form-item>
+			            <el-form label-width="120px" v-if="item.activityType == 'DELGOLD'" v-model="delgoldActivity">
 			                <el-form-item label="开始时间">
-			                    <el-input></el-input>
+			                    <el-date-picker type="date" v-model="delgoldActivity.beginTime" :picker-options="pickerOptions0"></el-date-picker>
 			                </el-form-item>
 			                <el-form-item label="结束时间">
-			                    <el-input></el-input>
+			                    <el-date-picker type="date" v-model="delgoldActivity.endTime" placeholder="无限制" :picker-options="pickerOptions0"></el-date-picker>
 			                </el-form-item>
-			                <el-form-item label="立减金额">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+			                <div v-for="(item,index) in delgoldActivity.activityContent.delgolds">
+			                	<el-form-item label="购满">
+				                	<el-col :span="5">
+								      <el-input v-model="item.full"></el-input>
+								    </el-col>
+								    <el-col class="line" :span="3" style="text-align:center;">立减</el-col>
+								    <el-col :span="5">
+								      <el-input v-model="item.subtract"></el-input>
+								    </el-col>
+								    <el-col :span="5">
+								      <el-button @click="addDel">增加</el-button>
+								    </el-col>
+								    <el-col :span="5">
+								      <el-button @click="delAddDel(index)">删除</el-button>
+								    </el-col>
+				                </el-form-item>
+			                </div>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
-			            <el-form label-width="120px" v-if="item.activityType == 'COMPLIMENTARY'">
-			                <el-form-item label="活动名称">
-			                    <el-input width="100"></el-input>
+			            <el-form label-width="120px" v-if="item.activityType == 'COMPLIMENTARY'" v-model="complimentaryActivity">
+			                <el-form-item label="活动时间">
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="选择日期" v-model="complimentaryActivity.beginTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="无限制" v-model="complimentaryActivity.endTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							</el-form-item>
+			                <el-form-item label="最低金额">
+			                    <el-input v-model="complimentaryActivity.activityContent.full"></el-input>
 			                </el-form-item>
-			                <el-form-item label="开始时间">
-			                    <el-input></el-input>
+			                <el-form-item label="选择红包">
+			                    <el-select v-model="complimentaryActivity.activityContent.couponId" placeholder="请选择">
+								    <el-option v-for="(item,index) in options" :key="index" :label="item.couponName" :value="item.couponId"></el-option>
+								</el-select>
 			                </el-form-item>
-			                <el-form-item label="结束时间">
-			                    <el-input></el-input>
+			                <el-form-item label="红包数量">
+			                    <el-input v-model="complimentaryActivity.activityContent.couponCount"></el-input>
 			                </el-form-item>
-			                <el-form-item label="立减金额">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
-			            <el-form label-width="120px" v-if="item.activityType == 'COMPLIMENTARY'">
+			            <el-form label-width="120px" v-if="item.activityType == 'SALE'" v-model="saleActivity">
+			                <el-form-item label="活动时间">
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="选择日期" v-model="saleActivity.beginTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="无限制" v-model="saleActivity.endTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							</el-form-item>
 			                <el-form-item label="活动名称">
-			                    <el-input width="100"></el-input>
+			                    <el-input v-model="saleActivity.activityName"></el-input>
 			                </el-form-item>
-			                <el-form-item label="开始时间">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-form-item label="结束时间">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-form-item label="立减金额">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
-			            <el-form label-width="120px" v-if="item.activityType == 'SPECIFIC'">
+			            <el-form label-width="120px" v-if="item.activityType == 'SPECIFIC'" v-model="specificActivity">
+			               <el-form-item label="活动时间">
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="选择日期" v-model="specificActivity.beginTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							    <el-col class="line" :span="2" style="text-align:center">-</el-col>
+							    <el-col :span="10">
+							        <el-date-picker type="date" placeholder="无限制" v-model="specificActivity.endTime" :picker-options="pickerOptions0"></el-date-picker>
+							    </el-col>
+							</el-form-item>
 			                <el-form-item label="活动名称">
-			                    <el-input width="100"></el-input>
+			                    <el-input v-model="specificActivity.activityName"></el-input>
 			                </el-form-item>
-			                <el-form-item label="开始时间">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-form-item label="结束时间">
-			                    <el-input></el-input>
-			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(index)">保存</el-button>
+			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
 					</el-col>
@@ -232,7 +251,7 @@
   <!-- [首单立减'FIRST', 购满就减'DELGOLD', 购满就送'COMPLIMENTARY', 特价商品'SPECIALPRICES', 折扣商品'SALE', 其他'SPECIFIC'] -->
 
 <script>
-import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails} from "@/api/api.js"
+import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails ,updateActivityDetails} from "@/api/api.js"
 export default {
 	created(){
 		this.getActivitys()
@@ -264,15 +283,10 @@ export default {
             endTime: '',
             money:"",
             activityName:"",
-            // subtract: "",
             activityObj:[{
             	full:null,
             	subtract:null
             }],
-
-
-
-
 	        activityId:"",
 	        state:"",
         	addDialog:false,
@@ -295,7 +309,62 @@ export default {
             },{
             	label:"其他",
             	value:5
-            }]
+            }],
+            firstActivity: {
+            	activityContent: {
+            		typeName: "sharefood.models.activity.activity.entity.FirstActivityData",
+            	    money: null,
+            	},
+            	beginTime: null,
+            	endTime: null,
+            	activityType: "FIRST",
+            	isValid: true
+            },
+            complimentaryActivity: {
+            	activityContent: {
+            		typeName:"sharefood.models.activity.activity.entity.ComplimentaryActivityData",
+	        		couponCount: null,
+                    couponId: null,
+                    full: null,
+            	},
+            	activityType: 'COMPLIMENTARY',
+                beginTime: null,
+                endTime:  null,
+                isValid: true
+            },
+            delgoldActivity: {
+            	activityContent:{
+	        		typeName:"sharefood.models.activity.activity.entity.DelgoldActivityData",
+	        		delgolds : null
+	        	},
+	        	activityType: 'DELGOLD',
+                beginTime: null,
+                endTime:  null,
+                isValid: true
+            },
+            saleActivity: {
+            	activityContent: {
+            		typeName: "sharefood.models.activity.activity.entity.SaleActivityData"
+                },
+                activityType: 'SALE',
+                beginTime: null,
+                endTime: null,
+                activityName: null,
+                isValid: true
+            },
+            specificActivity: {
+            	activityContent: {
+                	typeName: "sharefood.models.activity.activity.entity.SpecificActivityData",
+                    content: {
+                    	activityName:""
+                    }
+                },
+                activityType: "SPECIFIC",
+                beginTime: null,
+	            endTime: null,
+	            activityName: null,
+                isValid: true
+            }
         }
     },
     methods:{
@@ -311,17 +380,70 @@ export default {
                     message: '不能超过5个'
                 });
 	    	}
-    		
     	},
     	delAddDelGold(index){
     		this.activityObj.splice(index, 1)
     	},
-    	async handleClick(activityId,index){
-    		this.activityList[index].state = false
-    		const data = await getActivityDetails(activityId)
-    		console.log(data)
+    	addDel(){
+    		if(this.delgoldActivity.activityContent.delgolds.length < 5){
+    			this.delgoldActivity.activityContent.delgolds.push({
+	    			full:null,
+	            	subtract:null
+	    		})
+	    	}else{
+	    		this.$message({
+                    type: 'error',
+                    message: '不能超过5个'
+                });
+	    	}
     	},
-    	saveUpdateActivity(index){
+    	delAddDel(index){
+    		this.delgoldActivity.activityContent.delgolds.splice(index, 1)
+    	},
+    	async handleClick(item,index){
+    		switch(item.activityType){
+    			case 'FIRST':
+    				this.firstActivity = item;
+    				break;
+    			case 'DELGOLD':
+    				this.delgoldActivity = item;
+    				break;
+    			case 'COMPLIMENTARY':
+    				this.complimentaryActivity = item;
+    				break;
+    			case 'SALE':
+    				this.saleActivity = item;
+    				break;
+    			case 'SPECIFIC':
+    				this.specificActivity = item;
+    				break;
+    		}
+    		this.activityList[index].state = false;
+    	},
+    	async saveUpdateActivity(item,index){
+    		console.log(this.firstActivity)
+    		switch(item.activityType){
+    			case 'FIRST':
+    				await updateActivityDetails(item.activityId,this.firstActivity)
+    				this.getActivitys()
+    				break;
+    			case 'DELGOLD':
+    				await updateActivityDetails(item.activityId,this.delgoldActivity)
+    				this.getActivitys()
+    				break;
+    			case 'COMPLIMENTARY':
+    				await updateActivityDetails(item.activityId,this.complimentaryActivity)
+    				this.getActivitys()
+    				break;
+    			case 'SALE':
+    				await updateActivityDetails(item.activityId,this.saleActivity)
+    				this.getActivitys()
+    				break;
+    			case 'SPECIFIC':
+    				await updateActivityDetails(item.activityId,this.specificActivity)
+    				this.getActivitys()
+    				break;
+    		}
     		this.activityList[index].state = true
     	},
     	cancelActivity(index){
@@ -362,6 +484,7 @@ export default {
     		this.counts = res.count
     		let data = res.list
     		let state = {state:true}
+    		console.log(data)
     		this.activityList = data.map((item) =>{
     			return {...item,...state}
     		})
