@@ -173,7 +173,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 deleteGoodsById(id).then(() => {
-                    this.getGoodsLists();
+                    this.getGoodsLists(id)
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -216,6 +216,7 @@ export default {
     .Type{
         text-align: center;
     }
+
     .chageBtn{
         background-color: #f4f4f4;
         padding-left: 10px;
