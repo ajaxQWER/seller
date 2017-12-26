@@ -2,6 +2,7 @@
     <el-row>
         <el-row class="bonusTitle">
             <el-col :span="22">
+                <!--<el-row class="i-icon i-icon-shouye"></el-row>-->
                 <el-row class="bonusSetting">红包设置</el-row>
                 <el-row>Lorem ipsum dolor sit amet, consectetur adipisicing.</el-row>
             </el-col>
@@ -28,6 +29,13 @@
                     </el-row>
                 </li>
             </ul>
+            <el-row class="PaginationBox">
+                <el-pagination
+                    @current-change="currentChange"
+                    :current-page="pageId"
+                    :total="counts">
+                </el-pagination>
+            </el-row>
         </el-row>
         <el-row v-else class="empty">
             <img src="../assets/images/empty-img.png" alt="">
@@ -117,6 +125,11 @@ export default {
                     couponId:""
             }
         },
+        //分页
+        currentChange(val) {
+            this.pageId = val;
+            this.getBonusList(val)
+        },
         //取消添加分类
         cancelAddBonus: function() {
             this.addDialog = false;
@@ -198,8 +211,9 @@ export default {
         },
         //获取红包列表
         getBonusList: function(){
-            getBonusLists({params: {pageSize: 10,pageId:this.pageId}}).then(res => {
+            getBonusLists({params: {pageSize: 5,pageId:this.pageId}}).then(res => {
                 this.bonusList = res.list;
+                this.counts = res.count;
             })
         },
         //删除红包
@@ -249,9 +263,9 @@ export default {
     }
     .bonusContentBox{
         margin-top: 10px;
+        background-color: white;
     }
     .bonusContent{
-        background-color: white;
         margin: 0;
         padding: 10px;
     }
@@ -279,5 +293,9 @@ export default {
     .empty{
         padding: 30px;
         text-align: center;
+    }
+    .PaginationBox{
+        text-align: right;
+        margin-bottom: 10px;
     }
 </style>

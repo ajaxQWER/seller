@@ -37,6 +37,7 @@
                                 </el-col>
                                 <el-col :span="3"class="phone">
                                     <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
                             <el-row class="mytable">
@@ -60,9 +61,8 @@
                                         <td>{{item.orderGoodsCount}}</td>
                                         <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
                                         <td rowspan="2">
-                                            <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
-                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
-                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
+                                            <el-row class="cancel" v-if="item.orderCancel.cancelType"><span class="dishes">{{formatCancelType(item.orderCancel.cancelType)}}</span></el-row>
+                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''"> <span class="dishes">{{formatOrderStatus(item.orderStatus)}}</span></el-row>
                                         </td>
                                     </tr>
                                     <!--<tr>-->
@@ -124,6 +124,7 @@
                                 </el-col>
                                 <el-col :span="3"class="phone">
                                     <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
                             <el-row class="mytable">
@@ -211,6 +212,7 @@
                                 </el-col>
                                 <el-col :span="3"class="phone">
                                     <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
                             <el-row class="mytable">
@@ -298,6 +300,7 @@
                                 </el-col>
                                 <el-col :span="3"class="phone">
                                     <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
                             <el-row class="mytable">
@@ -385,6 +388,7 @@
                                 </el-col>
                                 <el-col :span="3"class="phone">
                                     <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
                             <el-row class="mytable">
@@ -408,7 +412,7 @@
                                         <td>{{item.orderGoodsCount}}</td>
                                         <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
                                         <td rowspan="2">
-                                            <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
+                                            <!--<el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>-->
                                             <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
                                             <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
                                         </td>
@@ -440,7 +444,7 @@
     </el-row>
 </template>
 <script>
-import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById } from '@/api/api'
+import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById ,printOrder} from '@/api/api'
 export default {
     data: function() {
         return {
@@ -506,27 +510,8 @@ export default {
             this.Loading=true
             getOrderList({ params: { pageSize: 5, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
                 this.Loading=false
-                console.log(res)
-                console.log(res.list)
-                if (this.init) {
-                    this.orderList = res.list
-                    this.totalOrderCount = res.count
-                } else {
-                    this.orderList = [].concat.apply(this.orderList, res.list)
-                }
-                this.counts = res.count;
-                if (res.count == 0) {
-                    this.allLoaded = true;
-                    this.isEmpty = true;
-                } else {
-                    this.canLoad = true;
-                    this.isEmpty = false;
-                }
-                if (Math.ceil(this.counts / 10) == this.pageId) {
-                    this.allLoaded = true;
-                    this.canLoad = false;
-                    return;
-                }
+                this.orderList = res.list
+                this.totalOrderCount = res.count
             })
         },
         formatCancelType: function(type) {
@@ -586,6 +571,27 @@ export default {
                 this.getOrderListData({ pageId: this.pageId, orderStatus: this.orderStatus })
             })
         },
+        // 补打订单
+        printOrderBtn(orderId){
+            this.$confirm('是否确认补打订单？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                printOrder(orderId).then(() => {
+                    this.getOrderList({ pageId: this.pageId, orderStatus: this.orderStatus })
+                })
+                this.$message({
+                    type: 'success',
+                    message: '补打成功!'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消补打'
+                });
+            });
+        }
     },
     created(){
         this.getOrderListData({pageId: this.pageId, orderStatus: this.orderStatus })

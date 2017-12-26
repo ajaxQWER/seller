@@ -79,25 +79,25 @@
                         <li class="receiveOrder"><el-button  type="success" size="small">一键接单</el-button></li>
                     </ul>
                 </li>
-                <li @click="changeClass(index)" :class=" activeIndex==index ? 'active' : ''" v-for="index in 3">
+                <li @click="changeClass(index)" :class=" activeIndex==index ? 'active' : ''" v-for="(item,index) in orderList" :key="index">
                     <el-row>
                         <el-col :span="10">
                             <el-col class="headPortrait" :span="9">
                                 <img src="../assets/images/portrait.jpg" alt="">
                             </el-col>
                             <el-col :span="9" class="headerTitle">
-                                <el-row>张晓天</el-row>
-                                <el-row class="address">四川成店铺下你下发</el-row>
+                                <el-row>{{item.orderContact.contactName}}</el-row>
+                                <el-row class="address" ><span :title="item.orderContact.address">{{(item.orderContact.address).substr(item.orderContact.address,10)}}</span></el-row>
                             </el-col>
                         </el-col>
                         <el-col :span="10">
                             <el-col >
-                                <el-row>备注：多放辣椒</el-row>
-                                <el-row class="address">发票：四川成店铺下你下发</el-row>
+                                <el-row >备注：{{item.orderContent?item.orderContent:'无'}}</el-row>
+                                <el-row class="address" v-if="item.title">发票：{{item.title}}</el-row>
                             </el-col>
                         </el-col>
                         <el-col :span="4"class="phone">
-                            <i class="fa fa-phone">191919191911</i>
+                            <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
                         </el-col>
                     </el-row>
                 </li>
@@ -106,16 +106,22 @@
     </el-row>
 </template>
 <script>
-    import { getRealtimestatistics } from '@/api/api'
+    import { getRealtimestatistics,getOrderList} from '@/api/api'
     export default {
         data: function () {
             return {
                 activeIndex: 1,
                 loginShopId: JSON.parse(localStorage.getItem('seller')).shopId,
                 loginUser: localStorage.getItem('shopName'),
-                shopSalesData:"",
-                shopStatusImg:'',
-                printerStatusImg:''
+                shopSalesData: "",
+                shopStatusImg: '',
+                printerStatusImg: '',
+                orderList: [],
+                pageSize: 5,
+                pageId: 1,
+                orderStatus: '',
+                Loading:false,
+                totalOrderCount:''
             }
         },
         methods: {
@@ -123,19 +129,19 @@
                 this.activeIndex = index
             },
             // 获取店铺实时统计
-            getRealtimestatisticsData(){
+            getRealtimestatisticsData() {
                 getRealtimestatistics().then(res => {
                     console.log(res)
                     this.shopSalesData = res;
                     if (res.operatingState) {
-                        this.shopStatusImg ='../assets/images/shop-open.png';
+                        this.shopStatusImg = '../assets/images/shop-open.png';
                     } else {
                         this.shopStatusImg = '../assets/images/shop-close.png';
                     }
                     this.printerStatusImg = '../assets/images/' + res.printerStatus.toLowerCase() + '.png';
                 })
             },
-            formatMoney: function(money) {
+            formatMoney: function (money) {
                 money = parseFloat((money + "").replace(/[^\d\.-]/g, "")).toFixed(2) + "";
                 var l = money.split(".")[0].split("").reverse();
                 var r = money.split(".")[1];
@@ -144,10 +150,24 @@
                     t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
                 }
                 return t.split("").reverse().join("") + "." + r;
-            }
+            },
+            // 新订单列表
+           getOrderListData(){
+               this.Loading=true
+               getOrderList({ params: { pageSize: this.pageSize, pageId: this.pageId, orderStatus: this.orderStatus}}).then(res => {
+                   this.Loading=false
+                   this.orderList = res.list
+                   console.log(res.list)
+                   console.log(555)
+                   this.totalOrderCount = res.count
+               })
+           }
+
+
         },
-        created(){
+        created() {
             this.getRealtimestatisticsData()
+            this.getOrderListData()
         }
     }
 </script>
@@ -277,7 +297,7 @@
     .orderContainer>li{
         height: 60px;
         padding-left: 10px;
-        padding-top: 10px;
+        padding-top:22px;
     }
     .msgnum{
         font-size: 20px;

@@ -34,16 +34,16 @@
                         <!--</el-row>-->
                     <!--</li>-->
             </ul>
+            <el-row class="PaginationBox">
+                <el-pagination
+                    @current-change="currentChange"
+                    :current-page="pageId"
+                    :total="counts">
+                </el-pagination>
+            </el-row>
         </el-row>
         <el-row v-else class="empty">
             <img src="../assets/images/empty-img.png" alt="">
-        </el-row>
-        <el-row class="PaginationBox">
-            <el-pagination
-                @current-change="currentChange"
-                :current-page="pageId"
-                :total="counts">
-            </el-pagination>
         </el-row>
     </el-row>
 </template>
@@ -103,9 +103,10 @@ export default {
     }
     .bonusContentBox{
         margin-top: 10px;
+        background-color: white;
     }
     .bonusContent{
-        background-color: white;
+
         margin: 0;
         padding: 10px;
     }
@@ -141,6 +142,6 @@ export default {
     }
     .PaginationBox{
         text-align: right;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 </style>

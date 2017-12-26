@@ -75,6 +75,10 @@ export const getOrderById = orderId => {
 export const cancelOrderById = params => {
     return ajax.put('seller/order/orderCancel', params);
 };
+//订单补打
+export const printOrder = orderId => {
+    return ajax.post('seller/order/print/' + orderId);
+};
 //店铺总评
 export const getShopAppraiseHead = () => {
     return ajax.get('seller/shopAppraise/shopAppriseStatistics');

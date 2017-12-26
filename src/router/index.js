@@ -15,6 +15,7 @@ const GoodsCategory = r => require.ensure([],() => r(require('../views/GoodsCate
 const Setting = r => require.ensure([],() => r(require('../views/Setting.vue')), 'Setting'); //设置
 const Notice = r => require.ensure([],() => r(require('../views/Notice.vue')), 'Notice'); //通知中心
 const Bonus = r => require.ensure([],() => r(require('../views/Bonus.vue')), 'Bonus'); //红包设置
+const Printer = r => require.ensure([],() => r(require('../views/Printer.vue')), 'Printer'); //打印机设置
 let routes = [{
     path: '/login',
     component: Login,
@@ -35,7 +36,7 @@ let routes = [{
     path: '/',
     component: Home,
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-home',
+    iconCls: 'i-icon i-icon-shouye',
     children: [
         { path: '/index', component: Index, name: '首页' }
     ]
@@ -44,7 +45,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-shopping-bag',
+    iconCls: 'i-icon i-icon-shangpin',
     children: [
         { path: '/goods', component: Goods, name: '商品' },
         { path: '/editGoods', component: editGoods, name: '商品编辑' }
@@ -54,7 +55,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-shopping-cart',
+    iconCls: 'i-icon i-icon-dingdan',
     children: [
         { path: '/order', component: Order, name: '订单' },
         { path: '/OrderDetail', component: OrderDetail, name: '订单详情' },
@@ -65,7 +66,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-commenting-o',
+    iconCls: 'i-icon i-icon-pingjia',
     children: [
         { path: '/appraisement', component: Appraisement, name: '评价' },
     ]
@@ -74,7 +75,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-line-chart',
+    iconCls: 'i-icon i-icon-yingyefenxi',
     children: [
         { path: '/businessAnalysis', component: BusinessAnalysis, name: '营业分析' },
     ]
@@ -83,7 +84,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-institution',
+    iconCls: 'i-icon i-icon-mendianxinxi',
     children: [
         { path: '/shopDetail', component: ShopDetail, name: '门店信息' },
     ]
@@ -92,7 +93,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-flag-o',
+    iconCls: 'i-icon i-icon-huodong',
     children: [
         { path: '/activity', component: Activity, name: '门店活动' },
     ]
@@ -101,7 +102,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-th',
+    iconCls: 'i-icon i-icon-fenleishangpin',
     children: [
         { path: '/goodsCategory', component: GoodsCategory, name: '商品分类' },
     ]
@@ -110,7 +111,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-gear',
+    iconCls: 'i-icon i-icon-shezhi',
     children: [
         { path: '/setting', component: Setting, name: '设置' },
     ]
@@ -119,7 +120,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-bell-o',
+    iconCls: 'i-icon i-icon-tongzhizhongxin',
     children: [
         { path: '/notice', component: Notice, name: '通知中心' },
     ]
@@ -128,11 +129,21 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-envelope-o',
+    iconCls: 'i-icon i-icon-hongbaoshezhi',
     children: [
         { path: '/bonus', component: Bonus, name: '红包设置' },
     ]
 },{
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'i-icon i-icon-dayinji',
+    children: [
+        { path: '/Printer', component: Printer, name: '打印机设置' },
+    ]
+},
+    {
     path: '*',
     hidden: true,
     redirect: { path: '/404' }

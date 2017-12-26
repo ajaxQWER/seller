@@ -26,7 +26,7 @@
             <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  ><span  @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span></el-col>
         </el-row>
         <el-row class="goodsContentBox" v-if="goodsList.length>0">
-            <el-col :span="8" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
+            <el-col :span="7" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
                 <el-row class="chageBtn">
                     <el-checkbox></el-checkbox>
                     <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)">{{formatStatus(item.goodsStatus)}}</el-button>
@@ -51,6 +51,7 @@
     </el-row>
 </template>
 <script>
+
 import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods} from '@/api/api'
 export default {
     data: function() {
@@ -221,6 +222,8 @@ export default {
     }
     .goodsContent{
         border: 1px solid lavender;
+        margin-left: 10px;
+        margin-bottom: 15px;
     }
     .goodsContentText{
         padding: 10px;

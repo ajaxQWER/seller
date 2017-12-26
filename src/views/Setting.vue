@@ -75,41 +75,41 @@
                         </el-row>
                     </el-row>
                 </el-row>
-                <el-row>
-                    <el-row class="bgColorG">
-                        <el-col :span="22">
-                            <span>打印机设置</span>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button type="success" size="mini" @click="addPrinterBtn">
-                                添加打印机
-                            </el-button>
-                        </el-col>
-                    </el-row>
-                    <el-row class="bgColorW bgH">
-                        <el-row class="printerSetting" v-for="(item,index) in printerList" :key="index">
-                            <el-col :span="22">
-                                <el-row>
-                                    <el-col :span="2">设备名称</el-col>
-                                    <el-col :span="8">{{item.deviceName}}</el-col>
-                                    <el-col :span="4">{{formatType(item.printerType)}}</el-col>
-                                </el-row>
-                                <el-row>
-                                    <el-col :span="2">设备状态</el-col>
-                                    <el-col :span="8">{{formatPageType(item.printerPageType)}}/{{item.copies}}份/{{formatStatus(item.printerStatus)}}</el-col>
-                                </el-row>
-                                <el-row v-if="item.deviceRemark">
-                                    <el-col :span="2">设备备注</el-col>
-                                    <el-col :span="8">{{item.deviceRemark}}</el-col>
-                                </el-row>
-                            </el-col>
-                            <el-col :span="2">
-                                <el-button size="small" @click="editPrinter(item)" type="text">编辑</el-button>
-                                <el-button size="small" @click="deletePrinter(item.printerId,index)" type="text" style="color: red">删除</el-button>
-                            </el-col>
-                        </el-row>
-                    </el-row>
-                </el-row>
+                <!--<el-row>-->
+                    <!--<el-row class="bgColorG">-->
+                        <!--<el-col :span="22">-->
+                            <!--<span>打印机设置</span>-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="2">-->
+                            <!--<el-button type="success" size="mini" @click="addPrinterBtn">-->
+                                <!--添加打印机-->
+                            <!--</el-button>-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--<el-row class="bgColorW bgH">-->
+                        <!--<el-row class="printerSetting" v-for="(item,index) in printerList" :key="index">-->
+                            <!--<el-col :span="22">-->
+                                <!--<el-row>-->
+                                    <!--<el-col :span="2">设备名称</el-col>-->
+                                    <!--<el-col :span="8">{{item.deviceName}}</el-col>-->
+                                    <!--<el-col :span="4">{{formatType(item.printerType)}}</el-col>-->
+                                <!--</el-row>-->
+                                <!--<el-row>-->
+                                    <!--<el-col :span="2">设备状态</el-col>-->
+                                    <!--<el-col :span="8">{{formatPageType(item.printerPageType)}}/{{item.copies}}份/{{formatStatus(item.printerStatus)}}</el-col>-->
+                                <!--</el-row>-->
+                                <!--<el-row v-if="item.deviceRemark">-->
+                                    <!--<el-col :span="2">设备备注</el-col>-->
+                                    <!--<el-col :span="8">{{item.deviceRemark}}</el-col>-->
+                                <!--</el-row>-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="2">-->
+                                <!--<el-button size="small" @click="editPrinter(item)" type="text">编辑</el-button>-->
+                                <!--<el-button size="small" @click="deletePrinter(item.printerId,index)" type="text" style="color: red">删除</el-button>-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                    <!--</el-row>-->
+                <!--</el-row>-->
             </el-form>
         </el-row>
         <!--添加打印机-->

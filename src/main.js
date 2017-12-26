@@ -7,7 +7,8 @@ import routes from './router'
 import moment from 'moment'
 import VueAMap from 'vue-amap'
 import './assets/theme/theme-default/index.css'
-import 'font-awesome/css/font-awesome.min.css'
+// import 'font-awesome/css/font-awesome.min.css'
+import "./assets/font/iconfont.css"
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
