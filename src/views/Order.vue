@@ -1,7 +1,7 @@
 <template>
     <el-row class="bg">
         <el-tabs v-model="activeName" @tab-click="getOrderListData">
-            <el-tab-pane :label="'全部订单'+ '('+totalOrderCount+')'" name="0">
+            <el-tab-pane :label="'全部订单'+ '('+counts+')'" name="0">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -36,7 +36,7 @@
                                     </el-col>
                                 </el-col>
                                 <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <i class="fa fa-phone" @click.stop="copy=true">{{item.orderContact.contactPhone}}</i>
                                     <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
@@ -88,7 +88,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="'新订单'+ '('+totalOrderCount+')'" name="1">
+            <el-tab-pane  name="1">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -176,7 +176,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="'进行中'+ '('+totalOrderCount+')'" name="2">
+            <el-tab-pane :label="'进行中'+ '('+counts+')'" name="2">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -264,7 +264,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="'已完成'+ '('+totalOrderCount+')'" name="3">
+            <el-tab-pane :label="'已完成'+ '('+counts+')'" name="3">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -352,7 +352,7 @@
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="'已取消'+ '('+totalOrderCount+')'" name="4">
+            <el-tab-pane :label="'已取消'+ '('+counts+')'" name="4">
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -448,6 +448,7 @@ import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById ,printO
 export default {
     data: function() {
         return {
+            copy:false,
             activeName: '0',
             orderSearchInput:'',
             init: true,
@@ -511,7 +512,7 @@ export default {
             getOrderList({ params: { pageSize: 5, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
                 this.Loading=false
                 this.orderList = res.list
-                this.totalOrderCount = res.count
+                this.counts = res.count
             })
         },
         formatCancelType: function(type) {
