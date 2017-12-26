@@ -214,3 +214,37 @@ export const getActivityDetails = activityId => {
 export const updateActivityDetails = (activityId,params) => {
     return ajax.post('seller/activity/' + activityId , params);
 };
+//门店信息查询
+export const getShopDetails = () => {
+    return ajax.get('seller/shopDetail/');
+};
+//更改门店状态
+//营业
+export const openShop = () => {
+    return ajax.put('seller/shopDetail/operatingState');
+};
+//歇业
+export const closeShop = () => {
+    return ajax.delete('seller/shopDetail/operatingState');
+};
+//更改店铺营业时间
+export const updateBusTime = params => {
+    return ajax.put('seller/shopDetail/busTime' , params);
+};
+//更改店铺联系方式
+export const updateTakeOutPhone = takeOutPhone => {
+    return ajax.put('seller/shopDetail/takeOutPhone/' + takeOutPhone);
+};
+//更改店铺最小配送金额
+export const updateMinDeliveryPrice = minDeliveryPrice => {
+    return ajax.put('seller/shopDetail/updateMinDeliveryPrice/' + minDeliveryPrice);
+};
+//是否允许开票
+//允许开票
+export const openDrawInvoice = () => {
+    return ajax.put('seller/shopDetail/drawInvoice');
+};
+//不允许开票
+export const closeDrawInvoice = () => {
+    return ajax.delete('seller/shopDetail/drawInvoice');
+};

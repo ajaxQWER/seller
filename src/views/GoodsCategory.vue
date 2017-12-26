@@ -40,7 +40,6 @@
 		        </div>
 		    </el-dialog>
     </el-row>
-    
 </template>
 <script>
 import { getGoodsCategory, addGoodsCategory, deleteGoodsCategoryById , updateGoodsCategoryById , getGoodsCategoryDetail} from "../api/api.js"
