@@ -248,3 +248,11 @@ export const openDrawInvoice = () => {
 export const closeDrawInvoice = () => {
     return ajax.delete('seller/shopDetail/drawInvoice');
 };
+//更改配送类型
+export const updateDistributionType = distributionType => {
+    return ajax.put('seller/shopDetail/distributionType/' + distributionType);
+};
+//更改店铺类型
+export const updateShopType = shopType => {
+    return ajax.put('seller/shopDetail/shopType/' + shopType);
+};

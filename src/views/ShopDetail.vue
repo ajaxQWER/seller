@@ -86,11 +86,10 @@
     </el-row>
 </template>
 <script>
-import { getShopDetails , openShop , closeShop , updateBusTime , updateTakeOutPhone , updateMinDeliveryPrice , openDrawInvoice , closeDrawInvoice} from "@/api/api"
+import { getShopDetails , openShop , closeShop , updateBusTime , updateTakeOutPhone , updateMinDeliveryPrice , openDrawInvoice , closeDrawInvoice , updateDistributionType , updateShopType } from "@/api/api"
 export default {
 		created(){
   		getShopDetails().then(res => {
-  			console.log(res)
   			if(res.operatingState){
   				this.business = "营业中"
   			}else{
