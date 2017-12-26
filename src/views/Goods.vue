@@ -10,7 +10,7 @@
                     :on-icon-click="searchGoodsBtn">
                 </el-input>
             </el-col>
-            <el-col :span="5" :offset="1">
+            <el-col :span="5" :offset="1" style="text-align:right">
                 <el-col :span="8">全部商品</el-col>
                 <el-col :span="8">已上架</el-col>
                 <el-col :span="8">已下架</el-col>
@@ -62,7 +62,8 @@ export default {
             pageSize:10,
             counts:0,
             goodsList:[],
-            goodsCategoryLists:''  //分类列表(title)
+            goodsCategoryLists:'',  //分类列表(title)
+            goodsCategoryId : '' // 当前选中分类ID
         }
     },
     methods:{
@@ -75,8 +76,8 @@ export default {
         },
 
         //获取商品列表
-        getGoodsLists(id){
-            getGoodsLists({params: {pageSize: 999999, goodsClassId: id}}).then( res =>{
+        getGoodsLists(goodsCategoryId){
+            getGoodsLists({params: {pageSize: 999999, goodsClassId: goodsCategoryId}}).then( res =>{
                 this.goodsList = res.list;
             })
         },
@@ -88,6 +89,7 @@ export default {
             getGoodsCategoryLists(paramas).then( res =>{
                 console.log(res)
                 console.log(33333)
+                this.goodsCategoryId = res.list[0].goodsCategoryId
                 this.getGoodsLists(res.list[0].goodsCategoryId)
                 this.goodsCategoryLists = res.list;
                 this.goodsCategoryLists.forEach(function(item,index){
@@ -106,14 +108,15 @@ export default {
                     return '上架';
             }
         },
-        getGoodsById(id,index){
+        getGoodsById(goodsCategoryId,index){
             this.goodsCategoryLists.forEach(function(item,current){
                 item['isActiveItem'] = false;
                 if(index == current){
                     item['isActiveItem'] = true;
                 }
             })
-            this.getGoodsLists(id)
+            this.goodsCategoryId = goodsCategoryId;
+            this.getGoodsLists(goodsCategoryId)
         },
         //上架或者下架商品
         soldOut: function(id,index,status){
@@ -173,7 +176,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 deleteGoodsById(id).then(() => {
-                    this.getGoodsLists(id)
+                    this.getGoodsLists(this.goodsCategoryId)
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
