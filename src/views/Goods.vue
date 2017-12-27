@@ -173,7 +173,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 deleteGoodsById(id).then(() => {
-                    this.getGoodsLists();
+                    // this.getGoodsLists();
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
