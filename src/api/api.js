@@ -79,6 +79,25 @@ export const cancelOrderById = params => {
 export const printOrder = orderId => {
     return ajax.post('seller/order/print/' + orderId);
 };
+//完成订单
+export const finishOrderById = orderId => {
+    return ajax.put('seller/order/setFinished/' + orderId);
+};
+//确认接单
+export const acceptOrderById = orderId => {
+    return ajax.put('seller/order/confirmReceipt/' + orderId);
+};
+//设置订单为配送
+export const setOrderShipping = orderId => {
+    return ajax.put('seller/order/setShipping/' + orderId);
+};
+export const getPositionById = orderId => {
+    return ajax.get('seller/order/geoInfo/' + orderId);
+};
+export const getCarrierById = orderId => {
+    return ajax.get('seller/order/carrier/' + orderId);
+};
+
 //店铺总评
 export const getShopAppraiseHead = () => {
     return ajax.get('seller/shopAppraise/shopAppriseStatistics');

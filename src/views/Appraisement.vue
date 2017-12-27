@@ -32,204 +32,77 @@
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName" @tab-click="showShopAppraise">
                 <el-tab-pane label="全部评价" name="0">
-                    <el-row  v-if="commentList.length>0">
-                        <ul class="clientRepalyContainer">
-                            <li v-for="(item,index) in commentList" :key="index">
-                                <el-row>
-                                    <el-col class="headPortrait" :span="2">
-                                        <img  v-if="item.avatorUrl" :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
-                                        <img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">
-                                    </el-col>
-                                    <el-col :span="19">
-                                        <el-col>
-                                            <ul class="custormReply">
-                                                <li>
-                                                    <el-row>
-                                                        <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
-                                                    </el-row>
-                                                </li>
-                                                <li>{{item.contentShopAppraise}}</li>
-                                                <li class="lastAppraise">{{item.orderName}}</li>
-                                                <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
-                                            </ul>
-                                        </el-col>
-                                    </el-col>
-                                    <el-col :span="3" class="replyInfo">
-                                        <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
-                                        <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId)">回复</el-button></el-row>
-                                    </el-col>
-                                </el-row>
-                                <el-row class="clientRepalyContent">
-                                    <ul class="clientRepaly">
-                                        <li v-if="item.goodsAppraiseList.length>0" v-for="(goods,goodsKey) in item.goodsAppraiseList" :key="goodsKey">
-                                            <el-col :span="19">
-                                                <el-row>{{goods.goodsName}}</el-row>
-                                                <el-row class="evaluate">{{goods.appraiseContent}}</el-row>
-                                            </el-col>
-                                            <el-col :span="5" class="grade">
-                                                <div class="goods-comment"><img v-for="n in goods.appraiseLevel" src="../assets/images/scores.png" alt="" class="scores-img"></div>
-                                            </el-col>
-                                        </li>
-                                    </ul>
-                                </el-row>
-                                <el-row class="replyTextareaBox" v-if="replay">
-                                    <el-input type="textarea" placeholder="请输入回复内容" v-model="commentContent"></el-input>
-                                    <el-row>
-                                        <el-col :span="3" :offset="21" class="replyBtn1">
-                                            <el-button type="text" size="mini" @click="cancelReplay">取消</el-button>
-                                            <el-button type="success" size="mini" @click="commentsReply">回复</el-button>
-                                        </el-col>
-                                    </el-row>
-                                </el-row>
-                            </li>
-                        </ul>
-                        <el-row class="PaginationBox">
-                            <el-row class="PaginationBox">
-                                <el-pagination
-                                    @current-change="currentChange"
-                                    :current-page="pageId"
-                                    :total="counts">
-                                </el-pagination>
-                            </el-row>
-                        </el-row>
-                    </el-row>
-                    <el-row v-else class="empty">
-                            <img src="../assets/images/empty-img.png" alt="">
-                    </el-row>
+
                 </el-tab-pane>
-                <el-tab-pane label="未回复" name="1">
-                    <el-row  v-if="commentList.length>0">
-                        <ul class="clientRepalyContainer">
-                            <li v-for="(item,index) in commentList" :key="index">
-                                <el-row>
-                                    <el-col class="headPortrait" :span="2">
-                                        <img  v-if="item.avatorUrl" :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
-                                        <img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">
-                                    </el-col>
-                                    <el-col :span="19">
-                                        <el-col>
-                                            <ul class="custormReply">
-                                                <li>
-                                                    <el-row>
-                                                        <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
-                                                    </el-row>
-                                                </li>
-                                                <li>{{item.contentShopAppraise}}</li>
-                                                <li class="lastAppraise">{{item.orderName}}</li>
-                                                <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
-                                            </ul>
-                                        </el-col>
-                                    </el-col>
-                                    <el-col :span="3" class="replyInfo">
-                                        <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
-                                        <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId)">回复</el-button></el-row>
-                                    </el-col>
-                                </el-row>
-                                <el-row class="clientRepalyContent">
-                                    <ul class="clientRepaly">
-                                        <li v-if="item.goodsAppraiseList.length>0" v-for="(goods,goodsKey) in item.goodsAppraiseList" :key="goodsKey">
-                                            <el-col :span="19">
-                                                <el-row>{{goods.goodsName}}</el-row>
-                                                <el-row class="evaluate">{{goods.appraiseContent}}</el-row>
-                                            </el-col>
-                                            <el-col :span="5" class="grade">
-                                                <div class="goods-comment"><img v-for="n in goods.appraiseLevel" src="../assets/images/scores.png" alt="" class="scores-img"></div>
-                                            </el-col>
-                                        </li>
-                                    </ul>
-                                </el-row>
-                                <el-row class="replyTextareaBox" v-if="replay">
-                                    <el-input type="textarea" placeholder="请输入回复内容" v-model="commentContent"></el-input>
-                                    <el-row>
-                                        <el-col :span="3" :offset="21" class="replyBtn1">
-                                            <el-button type="text" size="mini" @click="cancelReplay">取消</el-button>
-                                            <el-button type="success" size="mini" @click="commentsReply">回复</el-button>
-                                        </el-col>
-                                    </el-row>
-                                </el-row>
-                            </li>
-                        </ul>
-                        <el-row class="PaginationBox">
-                            <el-row class="PaginationBox">
-                                <el-pagination
-                                    @current-change="currentChange"
-                                    :current-page="pageId"
-                                    :total="counts">
-                                </el-pagination>
-                            </el-row>
-                        </el-row>
-                    </el-row>
-                    <el-row v-else class="empty">
-                        <img src="../assets/images/empty-img.png" alt="">
-                    </el-row>
+                <el-tab-pane label="已回复" name="1">
                 </el-tab-pane>
-                <el-tab-pane label="已回复" name="2">
-                    <el-row  v-if="commentList.length>0">
-                        <ul class="clientRepalyContainer">
-                            <li v-for="(item,index) in commentList" :key="index">
-                                <el-row>
-                                    <el-col class="headPortrait" :span="2">
-                                        <img  v-if="item.avatorUrl" :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
-                                        <img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">
-                                    </el-col>
-                                    <el-col :span="19">
-                                        <el-col>
-                                            <ul class="custormReply">
-                                                <li>
-                                                    <el-row>
-                                                        <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
-                                                    </el-row>
-                                                </li>
-                                                <li>{{item.contentShopAppraise}}</li>
-                                                <li class="lastAppraise">{{item.orderName}}</li>
-                                                <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
-                                            </ul>
-                                        </el-col>
-                                    </el-col>
-                                    <el-col :span="3" class="replyInfo">
-                                        <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
-                                        <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId)">回复</el-button></el-row>
-                                    </el-col>
-                                </el-row>
-                                <el-row class="clientRepalyContent">
-                                    <ul class="clientRepaly">
-                                        <li v-if="item.goodsAppraiseList.length>0" v-for="(goods,goodsKey) in item.goodsAppraiseList" :key="goodsKey">
-                                            <el-col :span="19">
-                                                <el-row>{{goods.goodsName}}</el-row>
-                                                <el-row class="evaluate">{{goods.appraiseContent}}</el-row>
-                                            </el-col>
-                                            <el-col :span="5" class="grade">
-                                                <div class="goods-comment"><img v-for="n in goods.appraiseLevel" src="../assets/images/scores.png" alt="" class="scores-img"></div>
-                                            </el-col>
-                                        </li>
-                                    </ul>
-                                </el-row>
-                                <el-row class="replyTextareaBox" v-if="replay">
-                                    <el-input type="textarea" placeholder="请输入回复内容" v-model="commentContent"></el-input>
-                                    <el-row>
-                                        <el-col :span="3" :offset="21" class="replyBtn1">
-                                            <el-button type="text" size="mini" @click="cancelReplay">取消</el-button>
-                                            <el-button type="success" size="mini" @click="commentsReply">回复</el-button>
-                                        </el-col>
-                                    </el-row>
-                                </el-row>
-                            </li>
-                        </ul>
-                        <el-row class="PaginationBox">
-                            <el-row class="PaginationBox">
-                                <el-pagination
-                                    @current-change="currentChange"
-                                    :current-page="pageId"
-                                    :total="counts">
-                                </el-pagination>
-                            </el-row>
-                        </el-row>
-                    </el-row>
-                    <el-row v-else class="empty">
-                        <img src="../assets/images/empty-img.png" alt="">
-                    </el-row>
+                <el-tab-pane label="未回复" name="2">
                 </el-tab-pane>
             </el-tabs>
+            <el-row  v-if="commentList.length>0">
+                <ul class="clientRepalyContainer">
+                    <li v-for="(item,index) in commentList" :key="index">
+                        <el-row>
+                            <el-col class="headPortrait" :span="2">
+                                <img  v-if="item.avatorUrl" :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
+                                <img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">
+                            </el-col>
+                            <el-col :span="19">
+                                <el-col>
+                                    <ul class="custormReply">
+                                        <li>
+                                            <el-row>
+                                                <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
+                                            </el-row>
+                                        </li>
+                                        <li>{{item.contentShopAppraise}}</li>
+                                        <li class="lastAppraise">{{item.orderName}}</li>
+                                        <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
+                                    </ul>
+                                </el-col>
+                            </el-col>
+                            <el-col :span="3" class="replyInfo">
+                                <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
+                                <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId)">回复</el-button></el-row>
+                            </el-col>
+                        </el-row>
+                        <el-row class="clientRepalyContent">
+                            <ul class="clientRepaly">
+                                <li v-if="item.goodsAppraiseList.length>0" v-for="(goods,goodsKey) in item.goodsAppraiseList" :key="goodsKey">
+                                    <el-col :span="19">
+                                        <el-row>{{goods.goodsName}}</el-row>
+                                        <el-row class="evaluate">{{goods.appraiseContent}}</el-row>
+                                    </el-col>
+                                    <el-col :span="5" class="grade">
+                                        <div class="goods-comment"><img v-for="n in goods.appraiseLevel" src="../assets/images/scores.png" alt="" class="scores-img"></div>
+                                    </el-col>
+                                </li>
+                            </ul>
+                        </el-row>
+                        <el-row class="replyTextareaBox" v-if="replay">
+                            <el-input type="textarea" placeholder="请输入回复内容" v-model="commentContent"></el-input>
+                            <el-row>
+                                <el-col :span="3" :offset="21" class="replyBtn1">
+                                    <el-button type="text" size="mini" @click="cancelReplay">取消</el-button>
+                                    <el-button type="success" size="mini" @click="commentsReply">回复</el-button>
+                                </el-col>
+                            </el-row>
+                        </el-row>
+                    </li>
+                </ul>
+                <el-row class="PaginationBox">
+                    <el-row class="PaginationBox">
+                        <el-pagination
+                            @current-change="currentChange"
+                            :current-page="pageId"
+                            :total="counts">
+                        </el-pagination>
+                    </el-row>
+                </el-row>
+            </el-row>
+            <el-row v-else class="empty">
+                <img src="../assets/images/empty-img.png" alt="">
+            </el-row>
         </el-row>
     </el-row>
 </template>

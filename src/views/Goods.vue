@@ -29,9 +29,9 @@
             <el-col :span="7" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
                 <el-row class="chageBtn">
                     <el-checkbox></el-checkbox>
-                    <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)">{{formatStatus(item.goodsStatus)}}</el-button>
+                    <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)" style="color: orange">{{formatStatus(item.goodsStatus)}}</el-button>
                     <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
-                    <el-button type="text" @click="deleteGoods(item.goodsId)">删除</el-button>
+                    <el-button type="text" @click="deleteGoods(item.goodsId)" style="color: red">删除</el-button>
                 </el-row>
                 <el-row class="goodsContentText">
                     <el-col class="goodsImg" :span="10">
@@ -39,7 +39,7 @@
                     </el-col>
                     <el-col :span="14">
                         <el-row class="goodsName">{{item.goodsName}}</el-row>
-                        <el-row class="goodsPrice"><i class="fa fa-jpy"></i>{{item.goodsPrice}}</el-row>
+                        <el-row class="goodsPrice">￥{{item.goodsPrice}}</el-row>
                         <el-row class="goodsSales ">月销量：{{item.goodsSales}}</el-row>
                     </el-col>
                 </el-row>
