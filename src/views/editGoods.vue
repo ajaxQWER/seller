@@ -334,12 +334,12 @@
             }
             getGoodsCategoryLists(paramas).then( res =>{
                 this.goodsCategoryLists = res.list;
-                console.log(this.goodsCategoryLists)
-                console.log(3333)
             })
             var goodsId = this.$route.query.goodsId;
             this.goodsId = goodsId;
             if (goodsId) {getGoodsById(goodsId).then(res => {
+                console.log(res)
+                console.log(6666)
                 this.editGoodsForm = res;
                 this.goodsId = res.goodsId;
                  this.editGoodsForm.addSpecs=res.goods.goodsSpecifications
