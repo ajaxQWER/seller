@@ -103,7 +103,8 @@
 			                <el-form-item label="活动名称">
 			                    <el-input v-model="saleActivity.activityName"></el-input>
 			                </el-form-item>
-			                <el-button class="saveUpdateActivity" type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
+			                <el-button class="saveUpdateActivity" type="primary" @click="updateGoodsAdministration(item.activityId)">商品管理</el-button>
+			                <el-button type="primary" @click="saveUpdateActivity(item,index)">保存</el-button>
 		                    <el-button type="info" @click="cancelActivity(index)">取消</el-button>
 			            </el-form>
 			            <el-form label-width="120px" v-if="item.activityType == 'SPECIFIC'" v-model="specificActivity">
@@ -245,13 +246,51 @@
                 <el-button type="primary" @click="addActivitys" >确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog :title="'商品管理'" :visible.sync="goodsAdministration" size="tiny" @close="closeGoodsAdministration" class="dialog">
+        	<p>1.参加活动的商品需要进行勾选</p>
+        	<p>2.限购为空或0表示不限购</p>
+        	<el-table
+		      :data="goodsLists"
+		      style="width: 100%">
+		      <el-table-column
+		        prop="goodsName"
+		        label="商品名称">
+		      </el-table-column>
+		      <el-table-column
+		        prop="goodsPrice"
+		        label="原价">
+		      </el-table-column>
+		      <el-table-column
+		        label="折扣">
+		        <template slot-scope="scope">
+		        	<el-input v-model="scope.row.discount"></el-input>
+		        </template>
+		      </el-table-column>
+		      <el-table-column
+		        label="限购">
+		        <template slot-scope="scope">
+		        	<el-input v-model="scope.row.limitation"></el-input>
+		        </template>
+		      </el-table-column>
+		      <el-table-column
+		        label="参加活动">
+		        <template slot-scope="scope">
+		        	<el-checkbox v-model="scope.row.isActivity"></el-checkbox>
+		        </template>
+		      </el-table-column>
+		    </el-table>
+			<div slot="footer" class="dialog-footer">
+                <el-button @click="closeGoodsAdministration">取 消</el-button>
+                <el-button type="primary" @click="saveGoodsAdministration" >保 存</el-button>
+            </div>
+        </el-dialog>
 	</el-row>
 </template>
 
   <!-- [首单立减'FIRST', 购满就减'DELGOLD', 购满就送'COMPLIMENTARY', 特价商品'SPECIALPRICES', 折扣商品'SALE', 其他'SPECIFIC'] -->
 
 <script>
-import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails ,updateActivityDetails} from "@/api/api.js"
+import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails ,updateActivityDetails , getGoodsLists , setActivityGoods} from "@/api/api.js"
 export default {
 	created(){
 		this.getActivitys()
@@ -261,6 +300,18 @@ export default {
 		}
 		getBonusLists({params:bonusParams}).then(res =>{
 			this.options = res.list
+		})
+		getGoodsLists({params:{pageSize:9999}}).then(res =>{
+			res.list.forEach((item,index) => {
+            	this.goodsLists.push({
+            		goodsName: item.goodsName,
+            		goodsId: item.goodsId,
+	        		goodsPrice: item.goodsPrice,
+            		discount:  item.activityGoods ? item.activityGoods.discount : null,
+            		limitation: item.activityGoods ? item.activityGoods.limitedQuantity : null,
+            		isActivity: item.activityGoods ? true : false,
+            	})
+            })
 		})
 	},
     data: function() {
@@ -275,6 +326,9 @@ export default {
 	            return time.getTime() < Date.now() - 8.64e7;
 	          }
 	        },
+	        goodsLists:[],
+	        goodsAdministration:false,
+
 	        typeName:"",
 	        couponCount:"",
 	        couponId:"",
@@ -625,8 +679,45 @@ export default {
                     message: '信息不完整，请填写完整'
                 });
 			}
-			
-		}	
+		},
+		saveGoodsAdministration(){
+			var id = this.activityId
+   			this.hasError = false;
+        	var params = {}
+        	this.goodsLists.forEach((item) => {
+        		if(item.isActivity){
+                    params[item.goodsId] = {
+                        goodsId: +item.goodsId,
+                        activityId: +this.activityId,
+                        discount: +item.discount,
+                        limitedQuantity: +item.limitation
+                    }
+                }
+        	})
+        	setActivityGoods(id,params).then(res => {
+        		this.goodsAdministration = false
+        		this.goodsLists = []
+        		getGoodsLists({params:{pageSize:9999}}).then(res =>{
+					res.list.forEach((item,index) => {
+		            	this.goodsLists.push({
+		            		goodsName: item.goodsName,
+		            		goodsId: item.goodsId,
+			        		goodsPrice: item.goodsPrice,
+		            		discount:  item.activityGoods ? item.activityGoods.discount : null,
+		            		limitation: item.activityGoods ? item.activityGoods.limitedQuantity : null,
+		            		isActivity: item.activityGoods ? true : false,
+		            	})
+		            })
+				})
+        	})
+		},
+		updateGoodsAdministration(activityId){
+			this.goodsAdministration = true
+			this.activityId = activityId
+		},
+		closeGoodsAdministration(){
+			this.goodsAdministration = false
+		}
 	}
 }
 </script>

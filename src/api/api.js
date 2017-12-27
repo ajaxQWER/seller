@@ -279,3 +279,7 @@ export const updateDistributionType = distributionType => {
 export const updateShopType = shopType => {
     return ajax.put('seller/shopDetail/shopType/' + shopType);
 };
+//添加活动商品
+export const setActivityGoods = (id,params) => {
+    return ajax.put('seller/activity/goods/' + id, params);
+};
