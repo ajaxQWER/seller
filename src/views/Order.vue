@@ -1,7 +1,18 @@
 <template>
     <el-row class="bg">
         <el-tabs v-model="activeName" @tab-click="getOrderListData">
-            <el-tab-pane :label="'全部订单'+ '('+totalOrderCount+')'" name="0">
+            <el-tab-pane :label="'全部订单'" name="0">
+            </el-tab-pane>
+            <el-tab-pane :label="'已接单'"  name="1">
+            </el-tab-pane>
+            <el-tab-pane :label="'配送中'" name="2">
+            </el-tab-pane>
+            <el-tab-pane :label="'已完成'" name="3">
+            </el-tab-pane>
+            <el-tab-pane :label="'已取消'" name="4">
+            </el-tab-pane>
+        </el-tabs>
+
                 <el-row  v-if="orderList.length>0"  v-loading="loading">
                     <el-row class="searchBox">
                         <el-col :span="5">
@@ -36,7 +47,7 @@
                                     </el-col>
                                 </el-col>
                                 <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                                    <i class="fa fa-phone" @click.stop="copy=true">{{item.orderContact.contactPhone}}</i>
                                     <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
                                 </el-col>
                             </el-row>
@@ -87,360 +98,6 @@
                 <el-row v-else class="empty">
                     <img src="../assets/images/empty-img.png" alt="">
                 </el-row>
-            </el-tab-pane>
-            <el-tab-pane :label="'新订单'+ '('+totalOrderCount+')'" name="1">
-                <el-row  v-if="orderList.length>0"  v-loading="loading">
-                    <el-row class="searchBox">
-                        <el-col :span="5">
-                            <el-input
-                                size="small"
-                                placeholder="搜索订单号"
-                                icon="search"
-                                v-model="orderSearchInput"
-                                :on-icon-click="searchIconClick">
-                            </el-input>
-                        </el-col>
-                    </el-row>
-                    <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
-                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
-                            <el-row class="orderTitle">
-                                <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
-                                <el-col :span="10">订单号：{{item.orderNum}}</el-col>
-                            </el-row>
-                            <el-row >
-                                <el-col :span="20">
-                                    <el-col class="headPortrait" :span="4">
-                                        <img src="../assets/images/portrait.jpg" alt="">
-                                    </el-col>
-                                    <el-col :span="17" class="headerTitle">
-                                        <el-row class="mar">{{item.orderContact.contactName}}</el-row>
-                                        <el-row class="address mar">{{item.orderContact.address}}</el-row>
-                                        <el-row class="address mar">
-                                            <span class="remark">备注：</span>
-                                            <span class="remarkContent">{{item.orderContent?item.orderContent:'无'}}</span>
-                                        </el-row>
-                                    </el-col>
-                                </el-col>
-                                <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
-                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
-                                </el-col>
-                            </el-row>
-                            <el-row class="mytable">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>商品</th>
-                                        <th>单价</th>
-                                        <th>数量</th>
-                                        <th>实付金额</th>
-                                        <th>状态</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="dishes">{{item.orderName}}</span>
-                                            <span class="dishes dishesRemark">【大份+微辣】</span>
-                                        </td>
-                                        <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
-                                        <td>{{item.orderGoodsCount}}</td>
-                                        <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
-                                        <td rowspan="2">
-                                            <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
-                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
-                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
-                                        </td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--<td>华为</td>-->
-                                    <!--<td><i class="fa fa-jpy"></i>78</td>-->
-                                    <!--<td>1234567</td>-->
-                                    <!--</tr>-->
-                                    </tbody>
-                                </table>
-                            </el-row>
-                            <!--</router-link>-->
-                        </li>
-                    </ul>
-                    <el-row class="PaginationBox">
-                        <el-pagination
-                            @current-change="currentChange"
-                            :current-page="pageId"
-                            :total="counts">
-                        </el-pagination>
-                    </el-row>
-                </el-row>
-                <el-row v-else class="empty">
-                    <img src="../assets/images/empty-img.png" alt="">
-                </el-row>
-            </el-tab-pane>
-            <el-tab-pane :label="'进行中'+ '('+totalOrderCount+')'" name="2">
-                <el-row  v-if="orderList.length>0"  v-loading="loading">
-                    <el-row class="searchBox">
-                        <el-col :span="5">
-                            <el-input
-                                size="small"
-                                placeholder="搜索订单号"
-                                icon="search"
-                                v-model="orderSearchInput"
-                                :on-icon-click="searchIconClick">
-                            </el-input>
-                        </el-col>
-                    </el-row>
-                    <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
-                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
-                            <el-row class="orderTitle">
-                                <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
-                                <el-col :span="10">订单号：{{item.orderNum}}</el-col>
-                            </el-row>
-                            <el-row >
-                                <el-col :span="20">
-                                    <el-col class="headPortrait" :span="4">
-                                        <img src="../assets/images/portrait.jpg" alt="">
-                                    </el-col>
-                                    <el-col :span="17" class="headerTitle">
-                                        <el-row class="mar">{{item.orderContact.contactName}}</el-row>
-                                        <el-row class="address mar">{{item.orderContact.address}}</el-row>
-                                        <el-row class="address mar">
-                                            <span class="remark">备注：</span>
-                                            <span class="remarkContent">{{item.orderContent?item.orderContent:'无'}}</span>
-                                        </el-row>
-                                    </el-col>
-                                </el-col>
-                                <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
-                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
-                                </el-col>
-                            </el-row>
-                            <el-row class="mytable">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>商品</th>
-                                        <th>单价</th>
-                                        <th>数量</th>
-                                        <th>实付金额</th>
-                                        <th>状态</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="dishes">{{item.orderName}}</span>
-                                            <span class="dishes dishesRemark">【大份+微辣】</span>
-                                        </td>
-                                        <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
-                                        <td>{{item.orderGoodsCount}}</td>
-                                        <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
-                                        <td rowspan="2">
-                                            <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
-                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
-                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
-                                        </td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--<td>华为</td>-->
-                                    <!--<td><i class="fa fa-jpy"></i>78</td>-->
-                                    <!--<td>1234567</td>-->
-                                    <!--</tr>-->
-                                    </tbody>
-                                </table>
-                            </el-row>
-                            <!--</router-link>-->
-                        </li>
-                    </ul>
-                    <el-row class="PaginationBox">
-                        <el-pagination
-                            @current-change="currentChange"
-                            :current-page="pageId"
-                            :total="counts">
-                        </el-pagination>
-                    </el-row>
-                </el-row>
-                <el-row v-else class="empty">
-                    <img src="../assets/images/empty-img.png" alt="">
-                </el-row>
-            </el-tab-pane>
-            <el-tab-pane :label="'已完成'+ '('+totalOrderCount+')'" name="3">
-                <el-row  v-if="orderList.length>0"  v-loading="loading">
-                    <el-row class="searchBox">
-                        <el-col :span="5">
-                            <el-input
-                                size="small"
-                                placeholder="搜索订单号"
-                                icon="search"
-                                v-model="orderSearchInput"
-                                :on-icon-click="searchIconClick">
-                            </el-input>
-                        </el-col>
-                    </el-row>
-                    <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
-                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
-                            <el-row class="orderTitle">
-                                <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
-                                <el-col :span="10">订单号：{{item.orderNum}}</el-col>
-                            </el-row>
-                            <el-row >
-                                <el-col :span="20">
-                                    <el-col class="headPortrait" :span="4">
-                                        <img src="../assets/images/portrait.jpg" alt="">
-                                    </el-col>
-                                    <el-col :span="17" class="headerTitle">
-                                        <el-row class="mar">{{item.orderContact.contactName}}</el-row>
-                                        <el-row class="address mar">{{item.orderContact.address}}</el-row>
-                                        <el-row class="address mar">
-                                            <span class="remark">备注：</span>
-                                            <span class="remarkContent">{{item.orderContent?item.orderContent:'无'}}</span>
-                                        </el-row>
-                                    </el-col>
-                                </el-col>
-                                <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
-                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
-                                </el-col>
-                            </el-row>
-                            <el-row class="mytable">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>商品</th>
-                                        <th>单价</th>
-                                        <th>数量</th>
-                                        <th>实付金额</th>
-                                        <th>状态</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="dishes">{{item.orderName}}</span>
-                                            <span class="dishes dishesRemark">【大份+微辣】</span>
-                                        </td>
-                                        <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
-                                        <td>{{item.orderGoodsCount}}</td>
-                                        <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
-                                        <td rowspan="2">
-                                            <el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>
-                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
-                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
-                                        </td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--<td>华为</td>-->
-                                    <!--<td><i class="fa fa-jpy"></i>78</td>-->
-                                    <!--<td>1234567</td>-->
-                                    <!--</tr>-->
-                                    </tbody>
-                                </table>
-                            </el-row>
-                            <!--</router-link>-->
-                        </li>
-                    </ul>
-                    <el-row class="PaginationBox">
-                        <el-pagination
-                            @current-change="currentChange"
-                            :current-page="pageId"
-                            :total="counts">
-                        </el-pagination>
-                    </el-row>
-                </el-row>
-                <el-row v-else class="empty">
-                    <img src="../assets/images/empty-img.png" alt="">
-                </el-row>
-            </el-tab-pane>
-            <el-tab-pane :label="'已取消'+ '('+totalOrderCount+')'" name="4">
-                <el-row  v-if="orderList.length>0"  v-loading="loading">
-                    <el-row class="searchBox">
-                        <el-col :span="5">
-                            <el-input
-                                size="small"
-                                placeholder="搜索订单号"
-                                icon="search"
-                                v-model="orderSearchInput"
-                                :on-icon-click="searchIconClick">
-                            </el-input>
-                        </el-col>
-                    </el-row>
-                    <ul class="orderContainer">
-                        <li v-for="(item,index) in orderList" :key="index"  @click="showOrderInfo(item,index)">
-                            <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
-                            <el-row class="orderTitle">
-                                <el-col :span="5" class="orderTime">{{moment(item.addTime).format('YYYY-MM-DD HH:mm:ss')}}</el-col>
-                                <el-col :span="10">订单号：{{item.orderNum}}</el-col>
-                            </el-row>
-                            <el-row >
-                                <el-col :span="20">
-                                    <el-col class="headPortrait" :span="4">
-                                        <img src="../assets/images/portrait.jpg" alt="">
-                                    </el-col>
-                                    <el-col :span="17" class="headerTitle">
-                                        <el-row class="mar">{{item.orderContact.contactName}}</el-row>
-                                        <el-row class="address mar">{{item.orderContact.address}}</el-row>
-                                        <el-row class="address mar">
-                                            <span class="remark">备注：</span>
-                                            <span class="remarkContent">{{item.orderContent?item.orderContent:'无'}}</span>
-                                        </el-row>
-                                    </el-col>
-                                </el-col>
-                                <el-col :span="3"class="phone">
-                                    <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
-                                    <el-button size="mini" type="success" style="margin-top: 10px" @click.stop="printOrderBtn(item.orderId)" >订单补打</el-button>
-                                </el-col>
-                            </el-row>
-                            <el-row class="mytable">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>商品</th>
-                                        <th>单价</th>
-                                        <th>数量</th>
-                                        <th>实付金额</th>
-                                        <th>状态</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="dishes">{{item.orderName}}</span>
-                                            <span class="dishes dishesRemark">【大份+微辣】</span>
-                                        </td>
-                                        <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
-                                        <td>{{item.orderGoodsCount}}</td>
-                                        <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
-                                        <td rowspan="2">
-                                            <!--<el-row class="clock"><i class="fa fa-clock-o "></i> <span> 已下单**分钟</span></el-row>-->
-                                            <el-row class="cancel" v-if="item.orderCancel.cancelType">{{formatCancelType(item.orderCancel.cancelType)}}</el-row>
-                                            <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''">{{formatOrderStatus(item.orderStatus)}}</el-row>
-                                        </td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--<td>华为</td>-->
-                                    <!--<td><i class="fa fa-jpy"></i>78</td>-->
-                                    <!--<td>1234567</td>-->
-                                    <!--</tr>-->
-                                    </tbody>
-                                </table>
-                            </el-row>
-                            <!--</router-link>-->
-                        </li>
-                    </ul>
-                    <el-row class="PaginationBox">
-                        <el-pagination
-                            @current-change="currentChange"
-                            :current-page="pageId"
-                            :total="counts">
-                        </el-pagination>
-                    </el-row>
-                </el-row>
-                <el-row v-else class="empty">
-                    <img src="../assets/images/empty-img.png" alt="">
-                </el-row>
-            </el-tab-pane>
-        </el-tabs>
     </el-row>
 </template>
 <script>
@@ -448,6 +105,7 @@ import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById ,printO
 export default {
     data: function() {
         return {
+            copy:false,
             activeName: '0',
             orderSearchInput:'',
             init: true,
@@ -511,7 +169,7 @@ export default {
             getOrderList({ params: { pageSize: 5, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
                 this.Loading=false
                 this.orderList = res.list
-                this.totalOrderCount = res.count
+                this.counts = res.count
             })
         },
         formatCancelType: function(type) {

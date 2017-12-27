@@ -49,7 +49,6 @@
         <el-row>
             <el-button type="success" size="small" @click="saveEditGoodsInfo">保存</el-button>
         </el-row>
-
         <!--<el-dialog-->
             <!--title="提示"-->
             <!--:visible.sync="dialogVisible"-->
@@ -70,7 +69,7 @@
         data: function () {
             return {
                 headerImage: '',
-                panel:true,
+                panel: false,
                 dialogVisible: false,
                 editGoodsForm:{
                     goods: {
@@ -120,7 +119,6 @@
                     console.log(666)
                     updateGoodsById(this.goodsId, this.editGoodsForm).then(() => {
                         this.$message.success("操作成功")
-
                     })
                 }else{
                     //新增
