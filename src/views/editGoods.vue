@@ -48,30 +48,30 @@
                     <el-col :span="10">
                         <el-form-item label="规格名称">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入规格名称"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入规格名称"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="餐盒费">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入规格价格"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入规格价格"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row style="margin: 10px 0px 10px 0px">
                     <el-col :span="10">
-                        <el-form-item label="库存" prop="feeMeals">
+                        <el-form-item label="库存" prop="goodsName">
                             <el-col :span="18">
-                                <el-switch on-text="" off-text="" v-model="editGoodsForm.goods.feeMeals"></el-switch>
+                                <el-switch on-text="" off-text="" v-model="editGoodsForm.goods.goodsName"></el-switch>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="库存数量">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入库存数量"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入库存数量"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
@@ -80,17 +80,78 @@
                     <el-col :span="10">
                         <el-form-item label="餐盒数量">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入餐盒数量"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入餐盒数量"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="餐盒价格">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入餐盒价格"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入餐盒价格"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
+                </el-row>
+            </el-row>
+            <el-row v-if="editGoodsForm.addSpecs">
+                <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index">
+                    <el-row class="standard-index">
+                        <el-col :span="20">
+                            规格{{index+1}}
+                        </el-col>
+                        <el-col :span="4" style="text-align: center">
+                            <el-button type="text" style="color: #13ce66">修改</el-button>
+                            <el-button type="text" style="color: red">删除</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item label="规格名称">
+                                <el-col :span="18">
+                                    <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationName" placeholder="请输入规格名称">{{item.goodsSpecificationName}}</el-input>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="10" :offset="1">
+                            <el-form-item label="价格">
+                                <el-col :span="18">
+                                    <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationPrice" placeholder="请输入规格价格">{{item.goodsSpecificationPrice}}</el-input>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row style="margin: 10px 0px 10px 0px">
+                        <el-col :span="10">
+                            <el-form-item label="库存" prop="goodsName">
+                                <el-col :span="18">
+                                    <el-switch on-text="" off-text="" v-model="editGoodsForm.goods.goodsName"></el-switch>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="10" :offset="1">
+                            <el-form-item label="库存数量">
+                                <el-col :span="18">
+                                    <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入库存数量"></el-input>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row >
+                        <el-col :span="10">
+                            <el-form-item label="餐盒数量">
+                                <el-col :span="18">
+                                    <el-input type="text" v-model="editGoodsForm.addSpecs.boxesNumber" placeholder="请输入餐盒数量">{{item.boxesNumber}}</el-input>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="10" :offset="1">
+                            <el-form-item label="餐盒价格">
+                                <el-col :span="18">
+                                    <el-input type="text" v-model="editGoodsForm.addSpecs.boxesMoney" placeholder="请输入餐盒价格">{{item.boxesMoney}}</el-input>
+                                </el-col>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-row>
             </el-row>
         </el-form-item>
@@ -104,12 +165,12 @@
                 <el-row v-if="addAttribute">
                     <el-form-item label="属性名称">
                         <el-col :span="21">
-                            <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入属性名称"></el-input>
+                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性名称"></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="属性值" style="margin-top: 10px">
                         <el-col :span="18">
-                            <el-input type="text" v-model="editGoodsForm.goods.feeMeals" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
+                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
                         </el-col>
                         <el-col :span="2" :offset="1">
                             <el-button size="mini" type="success" style="float: right;margin-top: 6px">添加</el-button>
@@ -147,18 +208,23 @@
                 addAttribute:false,      //添加属性
                 editGoodsForm:{
                     goods: {
-                        feeMeals: '',
-                        goodsClassNames: "",
                         goodsContent: "",
                         goodsImgUrl: "",
                         goodsName: "",
-                        goodsPrice: '',
                         goodsStatus: "SOLD_OUT",
-                        goodsStatus:""
                     },
-                    goodsCategoryIdList: []
+                    goodsCategoryIdList: [],
+                    goodsPropertys: [],
+                    addSpecs: {
+                        goodsSpecificationName:'',
+                        goodsSpecificationPrice:'',
+                        infiniteInventory:'',
+                        boxesNumber:'',
+                        boxesMoney:''
+                    }
                 },
-                goodsId:'',
+                goodsId:0,
+                standardObj: null,
                 // editGoodsFormRules:{
                 //     goodsName:[
                 //         { required: true, message: '请输入商品名称', trigger: 'blur' },
@@ -275,6 +341,8 @@
             this.goodsId = goodsId;
             if (goodsId) {getGoodsById(goodsId).then(res => {
                 this.editGoodsForm = res;
+                this.goodsId = res.goodsId;
+                 this.editGoodsForm.addSpecs=res.goods.goodsSpecifications
                 // this.editGoodsForm.goods.showImgUrl=this.UPLOADURL+res.goods.showImgUrl
             })
             }
@@ -377,5 +445,10 @@
     }
     .addSpecification>span{
         color: #13ce66;
+    }
+    .standard-index{
+        background-color: rgba(218, 218, 218, 0.13);
+        padding-left: 10px;
+        margin-bottom: 10px;
     }
 </style>
