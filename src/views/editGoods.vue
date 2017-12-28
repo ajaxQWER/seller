@@ -45,19 +45,19 @@
                         <span>添加规格</span>
                     </span>
             </el-row>
-            <el-row v-if="addSpecification">
-                <el-row>
+            <el-row v-if="addSpecification" class="addSpecifications">
+                <el-row >
                     <el-col :span="10">
                         <el-form-item label="规格名称">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入规格名称"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="餐盒费">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入规格价格"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
@@ -66,14 +66,18 @@
                     <el-col :span="10">
                         <el-form-item label="库存" prop="goodsName">
                             <el-col :span="18">
-                                <el-switch on-text="" off-text="" v-model="editGoodsForm.goods.goodsName"></el-switch>
+                                <el-col :span="5">
+                                    <el-switch on-text="" off-text="" on-color="#13ce66" v-model="editGoodsForm.addSpecs.infiniteInventory"></el-switch>
+                                </el-col>
+                                <el-col :span="10" v-text="formatVal(editGoodsForm.addSpecs.infiniteInventory)">
+                                </el-col>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="库存数量">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入库存数量"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesNumber" placeholder="请输入库存数量"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
@@ -82,14 +86,14 @@
                     <el-col :span="10">
                         <el-form-item label="餐盒数量">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入餐盒数量"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :span="10" :offset="1">
                         <el-form-item label="餐盒价格">
                             <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入餐盒价格"></el-input>
+                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
                             </el-col>
                         </el-form-item>
                     </el-col>
@@ -266,7 +270,7 @@
                     addSpecs: [{
                         goodsSpecificationName:'',
                         goodsSpecificationPrice:'',
-                        infiniteInventory:'',
+                        infiniteInventory:true,
                         boxesNumber:'',
                         boxesMoney:''
                     }]
@@ -386,11 +390,11 @@
     },
         //点击添加规格
         addSpecifications(){
-            this.addSpecification = true
+            this.addSpecification = !this.addSpecification
         },
         //点击添加属性
         addAttributes(){
-            this.addAttribute = true
+            this.addAttribute = !this.addAttribute
         },
         //点击修改商品规格
         editGoods(){
@@ -453,7 +457,10 @@
         saveAttribute(){
             this.editAttribute=false
             this.editAttributeDisabled=true
-        }
+        },
+            formatVal: function(val){
+                return val ? '无限' : '有限'
+            },
 
         },
         created(){
@@ -585,6 +592,9 @@
     }
     .addSpecification>span{
         color: #13ce66;
+    }
+    .addSpecifications{
+        margin-bottom: 20px;
     }
     .standard-index{
         background-color: rgba(218, 218, 218, 0.13);
