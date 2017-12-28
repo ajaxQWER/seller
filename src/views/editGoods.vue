@@ -45,60 +45,65 @@
                         <span>添加规格</span>
                     </span>
             </el-row>
-            <el-row v-if="addSpecification" class="addSpecifications">
-                <el-row >
-                    <el-col :span="10">
-                        <el-form-item label="规格名称">
-                            <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
+
+            <el-dialog title="收货地址" :visible.sync="addSpecification" >
+                    <el-row class="addSpecifications">
+                        <el-row >
+                            <el-col :span="10">
+                                <el-form-item label="规格名称">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="10" :offset="1">
-                        <el-form-item label="餐盒费">
-                            <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.addSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
+                            <el-col :span="10" :offset="1">
+                                <el-form-item label="餐盒费">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row style="margin: 10px 0px 10px 0px">
-                    <el-col :span="10">
-                        <el-form-item label="库存" prop="goodsName">
-                            <el-col :span="18">
-                                <el-col :span="5">
-                                    <el-switch on-text="" off-text="" on-color="#13ce66" v-model="editGoodsForm.addSpecs.infiniteInventory"></el-switch>
-                                </el-col>
-                                <el-col :span="10" v-text="formatVal(editGoodsForm.addSpecs.infiniteInventory)">
-                                </el-col>
+                        </el-row>
+                        <el-row style="margin: 10px 0px 10px 0px">
+                            <el-col :span="10">
+                                <el-form-item label="库存" prop="goodsName">
+                                    <el-col :span="18">
+                                        <el-col :span="5">
+                                            <el-switch on-text="" off-text="" on-color="#13ce66" v-model="addGoodsSpecs.infiniteInventory"></el-switch>
+                                        </el-col>
+                                        <el-col :span="10" v-text="formatVal(addGoodsSpecs.infiniteInventory)">
+                                        </el-col>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="10" :offset="1">
-                        <el-form-item label="库存数量">
-                            <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesNumber" placeholder="请输入库存数量"></el-input>
+                            <el-col :span="10" :offset="1">
+                                <el-form-item label="库存数量">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入库存数量"></el-input>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row >
-                    <el-col :span="10">
-                        <el-form-item label="餐盒数量">
-                            <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
+                        </el-row>
+                        <el-row >
+                            <el-col :span="10">
+                                <el-form-item label="餐盒数量">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="10" :offset="1">
-                        <el-form-item label="餐盒价格">
-                            <el-col :span="18">
-                                <el-input type="text" v-model="editGoodsForm.addSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
+                            <el-col :span="10" :offset="1">
+                                <el-form-item label="餐盒价格">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
+                                    </el-col>
+                                </el-form-item>
                             </el-col>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-row>
+                        </el-row>
+                    </el-row>
+        </el-dialog>
+
+
             <el-row v-if="editGoodsForm.addSpecs">
                 <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
                     <el-row class="standard-index">
@@ -255,6 +260,14 @@
                 editAttribute:false, //修改商品属性
                 editSpeciDisabled :true,  //禁止编辑商品规格
                 editAttributeDisabled :true,  //禁止编辑商品属性
+
+                addGoodsSpecs:{  //添加规格
+                    goodsSpecificationName:'',
+                    goodsSpecificationPrice:'',
+                    infiniteInventory:true,
+                    boxesNumber:'',
+                    boxesMoney:''
+                },
                 editGoodsForm:{
                     goods: {
                         goodsContent: "",
@@ -267,7 +280,7 @@
                         goodsPropertyName:'',
 
                     }],
-                    addSpecs: [{
+                    addSpecs: [{   //已有的规格
                         goodsSpecificationName:'',
                         goodsSpecificationPrice:'',
                         infiniteInventory:true,
@@ -410,48 +423,42 @@
         saveSpecs(){
             this.editSpeci=false
             this.editSpeciDisabled=true
-            // if(!this.editGoodsForm.addSpecs.infiniteInventory){
-            //     this.$message({
-            //         message: '请输入库存',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.goodsSpecificationName){
-            //     this.$message({
-            //         message: '请输入规格名称',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.goodsSpecificationPrice){
-            //     this.$message({
-            //         message: '请输入价格',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.infiniteInventory){
-            //     this.$message({
-            //         message: '请输入库存',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.boxesNumber){
-            //     this.$message({
-            //         message: '请输入餐盒数量',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.boxesMoney){
-            //     this.$message({
-            //         message: '请输入餐盒价格',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
+            if(!this.editGoodsForm.addSpecs.infiniteInventory){
+                this.$message({
+                    message: '请输入库存',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.editGoodsForm.addSpecs.goodsSpecificationName){
+                this.$message({
+                    message: '请输入规格名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.editGoodsForm.addSpecs.goodsSpecificationPrice){
+                this.$message({
+                    message: '请输入价格',
+                    type: 'warning'
+                })
+                return;
+            }
+        
+            if(!this.editGoodsForm.addSpecs.boxesNumber){
+                this.$message({
+                    message: '请输入餐盒数量',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.editGoodsForm.addSpecs.boxesMoney){
+                this.$message({
+                    message: '请输入餐盒价格',
+                    type: 'warning'
+                })
+                return;
+            }
         },
         //点击保存商品属性
         saveAttribute(){
