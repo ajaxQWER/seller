@@ -113,41 +113,41 @@
             </el-form>
         </el-row>
         <!--添加打印机-->
-        <el-dialog :title="isAdd?'新增设备':'修改设备'" :visible.sync="addDialog" size="tiny" class="dialog" @close="closeaddDialog">
-            <el-form :model="addPrinterForm" label-width="120px">
-                <el-form-item label="设备类型">
-                    <el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">
-                        <el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes" :key="index" :label="item.label"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="设备名称" v-if="addPrinterForm.deviceName">
-                    <el-input type="text" v-model="addPrinterForm.deviceName " auto-complete="off" placeholder="单行输入"></el-input>
-                </el-form-item>
-                <el-form-item label="设备编号">
-                    <el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入"></el-input>
-                </el-form-item>
-                <el-form-item label="设备密码" v-if="!addPrinterForm.deviceName">
-                    <el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位"></el-input>
-                </el-form-item>
-                <el-form-item label="纸张规则">
-                    <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
-                        <el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes" :key="index" :disabled="item.disabled"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="打印数量">
-                    <el-select v-model="addPrinterForm.copies" placeholder="请选择">
-                        <el-option v-for="(item) in copyNum" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="设备备注">
-                    <el-input type="text" v-model="addPrinterForm.deviceRemark" auto-complete="off" placeholder="请单行输入"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelAddPrinter" size="small">取 消</el-button>
-                <el-button type="primary" @click="saveAddPrinter" :loading="addLoading" size="small">确 定</el-button>
-            </div>
-        </el-dialog>
+        <!--<el-dialog :title="isAdd?'新增设备':'修改设备'" :visible.sync="addDialog" size="tiny" class="dialog" @close="closeaddDialog">-->
+            <!--<el-form :model="addPrinterForm" label-width="120px">-->
+                <!--<el-form-item label="设备类型">-->
+                    <!--<el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">-->
+                        <!--<el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes" :key="index" :label="item.label"></el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="设备名称" v-if="addPrinterForm.deviceName">-->
+                    <!--<el-input type="text" v-model="addPrinterForm.deviceName " auto-complete="off" placeholder="单行输入"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="设备编号">-->
+                    <!--<el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="设备密码" v-if="!addPrinterForm.deviceName">-->
+                    <!--<el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="纸张规则">-->
+                    <!--<el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">-->
+                        <!--<el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes" :key="index" :disabled="item.disabled"></el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="打印数量">-->
+                    <!--<el-select v-model="addPrinterForm.copies" placeholder="请选择">-->
+                        <!--<el-option v-for="(item) in copyNum" :key="index" :label="item.label" :value="item.value"></el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="设备备注">-->
+                    <!--<el-input type="text" v-model="addPrinterForm.deviceRemark" auto-complete="off" placeholder="请单行输入"></el-input>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
+            <!--<div slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="cancelAddPrinter" size="small">取 消</el-button>-->
+                <!--<el-button type="primary" @click="saveAddPrinter" :loading="addLoading" size="small">确 定</el-button>-->
+            <!--</div>-->
+        <!--</el-dialog>-->
     </el-row>
 </template>
 <script>
@@ -320,13 +320,13 @@ export default {
             })
         },
         //删除打印机
-        deletePrinter(id, index){
+        deletePrinter(id){
             this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                deletePrinterById(id, index).then(() => {
+                deletePrinterById(id).then(() => {
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
