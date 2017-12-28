@@ -71,6 +71,9 @@
 <script>
 // import {updatePwd} from '@/api/api';
 export default {
+    created(){
+        console.log(this)
+    },
     data: function () {
         return {
             collapsed: false,
@@ -96,7 +99,7 @@ export default {
             });
         },
         clearStorage: function () {
-            localStorage.removeItem('user');
+            localStorage.removeItem('seller');
             localStorage.removeItem('jwt');
             this.$router.push('/login');
         },
@@ -124,14 +127,21 @@ export default {
         }
     },
     mounted: function () {
-        var user = localStorage.getItem('user');
-        if (user) {
-            user = JSON.parse(user);
-            this.sysUserName = user.username || '';
+        var seller = localStorage.getItem('seller');
+        var shopName = localStorage.getItem('shopName')
+        if (seller) {
+            seller = JSON.parse(seller);
+            this.sysUserName = shopName || '';
+            this. shopId = seller.shopId
         }
 
     }
 }
+
+        // localStorage.setItem('seller', JSON.stringify(data.seller));
+        // localStorage.setItem('jwt', data.jwt);
+        // localStorage.setItem('shopName',data.shopName)
+        // localStorage.setItem('shopId',data.seller.shopId)
 </script>
 <style scoped lang="scss">
 .container {
