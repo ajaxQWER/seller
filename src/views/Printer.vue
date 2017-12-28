@@ -17,7 +17,7 @@
                         </el-col>
                     </el-row>
                     <el-row class="bgColorW bgH">
-                        <el-row class="printerSetting" v-for="(item,index) in printerList" :key="index">
+                        <el-row class="printerSetting" v-for="(item,index) in printerList">
                             <el-col :span="22">
                                 <el-row>
                                     <el-col :span="2">设备名称</el-col>
@@ -35,7 +35,7 @@
                             </el-col>
                             <el-col :span="2">
                                 <el-button size="small" @click="editPrinter(item)" type="text">编辑</el-button>
-                                <el-button size="small" @click="deletePrinter(item.printerId,index)" type="text" style="color: red">删除</el-button>
+                                <el-button size="small" @click="deletePrinter(item.printerId)" type="text" style="color: red">删除</el-button>
                             </el-col>
                         </el-row>
                     </el-row>
@@ -46,7 +46,7 @@
             <el-form :model="addPrinterForm" label-width="120px">
                 <el-form-item label="设备类型">
                     <el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">
-                        <el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes" :key="index" :label="item.label"></el-option>
+                        <el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes"  :label="item.label"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备名称" v-if="addPrinterForm.deviceName">
@@ -60,12 +60,12 @@
                 </el-form-item>
                 <el-form-item label="纸张规则">
                     <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
-                        <el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes" :key="index" :disabled="item.disabled"></el-option>
+                        <el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes"  :disabled="item.disabled"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="打印数量">
                     <el-select v-model="addPrinterForm.copies" placeholder="请选择">
-                        <el-option v-for="(item) in copyNum" :key="index" :label="item.label" :value="item.value"></el-option>
+                        <el-option v-for="(item) in copyNum"  :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备备注">
@@ -244,13 +244,13 @@
                 })
             },
             //删除打印机
-            deletePrinter(id, index){
+            deletePrinter(id){
                 this.$confirm('此操作将永久删除该设备, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    deletePrinterById(id, index).then(() => {
+                    deletePrinterById(id).then(() => {
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
