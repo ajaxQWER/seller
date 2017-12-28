@@ -46,7 +46,7 @@
             <el-form :model="addPrinterForm" label-width="120px">
                 <el-form-item label="设备类型">
                     <el-select v-model="addPrinterForm.printerType" placeholder="请选择类型">
-                        <el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes" :label="item.label"></el-option>
+                        <el-option label="" :disabled="item.disabled" :value="item.value" v-for="(item) in printerTypes" :key="index" :label="item.label"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备名称" v-if="addPrinterForm.deviceName">
@@ -60,12 +60,12 @@
                 </el-form-item>
                 <el-form-item label="纸张规则">
                     <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
-                        <el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes" :disabled="item.disabled"></el-option>
+                        <el-option :label="item.label" :value="item.value" v-for="(item) in printerPageTypes" :key="index" :disabled="item.disabled"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="打印数量">
                     <el-select v-model="addPrinterForm.copies" placeholder="请选择">
-                        <el-option v-for="(item) in copyNum" :label="item.label" :value="item.value"></el-option>
+                        <el-option v-for="(item) in copyNum" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备备注">

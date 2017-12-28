@@ -33,7 +33,17 @@ const router = new VueRouter({
       return { x: 0, y: 0 }
     }
 })
-
+router.beforeEach((to, from, next) => {
+    let jwt = localStorage.getItem('jwt');
+    if (!jwt && to.path != '/login') {
+        next({ path: '/login' })
+    } else {
+        next();
+        try{
+            document.querySelector('#container').scrollTop = 0;
+        }catch(e){}
+    }
+});
 
 Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: process.env.UPLOAD_URL});
 Object.defineProperty(Vue.prototype, 'BASEURL', {value: process.env.BASE_URL});
