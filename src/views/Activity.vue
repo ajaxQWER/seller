@@ -9,7 +9,11 @@
 			<div v-for="(item,index) in activityList" :key="index">
 				<el-row class="activityContent" v-if="item.state">
 					<el-col :span="2">
-						<img src="../assets/images/discount_03.png" height="66" width="69" class="imgP">
+						<img v-if="item.activityType == 'FIRST'" src="../assets/images/discount_01.png" class="imgP">
+						<img v-if="item.activityType == 'DELGOLD'" src="../assets/images/discount_02.png" class="imgP">
+						<img v-if="item.activityType == 'COMPLIMENTARY'" src="../assets/images/discount_03.png" class="imgP">
+						<img v-if="item.activityType == 'SALE'" src="../assets/images/discount_04.png" class="imgP">
+						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_04.png" class="imgP">
 					</el-col>
 					<el-col :span="19" :offset="1">
 						<h4 :class="['discountType',formatClassByType(item.activityType)]">{{formatActivityType(item.activityType)}}</h4>
@@ -23,7 +27,11 @@
 				</el-row>
 				<el-row class="activityContent" v-else>
 					<el-col :span="2">
-						<img src="../assets/images/discount_03.png" height="66" width="69" class="imgP">
+						<img v-if="item.activityType == 'FIRST'" src="../assets/images/discount_01.png" class="imgP">
+						<img v-if="item.activityType == 'DELGOLD'" src="../assets/images/discount_02.png" class="imgP">
+						<img v-if="item.activityType == 'COMPLIMENTARY'" src="../assets/images/discount_03.png" class="imgP">
+						<img v-if="item.activityType == 'SALE'" src="../assets/images/discount_04.png" class="imgP">
+						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_04.png" class="imgP">
 					</el-col>
 					<el-col :span="12" :offset="1">
 						<el-form label-width="120px" v-if="item.activityType == 'FIRST'" v-model="firstActivity">
@@ -544,9 +552,25 @@ export default {
     		})
         },
         //删除店铺活动
-        async deleteActivitys(activityId){
-        	await deleteActivity(activityId)
-        	this.getActivitys()
+        deleteActivitys(activityId){
+        	this.$confirm('此操作将删除该活动, 是否继续?', '提示', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning'
+	        }).then(() => {
+	        	deleteActivity(activityId).then(() => {
+	        		this.getActivitys()
+	        	})
+	          this.$message({
+	            type: 'success',
+	            message: '删除成功!'
+	          });
+	        }).catch(() => {
+	          this.$message({
+	            type: 'info',
+	            message: '已取消删除'
+	          });          
+	        });
         },
         formatActivityType(type){
 			switch (type) {
