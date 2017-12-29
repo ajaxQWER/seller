@@ -207,7 +207,7 @@
 						    <el-col :span="5">
 						      <el-input v-model="item.subtract"></el-input>
 						    </el-col>
-						    <el-col :span="5">
+						    <el-col :span="5" :offset="1">
 						      <el-button @click="addDelGold">增加</el-button>
 						    </el-col>
 						    <el-col :span="5">
@@ -516,6 +516,14 @@ export default {
             this.getActivitys()
         },
         closeAddDialog(){
+        	this.typeName = ""
+	        this.couponCount = ""
+	        this.couponId = ""
+	        this.full = ""
+            this.beginTime = ''
+            this.endTime = ''
+            this.money = ""
+            this.activityName = ""
         	this.value = ""
         	this.addDialog = false
         	this.state = ""
