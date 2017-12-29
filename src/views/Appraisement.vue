@@ -5,7 +5,7 @@
             <el-row>
                 <el-col :span="4" :offset="2">
                     <el-row class="grades">{{appraiseTotal.comprehensiveApprise}}</el-row>
-                    <el-row class="gradeIntro">高于商圈{{appraiseTotal.businessCircleRatio*100}}%的商家</el-row>
+                    <el-row class="gradeIntro">高于商圈{{~~(appraiseTotal.businessCircleRatio*100)}}%的商家</el-row>
                 </el-col>
                 <el-col :span="12">
                     <el-row class="Reply">
