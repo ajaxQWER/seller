@@ -3,11 +3,11 @@
         <el-row class="gradeContainer">
             <span>综合评分</span>
             <el-row>
-                <el-col :span="4" :offset="2">
+                <el-col :span="4" :offset="1">
                     <el-row class="grades">{{appraiseTotal.comprehensiveApprise}}</el-row>
                     <el-row class="gradeIntro">高于商圈{{~~(appraiseTotal.businessCircleRatio*100)}}%的商家</el-row>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="12" :offset="1">
                     <el-row class="Reply">
                         <el-row>
                             <el-col :span="7">
@@ -32,7 +32,6 @@
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName" @tab-click="showShopAppraise">
                 <el-tab-pane label="全部评价" name="0">
-
                 </el-tab-pane>
                 <el-tab-pane label="已回复" name="1">
                 </el-tab-pane>
@@ -44,8 +43,9 @@
                     <li v-for="(item,index) in commentList" :key="index">
                         <el-row>
                             <el-col class="headPortrait" :span="2">
-                                <img  v-if="item.avatorUrl" :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="">
-                                <img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">
+                                <!--<img  :src="item.avatorUrl ? UPLOADURL + item.avatorUrl + '/avator.png': '../assets/images/default-avatar.png' " alt="">-->
+                                <img :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="" class="default-avatar">
+                                <!--<img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">-->
                             </el-col>
                             <el-col :span="19">
                                 <el-col>
@@ -55,7 +55,7 @@
                                                 <img v-for="n in item.shopAppraise" src="../assets/images/scores.png" alt="" class="scores-img">
                                             </el-row>
                                         </li>
-                                        <li>{{item.contentShopAppraise}}</li>
+                                        <li class="firstAppraise"><span >{{item.contentShopAppraise}}</span></li>
                                         <li class="lastAppraise">{{item.orderName}}</li>
                                         <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
                                     </ul>
@@ -69,11 +69,11 @@
                         <el-row class="clientRepalyContent">
                             <ul class="clientRepaly">
                                 <li v-if="item.goodsAppraiseList.length>0" v-for="(goods,goodsKey) in item.goodsAppraiseList" :key="goodsKey">
-                                    <el-col :span="19">
-                                        <el-row>{{goods.goodsName}}</el-row>
+                                    <el-col :span="19" style="margin-top: 10px">
+                                        <el-row class="evaluateTitle">{{goods.goodsName}}</el-row>
                                         <el-row class="evaluate">{{goods.appraiseContent}}</el-row>
                                     </el-col>
-                                    <el-col :span="5" class="grade">
+                                    <el-col :span="5" class="grade" style="text-align: center;padding-left: 53px">
                                         <div class="goods-comment"><img v-for="n in goods.appraiseLevel" src="../assets/images/scores.png" alt="" class="scores-img"></div>
                                     </el-col>
                                 </li>
@@ -113,11 +113,9 @@ export default {
         return {
             headerImage: '',
             activeName: '0',
-            value5: 3.7,
-            replay:false,
             appraiseTotal:"",
         	commentsAppraise: false,
-                pageId: 1,
+            pageId: 1,
             pageSize: 5,
             counts: 0,
             shopAppraise: '',
@@ -164,9 +162,6 @@ export default {
         }
     },
     methods:{
-        clientReply(){
-            this.replay=true
-        },
         cancelReplay(){
             this.replay=false
         },
@@ -266,7 +261,7 @@ export default {
     },
     created(){
         this.getHeadInfo();
-        this.showShopAppraise()
+        this.showShopAppraise({index:'0'})
     },
     computed : {
         reversionRate : function(){
@@ -290,11 +285,13 @@ export default {
     }
     .grades{
         font-size: 30px;
-        color: red
+        color: red;
+        text-align: center;
     }
     .gradeIntro{
         color: rgba(62, 83, 113, 0.76);
         font-size: 13px;
+        text-align: center;
     }
     .Reply{
         padding: 0;
@@ -321,6 +318,10 @@ export default {
         height: 40px;
         border-radius: 20px;
     }
+    .default-avatar{
+        background: url(../assets/images/default-avatar.png) no-repeat center center #eaeaea;
+        background-size: cover;
+    }
     .AppraisementContent{
         background-color: white;
         padding: 5px;
@@ -332,13 +333,18 @@ export default {
         padding-left:10px
     }
     .lastAppraise{
-        color: green
+        color: green;
+        font-size: 12px;
+        margin-top: 3px;
+
     }
     .AppraiseTitle{
-        color: red
+        color: red;
     }
     .AppraiseBox{
-        margin-top: 5px
+        margin-top: 10px;
+        font-size: 12px;
+
     }
     .replyBtn{
         margin-top: 10px;
@@ -349,22 +355,26 @@ export default {
     }
     .clientRepalyContent{
         background-color: #f9f9f9;
-        margin-left: 10px;
+        margin-left: 48px;
         margin-top: 10px;
         border: 1px solid white;
         padding-bottom: 14px;
     }
 
     .clientRepaly{
-        margin-left: 25px;
-        padding: 10px;
+        margin-left: 5px;
+        padding: 0px 0px 0px 10px;
     }
     .clientRepaly>li{
         list-style: none;
     }
+    .evaluateTitle{
+        font-size: 14px;
+    }
     .evaluate{
         color: #8c939d;
         font-size: 12px;
+        padding-top: 3px;
     }
     .grade{
         float: right;
@@ -399,12 +409,18 @@ export default {
         color: #5e7382;
     }
     .scores-img{
-        padding-left: 5px;
+        padding-left: 3px;
+        width: 10px;
+        height: 15px;
     }
     .replyTextareaBox{
         margin-top: 10px;
         margin-left: 10px;
         width: 90%;
+    }
+    .firstAppraise{
+        font-size: 13px;
+
     }
     .replyBtn1{
         text-align: right;
