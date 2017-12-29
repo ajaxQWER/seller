@@ -45,20 +45,21 @@
                         <span>添加规格</span>
                     </span>
             </el-row>
-
-            <el-dialog title="收货地址" :visible.sync="addSpecification" >
+                <!--添加商品规格弹窗-->
+            <el-dialog title="添加规格" :visible.sync="addSpecificationDialog">
+                <el-form :model="addGoodsSpecs" label-width="100px">
                     <el-row class="addSpecifications">
                         <el-row >
                             <el-col :span="10">
-                                <el-form-item label="规格名称">
-                                    <el-col :span="18">
+                                <el-form-item label="规格名称：">
+                                    <el-col :span="13">
                                         <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="10" :offset="1">
-                                <el-form-item label="餐盒费">
-                                    <el-col :span="18">
+                                <el-form-item label="价格：">
+                                    <el-col :span="13">
                                         <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
                                     </el-col>
                                 </el-form-item>
@@ -66,9 +67,9 @@
                         </el-row>
                         <el-row style="margin: 10px 0px 10px 0px">
                             <el-col :span="10">
-                                <el-form-item label="库存" prop="goodsName">
-                                    <el-col :span="18">
-                                        <el-col :span="5">
+                                <el-form-item label="库存：" prop="goodsName">
+                                    <el-col :span="13">
+                                        <el-col :span="10">
                                             <el-switch on-text="" off-text="" on-color="#13ce66" v-model="addGoodsSpecs.infiniteInventory"></el-switch>
                                         </el-col>
                                         <el-col :span="10" v-text="formatVal(addGoodsSpecs.infiniteInventory)">
@@ -76,34 +77,37 @@
                                     </el-col>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="10" :offset="1">
-                                <el-form-item label="库存数量">
-                                    <el-col :span="18">
-                                        <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入库存数量"></el-input>
+                            <el-col :span="10" :offset="1" v-if="!addGoodsSpecs.infiniteInventory">
+                                <el-form-item label="库存数量：">
+                                    <el-col :span="13">
+                                        <el-input type="text" v-model="addGoodsSpecs.stock" placeholder="请输入库存数量"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row >
                             <el-col :span="10">
-                                <el-form-item label="餐盒数量">
-                                    <el-col :span="18">
+                                <el-form-item label="餐盒数量：">
+                                    <el-col :span="13">
                                         <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="10" :offset="1">
-                                <el-form-item label="餐盒价格">
-                                    <el-col :span="18">
+                                <el-form-item label="餐盒价格：">
+                                    <el-col :span="13">
                                         <el-input type="text" v-model="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-row>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="cancelAddSpecs" size="small">取 消</el-button>
+                    <el-button type="primary" @click="saveAddSpecs" :loading="SpecsLoading" size="small">保 存</el-button>
+                </div>
         </el-dialog>
-
-
             <el-row v-if="editGoodsForm.addSpecs">
                 <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
                     <el-row class="standard-index">
@@ -111,16 +115,16 @@
                             规格{{index+1}}
                         </el-col>
                         <el-col :span="4" style="text-align: center">
-                            <el-button type="text" style="color: #13ce66" @click="editGoods" v-if="!editSpeci">修改</el-button>
-                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs" v-if="editSpeci">保存</el-button>
-                            <el-button type="text" style="color: red">删除</el-button>
+                            <el-button type="text" style="color: #13ce66" @click="editGoods(item.goodsId,index)" v-if="!editSpeci">修改</el-button>
+                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(item.goodsId)" v-if="editSpeci">保存</el-button>
+                            <el-button type="text" style="color: red" @clik="deleteSpecs(item.goodsId,index)">删除</el-button>
                         </el-col>
                     </el-row>
                     <el-row >
                         <el-col :span="25">
                             <el-form-item label="库存">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.infiniteInventory ?'无限':'有限'" style="width: 650px" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.infiniteInventory ?'无限':item.stock" style="width: 643px" :disabled="editSpeciDisabled"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -170,7 +174,7 @@
                 <el-row v-if="addAttribute">
                     <el-form-item label="属性名称">
                         <el-col :span="21">
-                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性名称"></el-input>
+                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性名称" ></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="属性值" style="margin-top: 10px">
@@ -199,7 +203,7 @@
                         <el-row>
                             <el-form-item label="属性名称">
                                 <el-col :span="21">
-                                    <el-input type="text" v-model="item.goodsPropertyName" placeholder="请输入属性名称" :disabled="editAttributeDisabled"></el-input>
+                                    <el-input type="text" v-model="item.goodsPropertyName" placeholder="请输入属性名称" :disabled="editAttributeDisabled" style="width: 650px"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-row>
@@ -254,6 +258,8 @@
                 panel:false,
                 url:'' ,
                 panel: false,
+                SpecsLoading:false, //商品规格弹窗loading
+                addSpecificationDialog:false, //商品规格弹窗
                 addSpecification:false,  //添加规格
                 addAttribute:false,      //添加属性
                 editSpeci:false,   //修改商品规格
@@ -266,7 +272,9 @@
                     goodsSpecificationPrice:'',
                     infiniteInventory:true,
                     boxesNumber:'',
-                    boxesMoney:''
+                    boxesMoney:'',
+                    stock:'',
+                    isEditMode:false
                 },
                 editGoodsForm:{
                     goods: {
@@ -285,13 +293,13 @@
                         goodsSpecificationPrice:'',
                         infiniteInventory:true,
                         boxesNumber:'',
-                        boxesMoney:''
+                        boxesMoney:'',
+                        isEditMode:false
                     }]
                 },
                 goodsId:0,
                 goodsCategoryLists:[]
             }
-
         },
         methods:{
             saveEditGoodsInfo(){
@@ -363,54 +371,77 @@
         this.postImg()
     },
     getRoundedCanvas (sourceCanvas) {
-      var canvas = document.createElement('canvas');
-      var context = canvas.getContext('2d');
-      var width = sourceCanvas.width;
-      var height = sourceCanvas.height;
-      canvas.width = width;
-      canvas.height = height;
-      context.imageSmoothingEnabled = true;
-      context.drawImage(sourceCanvas, 0, 0, width, height);
-      context.globalCompositeOperation = 'destination-in';
-      context.beginPath();
-      // context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-      context.fill();
-      return canvas;
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+          var width = sourceCanvas.width;
+          var height = sourceCanvas.height;
+          canvas.width = width;
+          canvas.height = height;
+          context.imageSmoothingEnabled = true;
+          context.drawImage(sourceCanvas, 0, 0, width, height);
+          context.globalCompositeOperation = 'destination-in';
+          context.beginPath();
+          // context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+          context.fill();
+          return canvas;
     },
     postImg () {
-      //这边写图片的上传
-        var bytes = window.atob(this.headerImage.split(',')[1]); //去掉url的头，并转换为byte
-        //处理异常,将ascii码小于0的转换为大于0
-        var ab = new ArrayBuffer(bytes.length);
-        var ia = new Uint8Array(ab);
-        for (var i = 0; i < bytes.length; i++) {
-            ia[i] = bytes.charCodeAt(i);
-        }
-        var obj = new Blob([ab], { type: 'image/jpeg' })
-        var fd = new FormData();
-        //formdata对象第3个参数为文件名，不传则默认使用文件名，这里是blob对象所以需要加一个后缀
-        fd.append('file', obj, '*.jpg');
-        fd.path = '/goods'
-        uploadFiles(fd).then(data => {
-            console.log(data)
-            this.$message.success("上传成功")
-            this.editGoodsForm.goods.goodsImgUrl = data.originalUrl;
-            localStorage.setItem('goodsImgUrl', data.originalUrl);
-            this.cancel()
-        }).catch(err => {
-            this.$message.error(err)
-        })
+          //这边写图片的上传
+            var bytes = window.atob(this.headerImage.split(',')[1]); //去掉url的头，并转换为byte
+            //处理异常,将ascii码小于0的转换为大于0
+            var ab = new ArrayBuffer(bytes.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < bytes.length; i++) {
+                ia[i] = bytes.charCodeAt(i);
+            }
+            var obj = new Blob([ab], { type: 'image/jpeg' });
+            var fd = new FormData();
+            //formdata对象第3个参数为文件名，不传则默认使用文件名，这里是blob对象所以需要加一个后缀
+            fd.append('file', obj, '*.jpg');
+            fd.path = '/goods'
+            uploadFiles(fd).then(data => {
+                console.log(data)
+                this.$message.success("上传成功")
+                this.editGoodsForm.goods.goodsImgUrl = data.originalUrl;
+                localStorage.setItem('goodsImgUrl', data.originalUrl);
+                this.cancel()
+            }).catch(err => {
+                this.$message.error(err)
+            })
     },
         //点击添加规格
         addSpecifications(){
-            this.addSpecification = !this.addSpecification
+            this.addSpecificationDialog=true
+        },
+        // 点击删除商品规格
+        deleteSpecs(){
+
+        },
+        //取消添加规格
+        cancelAddSpecs(){
+            this.addSpecificationDialog=false
+        },
+        //保存添加规格
+        saveAddSpecs(goodsId){
+            this.addSpecificationDialog=false;
+            this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
+            this.$message.success("保存成功")
+            this.addGoodsSpecs={
+                goodsSpecificationName:'',
+                goodsSpecificationPrice:'',
+                infiniteInventory:true,
+                boxesNumber:'',
+                boxesMoney:'',
+                stock:''
+            }
         },
         //点击添加属性
         addAttributes(){
             this.addAttribute = !this.addAttribute
         },
         //点击修改商品规格
-        editGoods(){
+        editGoods(goodsId,index){
+            console.log(index)
             this.editSpeci=true
             this.editSpeciDisabled=false
         },
@@ -418,6 +449,9 @@
         editGoodsAttribute(){
             this.editAttribute=true
             this.editAttributeDisabled=false
+            var speces = this.addSpecs[index];
+            speces.isEditMode = true;
+            this.$set(this.addSpecs,index,speces)
         },
         //点击保存商品规格
         saveSpecs(){
@@ -444,7 +478,7 @@
                 })
                 return;
             }
-        
+
             if(!this.editGoodsForm.addSpecs.boxesNumber){
                 this.$message({
                     message: '请输入餐盒数量',
