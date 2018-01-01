@@ -39,13 +39,13 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="商品规格" class="goodsItem">
-            <el-row>
-                     <span class="addSpecification" @click="addSpecifications">
+                <el-row>
+                    <span class="addSpecification" @click="addSpecifications">
                         <img src="../assets/images/edit-icon.png" alt="">
                         <span>添加规格</span>
                     </span>
-            </el-row>
-                <!--添加商品规格弹窗-->
+                </el-row>
+            <!--添加商品规格弹窗-->
             <el-dialog title="添加规格" :visible.sync="addSpecificationDialog">
                 <el-form :model="addGoodsSpecs" label-width="100px">
                     <el-row class="addSpecifications">
@@ -107,7 +107,7 @@
                     <el-button @click="cancelAddSpecs" size="small">取 消</el-button>
                     <el-button type="primary" @click="saveAddSpecs" :loading="SpecsLoading" size="small">保 存</el-button>
                 </div>
-        </el-dialog>
+            </el-dialog>
             <el-row v-if="editGoodsForm.addSpecs">
                 <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
                     <el-row class="standard-index">
@@ -115,16 +115,16 @@
                             规格{{index+1}}
                         </el-col>
                         <el-col :span="4" style="text-align: center">
-                            <el-button type="text" style="color: #13ce66" @click="editGoods(item.goodsId,index)" v-if="!editSpeci">修改</el-button>
-                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(item.goodsId)" v-if="editSpeci">保存</el-button>
-                            <el-button type="text" style="color: red" @clik="deleteSpecs(item.goodsId,index)">删除</el-button>
+                            <el-button type="text" style="color: #13ce66" @click="editGoods(item.goodsId,index)" v-if="!item.isEditMode">修改</el-button>
+                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(item.goodsId)" v-if="item.isEditMode">保存</el-button>
+                            <el-button type="text" style="color: red" @click="deleteSpecs(index)">删除</el-button>
                         </el-col>
                     </el-row>
                     <el-row >
                         <el-col :span="25">
                             <el-form-item label="库存">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.infiniteInventory ?'无限':item.stock" style="width: 643px" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.stock" style="width: 643px" :disabled="item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -133,14 +133,14 @@
                         <el-col :span="10">
                             <el-form-item label="规格名称">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" :disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="1">
                             <el-form-item label="价格">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" :disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -149,14 +149,14 @@
                         <el-col :span="10">
                             <el-form-item label="餐盒数量">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" :disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="1">
                             <el-form-item label="餐盒价格">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" :disabled="editSpeciDisabled"></el-input>
+                                    <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" :disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -270,10 +270,10 @@
                 addGoodsSpecs:{  //添加规格
                     goodsSpecificationName:'',
                     goodsSpecificationPrice:'',
-                    infiniteInventory:true,
+                    infiniteInventory:'',
                     boxesNumber:'',
                     boxesMoney:'',
-                    stock:'',
+                    stock:'', //库存数量
                     isEditMode:false
                 },
                 editGoodsForm:{
@@ -289,12 +289,13 @@
 
                     }],
                     addSpecs: [{   //已有的规格
-                        goodsSpecificationName:'',
-                        goodsSpecificationPrice:'',
-                        infiniteInventory:true,
-                        boxesNumber:'',
-                        boxesMoney:'',
-                        isEditMode:false
+                        goodsSpecificationName:'1',
+                        goodsSpecificationPrice:'2',
+                        infiniteInventory:'',
+                        boxesNumber:'3',
+                        boxesMoney:'4',
+                        stock:'',//库存数量
+                        isEditMode:true
                     }]
                 },
                 goodsId:0,
@@ -334,43 +335,43 @@
                 }
                 return url;
             },
-             change (e) {
-                  let files = e.target.files || e.dataTransfer.files;
-                  if (!files.length) return;
-                  this.panel = true;
-                  this.picValue = files[0];
+            change (e) {
+              let files = e.target.files || e.dataTransfer.files;
+              if (!files.length) return;
+              this.panel = true;
+              this.picValue = files[0];
 
-                  this.url = this.getObjectURL(this.picValue);
+              this.url = this.getObjectURL(this.picValue);
                   //每次替换图片要重新得到新的url
                   if(this.cropper){
                     this.cropper.replace(this.url);
                     console.log(this.url)
                     console.log(444)
-                  }
-                  this.panel = true;
+                }
+                this.panel = true;
 
             },
-        cancelCrop(){
-            this.panel = false;
-         },
-         crop () {
-            this.panel = false;
-            var croppedCanvas;
-            var roundedCanvas;
+            cancelCrop(){
+                this.panel = false;
+            },
+            crop () {
+                this.panel = false;
+                var croppedCanvas;
+                var roundedCanvas;
 
-            if (!this.croppable) {
-              return;
-            }
-        // Crop
-        croppedCanvas = this.cropper.getCroppedCanvas();
-        console.log(this.cropper)
-        // Round
-        roundedCanvas = this.getRoundedCanvas(croppedCanvas);
+                if (!this.croppable) {
+                  return;
+              }
+            // Crop
+            croppedCanvas = this.cropper.getCroppedCanvas();
+            console.log(this.cropper)
+            // Round
+            roundedCanvas = this.getRoundedCanvas(croppedCanvas);
 
-        this.headerImage = roundedCanvas.toDataURL();
-        this.postImg()
-    },
-    getRoundedCanvas (sourceCanvas) {
+            this.headerImage = roundedCanvas.toDataURL();
+            this.postImg()
+        },
+        getRoundedCanvas (sourceCanvas) {
           var canvas = document.createElement('canvas');
           var context = canvas.getContext('2d');
           var width = sourceCanvas.width;
@@ -381,42 +382,39 @@
           context.drawImage(sourceCanvas, 0, 0, width, height);
           context.globalCompositeOperation = 'destination-in';
           context.beginPath();
-          // context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-          context.fill();
-          return canvas;
-    },
-    postImg () {
-          //这边写图片的上传
-            var bytes = window.atob(this.headerImage.split(',')[1]); //去掉url的头，并转换为byte
-            //处理异常,将ascii码小于0的转换为大于0
-            var ab = new ArrayBuffer(bytes.length);
-            var ia = new Uint8Array(ab);
-            for (var i = 0; i < bytes.length; i++) {
-                ia[i] = bytes.charCodeAt(i);
-            }
-            var obj = new Blob([ab], { type: 'image/jpeg' });
-            var fd = new FormData();
-            //formdata对象第3个参数为文件名，不传则默认使用文件名，这里是blob对象所以需要加一个后缀
-            fd.append('file', obj, '*.jpg');
-            fd.path = '/goods'
-            uploadFiles(fd).then(data => {
-                console.log(data)
-                this.$message.success("上传成功")
-                this.editGoodsForm.goods.goodsImgUrl = data.originalUrl;
-                localStorage.setItem('goodsImgUrl', data.originalUrl);
-                this.cancel()
-            }).catch(err => {
-                this.$message.error(err)
-            })
-    },
+              // context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+              context.fill();
+              return canvas;
+          },
+          postImg () {
+              //这边写图片的上传
+                var bytes = window.atob(this.headerImage.split(',')[1]); //去掉url的头，并转换为byte
+                //处理异常,将ascii码小于0的转换为大于0
+                var ab = new ArrayBuffer(bytes.length);
+                var ia = new Uint8Array(ab);
+                for (var i = 0; i < bytes.length; i++) {
+                    ia[i] = bytes.charCodeAt(i);
+                }
+                var obj = new Blob([ab], { type: 'image/jpeg' });
+                var fd = new FormData();
+                //formdata对象第3个参数为文件名，不传则默认使用文件名，这里是blob对象所以需要加一个后缀
+                fd.append('file', obj, '*.jpg');
+                fd.path = '/goods'
+                uploadFiles(fd).then(data => {
+                    console.log(data)
+                    this.$message.success("上传成功")
+                    this.editGoodsForm.goods.goodsImgUrl = data.originalUrl;
+                    localStorage.setItem('goodsImgUrl', data.originalUrl);
+                    this.cancel()
+                }).catch(err => {
+                    this.$message.error(err)
+                })
+            },
         //点击添加规格
         addSpecifications(){
             this.addSpecificationDialog=true
         },
-        // 点击删除商品规格
-        deleteSpecs(){
 
-        },
         //取消添加规格
         cancelAddSpecs(){
             this.addSpecificationDialog=false
@@ -429,7 +427,7 @@
             this.addGoodsSpecs={
                 goodsSpecificationName:'',
                 goodsSpecificationPrice:'',
-                infiniteInventory:true,
+                infiniteInventory:'',
                 boxesNumber:'',
                 boxesMoney:'',
                 stock:''
@@ -442,16 +440,23 @@
         //点击修改商品规格
         editGoods(goodsId,index){
             console.log(index)
-            this.editSpeci=true
-            this.editSpeciDisabled=false
+            var editSpecify = this.editGoodsForm.addSpecs[index]
+            var isEditMode = editSpecify.isEditMode
+            this.$set(editSpecify,"isEditMode",!isEditMode)
+            // this.editSpeci=true
+            // this.editSpeciDisabled=false
+        },
+        // 点击删除商品规格
+        deleteSpecs : function(index){
+            this.editGoodsForm.addSpecs.splice(index,1);
         },
         //点击修改商品属性
         editGoodsAttribute(){
             this.editAttribute=true
             this.editAttributeDisabled=false
-            var speces = this.addSpecs[index];
+            var speces = this.editGoodsForm.addSpecs[index];
             speces.isEditMode = true;
-            this.$set(this.addSpecs,index,speces)
+            this.$set(this.editGoodsForm.addSpecs,index,speces)
         },
         //点击保存商品规格
         saveSpecs(){
@@ -499,12 +504,12 @@
             this.editAttribute=false
             this.editAttributeDisabled=true
         },
-            formatVal: function(val){
-                return val ? '无限' : '有限'
-            },
-
+        formatVal: function(val){
+            return val ? '无限' : '有限'
         },
-        created(){
+
+    },
+    created(){
             //获取商品title列表
             var paramas={
                 pageSize:99999,
@@ -531,23 +536,23 @@
                 // })
                 this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
             })
+        }
+    },
+    mounted: function() {
+        var self = this;
+        var image = document.getElementById('image');
+        this.cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+            background: false,
+            zoomable: false,
+            dragMode: 'move',
+            ready: function() {
+                self.croppable = true;
             }
-        },
-        mounted: function() {
-            var self = this;
-            var image = document.getElementById('image');
-            this.cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 1,
-                background: false,
-                zoomable: false,
-                dragMode: 'move',
-                ready: function() {
-                    self.croppable = true;
-                }
-            });
-        },
-    }
+        });
+    },
+}
 </script>
 <style >
     .uploadImgTitle{
