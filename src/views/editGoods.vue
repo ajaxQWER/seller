@@ -115,8 +115,8 @@
                             规格{{index+1}}
                         </el-col>
                         <el-col :span="4" style="text-align: center">
-                            <el-button type="text" style="color: #13ce66" @click="editGoods(item.goodsId,index)" v-if="!item.isEditMode">修改</el-button>
-                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(item.goodsId)" v-if="item.isEditMode">保存</el-button>
+                            <el-button type="text" style="color: #13ce66" @click="editGoodsSpecs(index)" v-if="!item.isEditMode">修改</el-button>
+                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(index)" v-else>保存</el-button>
                             <el-button type="text" style="color: red" @click="deleteSpecs(index)">删除</el-button>
                         </el-col>
                     </el-row>
@@ -124,7 +124,7 @@
                         <el-col :span="25">
                             <el-form-item label="库存">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.stock" style="width: 643px" :disabled="item.isEditMode"></el-input>
+                                    <el-input type="text" v-model="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -133,14 +133,14 @@
                         <el-col :span="10">
                             <el-form-item label="规格名称">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" :disabled="!item.isEditMode"></el-input>
+                                    <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" v-bind:disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="1">
                             <el-form-item label="价格">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" :disabled="!item.isEditMode"></el-input>
+                                    <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -149,14 +149,14 @@
                         <el-col :span="10">
                             <el-form-item label="餐盒数量">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" :disabled="!item.isEditMode"></el-input>
+                                    <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
                         <el-col :span="10" :offset="1">
                             <el-form-item label="餐盒价格">
                                 <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" :disabled="!item.isEditMode"></el-input>
+                                    <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
                                 </el-col>
                             </el-form-item>
                         </el-col>
@@ -171,23 +171,38 @@
                         <span>添加属性</span>
                     </span>
                 </el-row>
-                <el-row v-if="addAttribute">
-                    <el-form-item label="属性名称">
-                        <el-col :span="21">
-                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性名称" ></el-input>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="属性值" style="margin-top: 10px">
-                        <el-col :span="18">
-                            <el-input type="text" v-model="editGoodsForm.goods.goodsName" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
-                        </el-col>
-                        <el-col :span="2" :offset="1">
-                            <el-button size="mini" type="success" style="float: right;margin-top: 6px">添加</el-button>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item>
-                    </el-form-item>
-                </el-row>
+                <!--添加商品属性弹窗-->
+                <el-dialog title="添加属性" :visible.sync="addAttributesDialog">
+                    <el-form :model="addGoodsSpecs" label-width="80px">
+                        <el-row>
+                            <el-form-item label="属性名称">
+                                <el-col :span="13">
+                                    <el-input type="text" v-model="addGoodsAttribute.goodsPropertyName" placeholder="请输入属性名称" size="small"></el-input>
+                                </el-col>
+                            </el-form-item>
+                            <el-form-item label="属性值" style="margin-top: 10px">
+                                <el-col :span="13">
+                                    <el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" size="small" v-model="addGoodsAttribute.propValue"></el-input>
+                                </el-col>
+                                <el-col :span="2" :offset="1">
+                                    <el-button size="mini" type="success" style="margin-top: 6px" @click="addPropItem">添加</el-button>
+                                </el-col>
+                            </el-form-item>
+                            <el-form-item style="margin-top: 10px" v-if="addGoodsAttribute.goodsPropertyValueList && addGoodsAttribute.goodsPropertyValueList.length">
+                                <el-row style="margin-left: 80px">
+                                    <el-col :span="2" v-for="(item,index) in addGoodsAttribute.goodsPropertyValueList" :key="index" class="goodsPropertyItem" >
+                                        <span>{{item.value}}</span>
+                                        <span class="delete-btn" @click="deleteItem(index)"></span>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
+                        </el-row>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="cancelAttribute" size="small">取 消</el-button>
+                        <el-button type="primary" @click="saveAddAttribute" :loading="SpecsLoading" size="small">保 存</el-button>
+                    </div>
+                </el-dialog>
                 <el-row v-if="editGoodsForm.goodsPropertys">
                     <el-row v-for="(item,index) in editGoodsForm.goodsPropertys" :key="index" class="showSpecs">
                         <el-row class="standard-index">
@@ -213,7 +228,7 @@
                                     <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
                                 </el-col>
                                 <el-col :span="2" :offset="1">
-                                    <el-button size="mini" type="success" style="float: right;margin-top: 6px">添加</el-button>
+                                    <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute">添加</el-button>
                                 </el-col>
                             </el-form-item>
                             <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
@@ -221,7 +236,7 @@
                                    <el-row >
                                        <el-col :span="2" v-for="(prop,propIndex) in item.goodsPropertyValueList" :key="propIndex" class="goodsPropertyItem">
                                            <span>{{prop.value}}</span>
-                                           <button class="delete-btn" v-if="editAttribute"></button>
+                                           <span class="delete-btn" v-if="editAttribute" @click="deleteAttribute(prop,propIndex)"></span>
                                        </el-col>
                                    </el-row>
                             </el-form-item>
@@ -259,14 +274,14 @@
                 url:'' ,
                 panel: false,
                 SpecsLoading:false, //商品规格弹窗loading
+                AttributesLoading:false, //商品属性弹窗loading
                 addSpecificationDialog:false, //商品规格弹窗
+                addAttributesDialog:false, //商品属性弹窗
                 addSpecification:false,  //添加规格
                 addAttribute:false,      //添加属性
-                editSpeci:false,   //修改商品规格
                 editAttribute:false, //修改商品属性
                 editSpeciDisabled :true,  //禁止编辑商品规格
                 editAttributeDisabled :true,  //禁止编辑商品属性
-
                 addGoodsSpecs:{  //添加规格
                     goodsSpecificationName:'',
                     goodsSpecificationPrice:'',
@@ -276,6 +291,12 @@
                     stock:'', //库存数量
                     isEditMode:false
                 },
+                addGoodsAttribute:{ //添加属性
+                    goodsPropertyName:'',
+                    propValue: '',
+                    goodsPropertyValueList: []
+                },
+                // tempAttributeArr: [],
                 editGoodsForm:{
                     goods: {
                         goodsContent: "",
@@ -284,9 +305,10 @@
                         goodsStatus: "SOLD_OUT",
                     },
                     goodsCategoryIdList: [],
-                    goodsPropertys: [{
+                    goodsPropertys: [{ //已有属性
                         goodsPropertyName:'',
-
+                        propValue: '',
+                        goodsPropertyValueList: []
                     }],
                     addSpecs: [{   //已有的规格
                         goodsSpecificationName:'1',
@@ -295,7 +317,7 @@
                         boxesNumber:'3',
                         boxesMoney:'4',
                         stock:'',//库存数量
-                        isEditMode:true
+                        // isEditMode:false
                     }]
                 },
                 goodsId:0,
@@ -435,79 +457,141 @@
         },
         //点击添加属性
         addAttributes(){
-            this.addAttribute = !this.addAttribute
+            this.addAttributesDialog = true
         },
         //点击修改商品规格
-        editGoods(goodsId,index){
-            console.log(index)
-            var editSpecify = this.editGoodsForm.addSpecs[index]
-            var isEditMode = editSpecify.isEditMode
-            this.$set(editSpecify,"isEditMode",!isEditMode)
-            // this.editSpeci=true
-            // this.editSpeciDisabled=false
+        editGoodsSpecs(index){
+            this.$set(this.editGoodsForm.addSpecs[index],'isEditMode', true)
         },
         // 点击删除商品规格
         deleteSpecs : function(index){
             this.editGoodsForm.addSpecs.splice(index,1);
+            console.log(this.editGoodsForm.addSpecs)
+            // this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
+            //     confirmButtonText: '确定',
+            //     cancelButtonText: '取消',
+            //     type: 'warning'
+            // }).then(() => {
+            //
+            // }).catch(() => {
+            //     this.$message({
+            //         type: 'info',
+            //         message: '已取消删除'
+            //     });
+            // });
         },
         //点击修改商品属性
         editGoodsAttribute(){
             this.editAttribute=true
             this.editAttributeDisabled=false
-            var speces = this.editGoodsForm.addSpecs[index];
-            speces.isEditMode = true;
-            this.$set(this.editGoodsForm.addSpecs,index,speces)
+            // var speces = this.editGoodsForm.addSpecs[index];
+            // speces.isEditMode = true;
+            // this.$set(this.editGoodsForm.addSpecs,index,speces)
         },
         //点击保存商品规格
-        saveSpecs(){
-            this.editSpeci=false
-            this.editSpeciDisabled=true
-            if(!this.editGoodsForm.addSpecs.infiniteInventory){
-                this.$message({
-                    message: '请输入库存',
-                    type: 'warning'
-                })
-                return;
-            }
-            if(!this.editGoodsForm.addSpecs.goodsSpecificationName){
-                this.$message({
-                    message: '请输入规格名称',
-                    type: 'warning'
-                })
-                return;
-            }
-            if(!this.editGoodsForm.addSpecs.goodsSpecificationPrice){
-                this.$message({
-                    message: '请输入价格',
-                    type: 'warning'
-                })
-                return;
-            }
-
-            if(!this.editGoodsForm.addSpecs.boxesNumber){
-                this.$message({
-                    message: '请输入餐盒数量',
-                    type: 'warning'
-                })
-                return;
-            }
-            if(!this.editGoodsForm.addSpecs.boxesMoney){
-                this.$message({
-                    message: '请输入餐盒价格',
-                    type: 'warning'
-                })
-                return;
-            }
+        saveSpecs(index){
+            // this.editSpeci=false
+            // this.editSpeciDisabled = true
+            // var goodsSpeces = this.editGoodsForm.addSpecs[index]
+            // goodsSpeces.isEditMode = false;
+            this.$set(this.editGoodsForm.addSpecs[index],'isEditMode',false)
+            // if(!this.editGoodsForm.addSpecs.infiniteInventory){
+            //     this.$message({
+            //         message: '请输入库存',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
+            // if(!this.editGoodsForm.addSpecs.goodsSpecificationName){
+            //     this.$message({
+            //         message: '请输入规格名称',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
+            // if(!this.editGoodsForm.addSpecs.goodsSpecificationPrice){
+            //     this.$message({
+            //         message: '请输入价格',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
+            //
+            // if(!this.editGoodsForm.addSpecs.boxesNumber){
+            //     this.$message({
+            //         message: '请输入餐盒数量',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
+            // if(!this.editGoodsForm.addSpecs.boxesMoney){
+            //     this.$message({
+            //         message: '请输入餐盒价格',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
         },
         //点击保存商品属性
         saveAttribute(){
             this.editAttribute=false
             this.editAttributeDisabled=true
         },
+        // 添加商品属性
+        addPropItem(){
+            // if(this.addGoodsAttribute.propValue === ''){
+            //         this.$message({
+            //             message: '请输入属性名称',
+            //             type: 'warning'
+            //         })
+            //     return;
+            // }
+            // if (this.addGoodsAttribute.goodsPropertyValueList.length == 4) {
+            //     this.$message({
+            //         message: '属性值最多四项',
+            //         type: 'warning'
+            //     })
+            //     this.addGoodsAttribute.propValue = '';
+            //     return;
+            // }
+            // if(this.addGoodsAttribute.goodsPropertyValueList.indexOf(this.addGoodsAttribute.propValue) != -1){
+            //     this.$message({
+            //         message: '属性值已经存在',
+            //         type: 'warning'
+            //     })
+            //     this.addGoodsAttribute.propValue = '';
+            //     return;
+            // }
+            this.addGoodsAttribute.goodsPropertyValueList.push({value: this.addGoodsAttribute.propValue});
+            this.addGoodsAttribute.propValue=''
+            },
+        //点击取消商品属性
+        cancelAttribute(){
+            this.addAttributesDialog=false
+        },
+        // 点击保存商品属性
+        saveAddAttribute(){
+        // this.AttributesLoading=true
+            this.addAttributesDialog=false
+        },
+        //新增的小红点删除商品属性
+            deleteItem: function(index){
+            this.addGoodsAttribute.goodsPropertyValueList.splice(index,1);
+        },
+        //修改的添加商品属性
+            addEditAttribute(){
+
+            },
+        //修改的小红点删除商品属性
+            deleteAttribute: function(prop,index){
+                console.log(prop)
+                console.log(index)
+                console.log(1111)
+                this.editGoodsForm.goodsPropertyValueList.splice(index,1);
+        },
         formatVal: function(val){
             return val ? '无限' : '有限'
         },
-
     },
     created(){
             //获取商品title列表
@@ -517,26 +601,33 @@
             getGoodsCategoryLists(paramas).then( res =>{
                 if (res && res.list) {
                     this.goodsCategoryLists = res.list;
+                    var goodsId = this.$route.query.goodsId;
+                    this.goodsId = goodsId;
+                    if (goodsId) {
+                        getGoodsById(goodsId).then(res => {
+                            console.log(res)
+                            this.editGoodsForm = res;
+                            this.goodsId = res.goodsId;
+                            this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
+                            var addSpecs = res.goods.goodsSpecifications;
+                            this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
+                            addSpecs.forEach((item) => {
+                                //****这里需要动态添加属性***
+                                this.$set(item,'isEditMode',false)
+                            });
+                            this.$set(this.editGoodsForm,'addSpecs',addSpecs);
 
+                            console.log(this.editGoodsForm.addSpecs)
+                            // res.goods.goodsSpecifications.forEach((item)=>{
+                            //     if(item.goodsSpecificationId){
+                            //         this.editGoodsForm.addSpecs.push(item)
+                            //     }
+                            // })
+                            this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
+                        })
+                    }
                 }
             })
-            var goodsId = this.$route.query.goodsId;
-            this.goodsId = goodsId;
-            if (goodsId) {getGoodsById(goodsId).then(res => {
-                console.log(res)
-                console.log(6666)
-                this.editGoodsForm = res;
-                this.goodsId = res.goodsId;
-                this.editGoodsForm.addSpecs=res.goods.goodsSpecifications
-                this.editGoodsForm.goodsPropertys=res.goods.goodsPropertys
-                // res.goods.goodsSpecifications.forEach((item)=>{
-                //     if(item.goodsSpecificationId){
-                //         this.editGoodsForm.addSpecs.push(item)
-                //     }
-                // })
-                this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
-            })
-        }
     },
     mounted: function() {
         var self = this;
@@ -551,6 +642,8 @@
                 self.croppable = true;
             }
         });
+
+
     },
 }
 </script>
@@ -627,7 +720,8 @@
         height:13px;
     }
     .delete-btn{
-        height: 20px;
+        height: 10px;
+        width: 10px;
         background: url(../assets/images/close-red.png) no-repeat;
         background-size: contain;
         border: none;
