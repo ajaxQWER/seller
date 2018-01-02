@@ -45,214 +45,214 @@
                         <span>添加规格</span>
                     </span>
                 </el-row>
-            <!--添加商品规格弹窗-->
-            <el-dialog title="添加规格" :visible.sync="addSpecificationDialog">
-                <el-form :model="addGoodsSpecs" label-width="100px">
-                    <el-row class="addSpecifications">
-                        <el-row >
-                            <el-col :span="10">
-                                <el-form-item label="规格名称：">
-                                    <el-col :span="13">
-                                        <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
-                                    </el-col>
-                                </el-form-item>
+                <!--添加商品规格弹窗-->
+                <el-dialog title="添加规格" :visible.sync="addSpecificationDialog">
+                    <el-form :model="addGoodsSpecs" label-width="100px">
+                        <el-row class="addSpecifications">
+                            <el-row >
+                                <el-col :span="10">
+                                    <el-form-item label="规格名称：">
+                                        <el-col :span="13">
+                                            <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="10" :offset="1">
+                                    <el-form-item label="价格：">
+                                        <el-col :span="13">
+                                            <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row style="margin: 10px 0px 10px 0px">
+                                <el-col :span="10">
+                                    <el-form-item label="库存：" prop="goodsName">
+                                        <el-col :span="13">
+                                            <el-col :span="10">
+                                                <el-switch on-text="" off-text="" on-color="#13ce66" v-model="addGoodsSpecs.infiniteInventory"></el-switch>
+                                            </el-col>
+                                            <el-col :span="10" v-text="formatVal(addGoodsSpecs.infiniteInventory)">
+                                            </el-col>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="10" :offset="1" v-if="!addGoodsSpecs.infiniteInventory">
+                                    <el-form-item label="库存数量：">
+                                        <el-col :span="13">
+                                            <el-input type="text" v-model="addGoodsSpecs.stock" placeholder="请输入库存数量"></el-input>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row >
+                                <el-col :span="10">
+                                    <el-form-item label="餐盒数量：">
+                                        <el-col :span="13">
+                                            <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="10" :offset="1">
+                                    <el-form-item label="餐盒价格：">
+                                        <el-col :span="13">
+                                            <el-input type="text" v-model="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
+                                        </el-col>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-row>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="cancelAddSpecs" size="small">取 消</el-button>
+                        <el-button type="primary" @click="saveAddSpecs" :loading="SpecsLoading" size="small">保 存</el-button>
+                    </div>
+                </el-dialog>
+                <el-row v-if="editGoodsForm.addSpecs">
+                    <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
+                        <el-row class="standard-index">
+                            <el-col :span="20">
+                                规格{{index+1}}
                             </el-col>
-                            <el-col :span="10" :offset="1">
-                                <el-form-item label="价格：">
-                                    <el-col :span="13">
-                                        <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
+                            <el-col :span="4" style="text-align: center">
+                                <el-button type="text" style="color: #13ce66" @click="editGoodsSpecs(index)" v-if="!item.isEditMode">修改</el-button>
+                                <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(index)" v-else>保存</el-button>
+                                <el-button type="text" style="color: red" @click="deleteSpecs(index)">删除</el-button>
+                            </el-col>
+                        </el-row>
+                        <el-row >
+                            <el-col :span="25">
+                                <el-form-item label="库存">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row style="margin: 10px 0px 10px 0px">
                             <el-col :span="10">
-                                <el-form-item label="库存：" prop="goodsName">
-                                    <el-col :span="13">
-                                        <el-col :span="10">
-                                            <el-switch on-text="" off-text="" on-color="#13ce66" v-model="addGoodsSpecs.infiniteInventory"></el-switch>
-                                        </el-col>
-                                        <el-col :span="10" v-text="formatVal(addGoodsSpecs.infiniteInventory)">
-                                        </el-col>
+                                <el-form-item label="规格名称">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="10" :offset="1" v-if="!addGoodsSpecs.infiniteInventory">
-                                <el-form-item label="库存数量：">
-                                    <el-col :span="13">
-                                        <el-input type="text" v-model="addGoodsSpecs.stock" placeholder="请输入库存数量"></el-input>
+                            <el-col :span="10" :offset="1">
+                                <el-form-item label="价格">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row >
                             <el-col :span="10">
-                                <el-form-item label="餐盒数量：">
-                                    <el-col :span="13">
-                                        <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
+                                <el-form-item label="餐盒数量">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="10" :offset="1">
-                                <el-form-item label="餐盒价格：">
-                                    <el-col :span="13">
-                                        <el-input type="text" v-model="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
+                                <el-form-item label="餐盒价格">
+                                    <el-col :span="18">
+                                        <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancelAddSpecs" size="small">取 消</el-button>
-                    <el-button type="primary" @click="saveAddSpecs" :loading="SpecsLoading" size="small">保 存</el-button>
-                </div>
-            </el-dialog>
-            <el-row v-if="editGoodsForm.addSpecs">
-                <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
-                    <el-row class="standard-index">
-                        <el-col :span="20">
-                            规格{{index+1}}
-                        </el-col>
-                        <el-col :span="4" style="text-align: center">
-                            <el-button type="text" style="color: #13ce66" @click="editGoodsSpecs(index)" v-if="!item.isEditMode">修改</el-button>
-                            <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(index)" v-else>保存</el-button>
-                            <el-button type="text" style="color: red" @click="deleteSpecs(index)">删除</el-button>
-                        </el-col>
-                    </el-row>
-                    <el-row >
-                        <el-col :span="25">
-                            <el-form-item label="库存">
-                                <el-col :span="18">
-                                    <el-input type="text" v-model="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
-                                </el-col>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row style="margin: 10px 0px 10px 0px">
-                        <el-col :span="10">
-                            <el-form-item label="规格名称">
-                                <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationName" placeholder="请输入规格名称" v-bind:disabled="!item.isEditMode"></el-input>
-                                </el-col>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="10" :offset="1">
-                            <el-form-item label="价格">
-                                <el-col :span="18">
-                                    <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
-                                </el-col>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row >
-                        <el-col :span="10">
-                            <el-form-item label="餐盒数量">
-                                <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
-                                </el-col>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="10" :offset="1">
-                            <el-form-item label="餐盒价格">
-                                <el-col :span="18">
-                                    <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
-                                </el-col>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
                 </el-row>
-            </el-row>
-        </el-form-item>
-            <el-form-item label="商品属性" class="goodsItem">
-                <el-row>
-                     <span class="addSpecification" @click="addAttributes">
-                        <img src="../assets/images/edit-icon.png" alt="">
-                        <span>添加属性</span>
-                    </span>
-                </el-row>
-                <!--添加商品属性弹窗-->
-                <el-dialog title="添加属性" :visible.sync="addAttributesDialog">
-                    <el-form :model="addGoodsSpecs" label-width="80px">
-                        <el-row>
-                            <el-form-item label="属性名称">
-                                <el-col :span="13">
-                                    <el-input type="text" v-model="addGoodsAttribute.goodsPropertyName" placeholder="请输入属性名称" size="small"></el-input>
-                                </el-col>
-                            </el-form-item>
-                            <el-form-item label="属性值" style="margin-top: 10px">
-                                <el-col :span="13">
-                                    <el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" size="small" v-model="addGoodsAttribute.propValue"></el-input>
-                                </el-col>
-                                <el-col :span="2" :offset="1">
-                                    <el-button size="mini" type="success" style="margin-top: 6px" @click="addPropItem">添加</el-button>
-                                </el-col>
-                            </el-form-item>
-                            <el-form-item style="margin-top: 10px" v-if="addGoodsAttribute.goodsPropertyValueList && addGoodsAttribute.goodsPropertyValueList.length">
-                                <el-row style="margin-left: 80px">
-                                    <el-col :span="2" v-for="(item,index) in addGoodsAttribute.goodsPropertyValueList" :key="index" class="goodsPropertyItem" >
-                                        <span>{{item.value}}</span>
-                                        <span class="delete-btn" @click="deleteItem(index)"></span>
+            </el-form-item>
+                <el-form-item label="商品属性" class="goodsItem">
+                    <el-row>
+                         <span class="addSpecification" @click="addAttributes">
+                            <img src="../assets/images/edit-icon.png" alt="">
+                            <span>添加属性</span>
+                        </span>
+                    </el-row>
+                    <!--添加商品属性弹窗-->
+                    <el-dialog title="添加属性" :visible.sync="addAttributesDialog">
+                        <el-form :model="addGoodsSpecs" label-width="80px">
+                            <el-row>
+                                <el-form-item label="属性名称">
+                                    <el-col :span="13">
+                                        <el-input type="text" v-model="addGoodsAttribute.goodsPropertyName" placeholder="请输入属性名称" size="small"></el-input>
                                     </el-col>
-                                </el-row>
-                            </el-form-item>
-                        </el-row>
-                    </el-form>
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="cancelAttribute" size="small">取 消</el-button>
-                        <el-button type="primary" @click="saveAddAttribute" :loading="SpecsLoading" size="small">保 存</el-button>
-                    </div>
-                </el-dialog>
-                <el-row v-if="editGoodsForm.goodsPropertys">
-                    <el-row v-for="(item,index) in editGoodsForm.goodsPropertys" :key="index" class="showSpecs">
-                        <el-row class="standard-index">
-                            <el-col :span="20">
-                                属性{{index+1}}
-                            </el-col>
-                            <el-col :span="4" style="text-align: center">
-                                <el-button type="text" style="color: #13ce66" @click="editGoodsAttribute" v-if="!editAttribute">修改</el-button>
-                                <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveAttribute" v-if="editAttribute">保存</el-button>
-                                <el-button type="text" style="color: red">删除</el-button>
-                            </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-form-item label="属性名称">
-                                <el-col :span="21">
-                                    <el-input type="text" v-model="item.goodsPropertyName" placeholder="请输入属性名称" :disabled="editAttributeDisabled" style="width: 650px"></el-input>
+                                </el-form-item>
+                                <el-form-item label="属性值" style="margin-top: 10px">
+                                    <el-col :span="13">
+                                        <el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" size="small" v-model="addGoodsAttribute.propValue"></el-input>
+                                    </el-col>
+                                    <el-col :span="2" :offset="1">
+                                        <el-button size="mini" type="success" style="margin-top: 6px" @click="addPropItem">添加</el-button>
+                                    </el-col>
+                                </el-form-item>
+                                <el-form-item style="margin-top: 10px" v-if="addGoodsAttribute.goodsPropertyValueList && addGoodsAttribute.goodsPropertyValueList.length">
+                                    <el-row style="margin-left: 80px">
+                                        <el-col :span="2" v-for="(item,index) in addGoodsAttribute.goodsPropertyValueList" :key="index" class="goodsPropertyItem" >
+                                            <span>{{item.value}}</span>
+                                            <span class="delete-btn" @click="deleteItem(index)"></span>
+                                        </el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </el-row>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="cancelAttribute" size="small">取 消</el-button>
+                            <el-button type="primary" @click="saveAddAttribute" :loading="SpecsLoading" size="small">保 存</el-button>
+                        </div>
+                    </el-dialog>
+                    <el-row v-if="editGoodsForm.goodsPropertys">
+                        <el-row v-for="(item,index) in editGoodsForm.goodsPropertys" >
+                            <el-row class="standard-index">
+                                <el-col :span="20">
+                                    属性{{index+1}}
                                 </el-col>
-                            </el-form-item>
-                        </el-row>
-                        <el-row>
-                            <el-form-item label="添加属性值" style="margin-top: 10px" v-if="editAttribute">
-                                <el-col :span="18">
-                                    <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
+                                <el-col :span="4" style="text-align: center">
+                                    <el-button type="text" style="color: #13ce66" @click="editGoodsAttribute(index)" v-if="!item.isEditMode">修改</el-button>
+                                    <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveAttribute(index)" v-if="item.isEditMode">保存</el-button>
+                                    <el-button type="text" style="color: red" @click="deleteGoodsProperty(index)">删除</el-button>
                                 </el-col>
-                                <el-col :span="2" :offset="1">
-                                    <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute">添加</el-button>
-                                </el-col>
-                            </el-form-item>
-                            <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
-                                    <!--<el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 735px" :disabled="editAttributeDisabled"></el-input>-->
-                                   <el-row >
-                                       <el-col :span="2" v-for="(prop,propIndex) in item.goodsPropertyValueList" :key="propIndex" class="goodsPropertyItem">
-                                           <span>{{prop.value}}</span>
-                                           <span class="delete-btn" v-if="editAttribute" @click="deleteAttribute(prop,propIndex)"></span>
-                                       </el-col>
-                                   </el-row>
-                            </el-form-item>
+                            </el-row>
+                            <el-row>
+                                <el-form-item label="属性名称">
+                                    <el-col :span="21">
+                                        <el-input type="text" v-model="item.goodsPropertyName" placeholder="请输入属性名称" :disabled="!item.isEditMode" style="width: 650px"></el-input>
+                                    </el-col>
+                                </el-form-item> 
+                            </el-row>
+                            <el-row>
+                                <el-form-item label="添加属性值" style="margin-top: 10px" v-if="item.isEditMode">
+                                    <el-col :span="18">
+                                        <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
+                                    </el-col>
+                                    <el-col :span="2" :offset="1">
+                                        <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute">添加</el-button>
+                                    </el-col>
+                                </el-form-item>
+                                <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
+                                        <!--<el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 735px" :disabled="editAttributeDisabled"></el-input>-->
+                                       <el-row >
+                                           <el-col :span="2" v-for="(prop,propIndex) in item.goodsPropertyValueList" :key="propIndex" class="goodsPropertyItem">
+                                               <span>{{prop.value}}</span>
+                                               <span class="delete-btn" v-if="item.isEditMode" @click="deleteAttribute(item.goodsPropertyValueList,propIndex)"></span>
+                                           </el-col>
+                                       </el-row>
+                                </el-form-item>
+                            </el-row>
                         </el-row>
                     </el-row>
-                </el-row>
-            </el-form-item>
-            <el-form-item label="商品介绍" class="goodsItem">
-                <el-input type="textarea" v-model="editGoodsForm.goods.goodsContent" placeholder="请输入商品简介，最多255字"></el-input>
-            </el-form-item>
-            <el-form-item label="商品状态" class="goodsItem">
-                <el-radio-group v-model="editGoodsForm.goods.goodsStatus">
-                    <el-radio label="SOLD_OUT">下架</el-radio>
-                    <el-radio label="PUTAWAY">上架</el-radio>
-                </el-radio-group>
-            </el-form-item>
+                </el-form-item>
+                <el-form-item label="商品介绍" class="goodsItem">
+                    <el-input type="textarea" v-model="editGoodsForm.goods.goodsContent" placeholder="请输入商品简介，最多255字"></el-input>
+                </el-form-item>
+                <el-form-item label="商品状态" class="goodsItem">
+                    <el-radio-group v-model="editGoodsForm.goods.goodsStatus">
+                        <el-radio label="SOLD_OUT">下架</el-radio>
+                        <el-radio label="PUTAWAY">上架</el-radio>
+                    </el-radio-group>
+                </el-form-item>
         </el-form>
         <el-row>
             <el-button type="success" size="small" @click="saveEditGoodsInfo">保存</el-button>
@@ -279,7 +279,6 @@
                 addAttributesDialog:false, //商品属性弹窗
                 addSpecification:false,  //添加规格
                 addAttribute:false,      //添加属性
-                editAttribute:false, //修改商品属性
                 editSpeciDisabled :true,  //禁止编辑商品规格
                 editAttributeDisabled :true,  //禁止编辑商品属性
                 addGoodsSpecs:{  //添加规格
@@ -294,7 +293,8 @@
                 addGoodsAttribute:{ //添加属性
                     goodsPropertyName:'',
                     propValue: '',
-                    goodsPropertyValueList: []
+                    goodsPropertyValueList: [],
+                    isEditMode:false
                 },
                 // tempAttributeArr: [],
                 editGoodsForm:{
@@ -307,8 +307,7 @@
                     goodsCategoryIdList: [],
                     goodsPropertys: [{ //已有属性
                         goodsPropertyName:'',
-                        propValue: '',
-                        goodsPropertyValueList: []
+                        isEditMode:false
                     }],
                     addSpecs: [{   //已有的规格
                         goodsSpecificationName:'1',
@@ -317,7 +316,6 @@
                         boxesNumber:'3',
                         boxesMoney:'4',
                         stock:'',//库存数量
-                        // isEditMode:false
                     }]
                 },
                 goodsId:0,
@@ -442,7 +440,7 @@
             this.addSpecificationDialog=false
         },
         //保存添加规格
-        saveAddSpecs(goodsId){
+        saveAddSpecs(){
             this.addSpecificationDialog=false;
             this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
             this.$message.success("保存成功")
@@ -465,7 +463,11 @@
         },
         // 点击删除商品规格
         deleteSpecs : function(index){
-            this.editGoodsForm.addSpecs.splice(index,1);
+            debugger
+            // this.editGoodsForm.addSpecs.splice(index,1);
+              this.$nextTick(function () {
+              this.editGoodsForm.addSpecs.splice(index,1); // => '更新完成'
+      })
             console.log(this.editGoodsForm.addSpecs)
             // this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
             //     confirmButtonText: '确定',
@@ -481,20 +483,19 @@
             // });
         },
         //点击修改商品属性
-        editGoodsAttribute(){
-            this.editAttribute=true
-            this.editAttributeDisabled=false
-            // var speces = this.editGoodsForm.addSpecs[index];
-            // speces.isEditMode = true;
-            // this.$set(this.editGoodsForm.addSpecs,index,speces)
+        editGoodsAttribute(index){
+            this.$set(this.editGoodsForm.goodsPropertys[index],'isEditMode',true)
+        },
+        //删除商品属性
+        deleteGoodsProperty : function(index){
+            var goodsPropertys = this.editGoodsForm.goodsPropertys 
+            goodsPropertys.splice(index,1);
+            // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
         },
         //点击保存商品规格
         saveSpecs(index){
-            // this.editSpeci=false
-            // this.editSpeciDisabled = true
-            // var goodsSpeces = this.editGoodsForm.addSpecs[index]
-            // goodsSpeces.isEditMode = false;
             this.$set(this.editGoodsForm.addSpecs[index],'isEditMode',false)
+            this.$message.success("保存成功！")
             // if(!this.editGoodsForm.addSpecs.infiniteInventory){
             //     this.$message({
             //         message: '请输入库存',
@@ -532,10 +533,10 @@
             //     return;
             // }
         },
-        //点击保存商品属性
-        saveAttribute(){
-            this.editAttribute=false
-            this.editAttributeDisabled=true
+        //点击保存编辑商品属性
+        saveAttribute(index){
+            this.$set(this.editGoodsForm.goodsPropertys[index],'isEditMode',false)
+             this.$message.success("保存成功！")
         },
         // 添加商品属性
         addPropItem(){
@@ -569,10 +570,18 @@
         cancelAttribute(){
             this.addAttributesDialog=false
         },
-        // 点击保存商品属性
+        // 点击保存新增商品属性
         saveAddAttribute(){
-        // this.AttributesLoading=true
             this.addAttributesDialog=false
+           this.editGoodsForm.goodsPropertys.push(this.addGoodsAttribute)
+            this.$message.success("保存成功")
+            this.addGoodsAttribute={
+                goodsPropertyName:'',
+                propValue: '',
+                goodsPropertyValueList: [],
+                isEditMode:false
+            }
+
         },
         //新增的小红点删除商品属性
             deleteItem: function(index){
@@ -587,13 +596,13 @@
                 console.log(prop)
                 console.log(index)
                 console.log(1111)
-                this.editGoodsForm.goodsPropertyValueList.splice(index,1);
+                prop.splice(index,1);
         },
         formatVal: function(val){
             return val ? '无限' : '有限'
         },
     },
-    created(){
+    mounted(){
             //获取商品title列表
             var paramas={
                 pageSize:99999,
@@ -609,27 +618,28 @@
                             this.editGoodsForm = res;
                             this.goodsId = res.goodsId;
                             this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
-                            var addSpecs = res.goods.goodsSpecifications;
                             this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
+                            var addSpecs = res.goods.goodsSpecifications;
                             addSpecs.forEach((item) => {
                                 //****这里需要动态添加属性***
                                 this.$set(item,'isEditMode',false)
                             });
-                            this.$set(this.editGoodsForm,'addSpecs',addSpecs);
+                            // this.$set(this.editGoodsForm,'addSpecs',addSpecs);
 
-                            console.log(this.editGoodsForm.addSpecs)
-                            // res.goods.goodsSpecifications.forEach((item)=>{
-                            //     if(item.goodsSpecificationId){
-                            //         this.editGoodsForm.addSpecs.push(item)
-                            //     }
-                            // })
+                            var goodsPropertys = res.goods.goodsPropertys;
+                                goodsPropertys.forEach((item) => {
+                                //****这里需要动态添加属性***
+                                this.$set(item,'isEditMode',false)
+                            });
+                            // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
+
                             this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
                         })
                     }
                 }
             })
-    },
-    mounted: function() {
+
+         //初始化图片上传   
         var self = this;
         var image = document.getElementById('image');
         this.cropper = new Cropper(image, {
@@ -642,8 +652,6 @@
                 self.croppable = true;
             }
         });
-
-
     },
 }
 </script>
