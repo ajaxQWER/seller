@@ -5,8 +5,9 @@
 			<p class="activityColor">活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置</p>
 		</el-row>
 		<el-button class="addButton" size="small" type="success" @click="showAddActivity">添加活动</el-button>
-		<el-row class="content">
+		<el-row class="content" v-if="!isEmpty">
 			<div v-for="(item,index) in activityList" :key="index">
+				<!-- 活动列表 -->
 				<el-row class="activityContent" v-if="item.state">
 					<el-col :span="2">
 						<img v-if="item.activityType == 'FIRST'" src="../assets/images/discount_01.png" class="imgP">
@@ -25,6 +26,7 @@
 	                    <el-button type="text" @click="deleteActivitys(item.activityId)">删除</el-button>
 					</el-col>
 				</el-row>
+				<!-- 修改活动 -->
 				<el-row class="activityContent" v-else>
 					<el-col :span="2">
 						<img v-if="item.activityType == 'FIRST'" src="../assets/images/discount_01.png" class="imgP">
@@ -139,6 +141,10 @@
                 </el-pagination>
             </el-col>
 		</el-row>
+		<el-row v-else-if="isEmpty" class="img-center">
+			<img src="../assets/images/empty-img.png" height="215" width="209">
+		</el-row>
+		<!-- 添加活动 -->
 		<el-dialog :title="'添加活动'" :visible.sync="addDialog" size="tiny" @close="closeAddDialog" class="dialog">
 			<el-form :inline="true">
 				<el-form-item label="活动类型" label-width="120px">
@@ -254,6 +260,7 @@
                 <el-button type="primary" @click="addActivitys" >确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 商品管理 -->
         <el-dialog :title="'商品管理'" :visible.sync="goodsAdministration" size="tiny" @close="closeGoodsAdministration" class="dialog">
         	<p>1.参加活动的商品需要进行勾选</p>
         	<p>2.限购为空或0表示不限购</p>
@@ -294,9 +301,6 @@
         </el-dialog>
 	</el-row>
 </template>
-
-  <!-- [首单立减'FIRST', 购满就减'DELGOLD', 购满就送'COMPLIMENTARY', 特价商品'SPECIALPRICES', 折扣商品'SALE', 其他'SPECIFIC'] -->
-
 <script>
 import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails ,updateActivityDetails , getGoodsLists , setActivityGoods} from "@/api/api.js"
 export default {
@@ -336,7 +340,7 @@ export default {
 	        },
 	        goodsLists:[],
 	        goodsAdministration:false,
-
+	        isEmpty:false,
 	        typeName:"",
 	        couponCount:"",
 	        couponId:"",
@@ -552,12 +556,16 @@ export default {
         async getActivitys(){
     		const res = await getActivity({params:this.params})
     		this.counts = res.count
-    		let data = res.list
-    		let state = {state:true}
-    		console.log(data)
-    		this.activityList = data.map((item) =>{
-    			return {...item,...state}
-    		})
+    		if(res.count === 0){
+    			this.isEmpty = true
+    		}else{
+    			this.isEmpty = false
+    			let data = res.list
+	    		let state = {state:true}
+	    		this.activityList = data.map((item) =>{
+	    			return {...item,...state}
+	    		})
+    		}
         },
         //删除店铺活动
         deleteActivitys(activityId){
@@ -820,5 +828,8 @@ export default {
 	}
 	.el-date-editor.el-input{
 		width:100%;
+	}
+	.img-center{
+		text-align: center;
 	}
 </style>
