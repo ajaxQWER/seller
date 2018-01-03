@@ -1,54 +1,43 @@
 <template>
     <div>
-        <el-row class="header">
-            <el-col class="logo">
-                <el-col :span="10">
-                    <router-link to="/index" class="router-link">
-                        <img src="../assets/images/logo1.png" alt="logo" class="logo-icon">
-                        <span class="txt">手机验证登录</span>
-                    </router-link>
-                </el-col>
-                <el-col :span="7" class="userinfo">
-                </el-col>
-            </el-col>
-        </el-row>
-        <div id="login">
-            <div class="login-container">
-                <h3 class="title">共享点餐商家端</h3>
-                <el-form :model="ruleForm" ref="ruleForm" label-width="60px">
-                    <el-form-item prop="account" label="手机号">
-                        <el-input type="text" v-model="ruleForm.sellerName" auto-complete="off" placeholder="用户名" :maxlength="11"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="checkPass" label="验证码">
-                        <el-input class="code-input" type="text" v-model="ruleForm.code" auto-complete="off" placeholder="验证码" :maxlength="4"></el-input>
-                        <el-button type="success" class="get-code-btn" @click="getCode" :disabled="isClickGetCode">获取验证码</el-button>
-                    </el-form-item>
-                    <el-form-item style="width:100%;">
-                        <el-button type="success" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
-                    </el-form-item>
-                </el-form>
+        <div id="green-color">
+            <div id="login">
+                <img src="../assets/images/login.png" height="684" width="668" alt="">
+                <div class="login-container">
+                    <h3 class="title">共享点餐商家端</h3>
+                    <el-form :model="ruleForm" ref="ruleForm" label-width="60px">
+                        <el-form-item prop="account" label="手机号">
+                            <el-input type="text" v-model="ruleForm.sellerName" auto-complete="off" placeholder="用户名" :maxlength="11"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="checkPass" label="验证码">
+                            <el-input class="code-input" type="text" v-model="ruleForm.code" auto-complete="off" placeholder="验证码" :maxlength="4"></el-input>
+                            <el-button type="success" class="get-code-btn" @click="getCode" :disabled="isClickGetCode">获取验证码</el-button>
+                        </el-form-item>
+                        <el-form-item style="width:100%;">
+                            <el-button type="success" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </div>
         </div>
         <el-row class="content">
-            <el-col :span="9" :offset="5">
-                <h4>产品简介</h4>
-                <p>共享点餐商家端，是共享点餐推出的商家管理系统。用户端处理订单，管理订单，管理菜品，商品。赶快入住共享点餐吧，让赚钱变得更简单。共享点餐商家端，是共享点餐推出的商家管理系统。用客户端处理订单，管理订单，管理菜品，商品。赶快入出共享点餐，让赚钱变得更简单。</p>
+            <el-col :span="10" :offset="4">
+                <h4 class="subtitle">产品简介</h4>
+                <p class="p-margin">共享点餐商家端，是共享点餐推出的商家管理系统。用户端处理订单，管理订单，管理菜品，商品。赶快入住共享点餐吧，让赚钱变得更简单。共享点餐商家端，是共享点餐推出的商家管理系统。用客户端处理订单，管理订单，管理菜品，商品。赶快入出共享点餐，让赚钱变得更简单。</p>
             </el-col>
             <el-col :span="8" :offset="2">
-                <h4>联系我们</h4>
+                <h4 class="subtitle">联系我们</h4>
                 <p class="p-margin">电话:022-88888888</p>
                 <p class="p-margin">邮箱:xinyuangongxiang@888tal.com</p>
                 <p class="p-margin">四川省成都市高新区通威国际中心19楼</p>
             </el-col>
         </el-row>
         <el-row class="footer-bar">
-            <p>鑫圆共享电子商务股份有限公司©2017 &nbsp; 蜀ICP备17032496号-4 <br><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001128" class="beian-link">
+            <p class="p-margin">鑫圆共享电子商务股份有限公司©2017 &nbsp; 蜀ICP备17032496号-4 <br><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001128" class="beian-link">
                 <img src="../assets/images/beian-gov.png"/>川公网安备 51019002001128号</a>
             </p>
         </el-row>
     </div>
-    
-
 </template>
 <script>
  import {
@@ -125,12 +114,15 @@ export default {
 }
 </script>
 <style scoped>
+#green-color{
+    background-color: #28c76b;
+}
 #login{
-    width: 100%;
-    height: 650px;
-    position: relative;
-    background-image: url("../assets/images/login.png");
-    background-repeat: no-repeat;
+    width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center; 
 }
 .login-container {
     -webkit-border-radius: 5px;
@@ -139,9 +131,9 @@ export default {
     background-clip: padding-box;
     background-color: #eee;
     width: 290px;
+    height: 230px;
     padding: 15px 35px;
-    position: absolute;
-    margin:15% 0 0 60%;
+    margin-top: 20%;
 }
 .title {
     font-size: 20px;
@@ -166,10 +158,9 @@ export default {
 }
 .footer-bar{
     width: 100%;
-    padding-top: 30px;
-    padding-bottom: auto;
+    padding-top: 20px;
     text-align: center;
-    background-color: #fff;
+    margin-top: 20px;
 }
 .footer-bar p{
     color: #333;
@@ -182,72 +173,18 @@ export default {
 .beian-link img{
     vertical-align: middle;
 }
-.header {
-    height: 60px;
-    line-height: 60px;
-    color: #666;
-    background-color: #fff; 
-}
-.logo {
-    width: 1200px;
-    height: 60px;
-    position: absolute;
-    left: 50%;
-    margin-left: -600px;
-    font-size: 0; 
-}
-.avator{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    vertical-align: middle;
-    cursor: pointer;
-}
-.logo-width {
-    width: 231px;
-}
-.logo-collapse-width {
-    width: 60px;
-    padding: 0;
-    text-align: center;
-}
-.logo-icon{
-    width: 54px;
-    vertical-align: middle;
-}
-.router-link {
-    padding: 0;
-}
-.txt {
-    color: #666;
-    font-size: 16px;
-    margin-left: 18px;
-    border-left: 2px solid #666;
-    padding-left: 15px;
-    vertical-align: middle;
-}
-.router-link {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-    box-sizing: border-box;
-    text-align: center;
-    color: #666;
-    text-decoration: none;
-}
-.tools {
-    padding: 0px 23px;
-    width: 14px;
-    height: 60px;
-    line-height: 60px;
-    cursor: pointer;
-}
 .p-margin{
-    margin: 0
+    margin: 6px;
+    color: #666666;
 }
 .content{
-    background-color: #fff
+    background-color: #fff;
+    padding-bottom: 30px;
+}
+.subtitle{
+    border-left: 6px solid #11c15b;
+    padding-left: 10px;
+    color: #11c15b;
 }
 </style>
 
