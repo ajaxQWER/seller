@@ -10,11 +10,11 @@
                 <div id="demo">
                 <!-- 遮罩层 -->
                     <div class="container" v-show="panel">
-                      <div>
-                        <img id="image" :src="url" alt="Picture" >
-                      </div>
-                        <button type="button" id="cancelButton" @click="cancelCrop">取消</button>
-                      <button type="button" id="button" @click="crop">确定</button>
+                          <div>
+                                <img id="image" :src="url" alt="Picture" >
+                          </div>
+                           <button type="button" id="cancelButton" @click="cancelCrop">取消</button>
+                           <button type="button" id="button" @click="crop">确定</button>
                     </div>
                     <div style="padding:20px;" class="imgBox">
                         <div class="show">
@@ -127,7 +127,7 @@
                             <el-col :span="25">
                                 <el-form-item label="库存">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="text" v-model.number="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -143,7 +143,7 @@
                             <el-col :span="10" :offset="1">
                                 <el-form-item label="价格">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="text" v-model.number="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -152,14 +152,14 @@
                             <el-col :span="10">
                                 <el-form-item label="餐盒数量">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="text" v-model.number="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="10" :offset="1">
                                 <el-form-item label="餐盒价格">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="text" v-model.number="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -308,19 +308,8 @@
                         goodsStatus: "SOLD_OUT",
                     },
                     goodsCategoryIdList: [],
-                    goodsPropertys: [{ //已有属性
-                        goodsPropertyName:'',
-                        isEditMode:false,
-                        propValue:''
-                    }],
-                    addSpecs: [{   //已有的规格
-                        goodsSpecificationName:'1',
-                        goodsSpecificationPrice:'2',
-                        infiniteInventory:'',
-                        boxesNumber:'3',
-                        boxesMoney:'4',
-                        stock:'',//库存数量
-                    }]
+                    goodsPropertys: [],
+                    addSpecs: []
                 },
                 goodsId:0,
                 goodsCategoryLists:[]
@@ -347,21 +336,20 @@
                                 console.log(res)
                                 this.editGoodsForm = res;
                                 this.goodsId = res.goodsId;
-                                this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
-                                this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
+                                // this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
+                                // this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
                                 var addSpecs = res.goods.goodsSpecifications;
                                 addSpecs.forEach((item) => {
                                     //****这里需要动态添加属性***
                                     this.$set(item,'isEditMode',false)
                                 });
-                                // this.$set(this.editGoodsForm,'addSpecs',addSpecs);
+                                this.$set(this.editGoodsForm,'addSpecs',addSpecs);
                                 var goodsPropertys = res.goods.goodsPropertys;
                                 goodsPropertys.forEach((item) => {
                                     //****这里需要动态添加属性***
                                     this.$set(item,'isEditMode',false)
                                 });
-                                // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
-
+                                this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
                                 this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
                             })
                         }
@@ -482,14 +470,7 @@
         },
         //取消添加规格
         cancelAddSpecs(){
-            this.addSpecificationDialog=false
-        },
-        //保存添加规格
-        saveAddSpecs(){
-            this.addSpecificationDialog=false;
-            this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
-            this.$message.success("保存成功")
-            this.addGoodsSpecs={
+            this.addGoodsSpecs = {
                 goodsSpecificationName:'',
                 goodsSpecificationPrice:'',
                 infiniteInventory:'',
@@ -497,6 +478,13 @@
                 boxesMoney:'',
                 stock:''
             }
+            this.addSpecificationDialog = false
+        },
+        //保存添加规格
+        saveAddSpecs(){
+            this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
+            this.$message.success("保存成功")
+            this.cancelAddSpecs()
         },
         //点击添加属性
         addAttributes(){
@@ -507,24 +495,19 @@
             this.$set(this.editGoodsForm.addSpecs[index],'isEditMode', true)
         },
         // 点击删除商品规格
-        deleteSpecs : function(index){
-            console.log(index)
-            console.log(5555)
-          this.editGoodsForm.addSpecs.splice(index,1);
-            console.log(this.editGoodsForm.addSpecs)
-            console.log(6666)
-            // this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
-            //     confirmButtonText: '确定',
-            //     cancelButtonText: '取消',
-            //     type: 'warning'
-            // }).then(() => {
-            //
-            // }).catch(() => {
-            //     this.$message({
-            //         type: 'info',
-            //         message: '已取消删除'
-            //     });
-            // });
+        deleteSpecs: function(index){
+            this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.editGoodsForm.addSpecs.splice(index,1);
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         //点击修改商品属性
         editGoodsAttribute(index){
@@ -532,9 +515,18 @@
         },
         //删除商品属性
         deleteGoodsProperty : function(index){
-            var goodsPropertys = this.editGoodsForm.goodsPropertys
-            goodsPropertys.splice(index,1);
-            // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
+            this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.editGoodsForm.goodsPropertys.splice(index,1);
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         //点击保存商品规格
         saveSpecs(index){
