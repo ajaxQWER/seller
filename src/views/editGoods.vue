@@ -1,6 +1,9 @@
 <template>
     <el-row>
         <el-form :model="editGoodsForm" label-width="85px" >
+            <el-row class="returnBack">
+                <el-button type="primary" @click="back" size="small"><i class="el-icon--left el-icon-arrow-left"></i>返回</el-button>
+            </el-row>
             <el-row class="uploadImgTitle">上传商品图片</el-row>
             <el-row class="uploadImgBox">
                 <!-- 图片上传 -->
@@ -20,7 +23,7 @@
                         <div style="margin-top:20px;">
                             <div class="upload-bg"></div>
                             <input type="file" id="change" accept="image" @change="change" class="upload-btn">
-                             <label for="change"></label>
+                            <label for="change"></label>
                         </div>
                     </div>
               </div>
@@ -225,10 +228,10 @@
                             <el-row>
                                 <el-form-item label="添加属性值" style="margin-top: 10px" v-if="item.isEditMode">
                                     <el-col :span="18">
-                                        <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px" v-model="item.propValue"></el-input>
+                                        <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 650px" v-model="item.propValue"></el-input>
                                     </el-col>
                                     <el-col :span="2" :offset="1">
-                                        <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute(item.goodsPropertyValueList,item.propValue,item)">添加</el-button>
+                                        <el-button size="mini" type="success" style="margin-top: 6px" @click="addEditAttribute(item.goodsPropertyValueList,item.propValue,item)">添加</el-button>
                                     </el-col>
                                 </el-form-item>
                                 <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
@@ -324,12 +327,54 @@
             }
         },
         methods:{
+            //返回上一页
+            back: function() {
+                this.$router.back()
+            },
+            // 回显信息
+            showData(){
+                //获取商品title列表
+                var paramas={
+                    pageSize:99999,
+                }
+                getGoodsCategoryLists(paramas).then( res =>{
+                    if (res && res.list) {
+                        this.goodsCategoryLists = res.list;
+                        var goodsId = this.$route.query.goodsId;
+                        this.goodsId = goodsId;
+                        if (goodsId) {
+                            getGoodsById(goodsId).then(res => {
+                                console.log(res)
+                                this.editGoodsForm = res;
+                                this.goodsId = res.goodsId;
+                                this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
+                                this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
+                                var addSpecs = res.goods.goodsSpecifications;
+                                addSpecs.forEach((item) => {
+                                    //****这里需要动态添加属性***
+                                    this.$set(item,'isEditMode',false)
+                                });
+                                // this.$set(this.editGoodsForm,'addSpecs',addSpecs);
+                                var goodsPropertys = res.goods.goodsPropertys;
+                                goodsPropertys.forEach((item) => {
+                                    //****这里需要动态添加属性***
+                                    this.$set(item,'isEditMode',false)
+                                });
+                                // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
+
+                                this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
+                            })
+                        }
+                    }
+                })
+            },
             saveEditGoodsInfo(){
                 //编辑
                 if (this.goodsId) {
                     console.log(666)
                     updateGoodsById(this.goodsId, this.editGoodsForm).then(() => {
                         this.$message.success("操作成功")
+                        this.showData()
                     })
                 }else{
                     //新增
@@ -392,7 +437,7 @@
             this.headerImage = roundedCanvas.toDataURL();
             this.postImg()
         },
-        getRoundedCanvas (sourceCanvas) {
+            getRoundedCanvas (sourceCanvas) {
           var canvas = document.createElement('canvas');
           var context = canvas.getContext('2d');
           var width = sourceCanvas.width;
@@ -407,7 +452,7 @@
               context.fill();
               return canvas;
           },
-          postImg () {
+             postImg () {
               //这边写图片的上传
                 var bytes = window.atob(this.headerImage.split(',')[1]); //去掉url的头，并转换为byte
                 //处理异常,将ascii码小于0的转换为大于0
@@ -599,42 +644,7 @@
         },
     },
     mounted(){
-            //获取商品title列表
-            var paramas={
-                pageSize:99999,
-            }
-            getGoodsCategoryLists(paramas).then( res =>{
-                if (res && res.list) {
-                    this.goodsCategoryLists = res.list;
-                    var goodsId = this.$route.query.goodsId;
-                    this.goodsId = goodsId;
-                    if (goodsId) {
-                        getGoodsById(goodsId).then(res => {
-                            console.log(res)
-                            this.editGoodsForm = res;
-                            this.goodsId = res.goodsId;
-                            this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
-                            this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
-                            var addSpecs = res.goods.goodsSpecifications;
-                            addSpecs.forEach((item) => {
-                                //****这里需要动态添加属性***
-                                this.$set(item,'isEditMode',false)
-                            });
-                            // this.$set(this.editGoodsForm,'addSpecs',addSpecs);
-
-                            var goodsPropertys = res.goods.goodsPropertys;
-                                goodsPropertys.forEach((item) => {
-                                //****这里需要动态添加属性***
-                                this.$set(item,'isEditMode',false)
-                            });
-                            // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
-
-                            this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
-                        })
-                    }
-                }
-            })
-
+        this.showData()
          //初始化图片上传
         var self = this;
         var image = document.getElementById('image');
@@ -656,6 +666,11 @@
         background-color: white;
         padding:10px;
         border-bottom: 1px solid lightgrey;
+        line-height: 30px;
+    }
+    .returnBack{
+        background-color: white;
+        padding:10px;
         line-height: 30px;
     }
     .uploadImgBox{
