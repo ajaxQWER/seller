@@ -1,6 +1,6 @@
 <template>
     <el-row class="bg">
-        <el-tabs v-model="activeName" @tab-click="getOrderListData">
+        <el-tabs v-model="activeName" @tab-click="tabClick">
             <el-tab-pane :label="'全部订单'" name="0">
             </el-tab-pane>
             <el-tab-pane :label="'已接单'"  name="1">
@@ -12,7 +12,7 @@
             <el-tab-pane :label="'已取消'" name="4">
             </el-tab-pane>
         </el-tabs>
-        <el-row  v-if="orderList.length>0">
+        <el-row  v-if="orderList.length>0" v-loading="loading" element-loading-text="拼命加载中">
             <el-row class="searchBox">
                 <el-col :span="5">
                     <el-input
@@ -95,8 +95,8 @@
                                     <el-col v-if="item.orderStatus=='PICKUPING'" :span="5">
                                         <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
                                     </el-col>
-                                    </el-row> 
-                                  
+                                    </el-row>
+
                                 </td>
                                 <td v-else>
                                      <el-row type="flex" justify="center">
@@ -149,6 +149,7 @@ import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById ,printO
 export default {
     data: function() {
         return {
+            loading:false,
             copy:false,
             activeName: '0',
             orderSearchInput:'',
@@ -171,15 +172,25 @@ export default {
     },
     methods: {
         searchIconClick(){
-            debugger
-            this.getOrderListData({ pageId: this.pageId, orderStatus: this.orderStatus })
+            console.log(this.orderSearchInput)
+            this.getOrderLists()
         },
         //分页
         currentChange(val) {
             this.pageId = val;
-            this.getOrderListData(val)
+            this.getOrderLists()
         },
-        getOrderListData(tab){
+        //获取列表
+        getOrderLists(){
+            this.loading=true
+            getOrderList({ params: { pageSize: 5, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
+                this.loading=false
+                this.orderList = res.list
+                this.counts = res.count
+            })
+        },
+        //点击tab获取的列表
+        tabClick(tab){
             if (!tab || !tab.index) {
                 return false
             }
@@ -209,10 +220,7 @@ export default {
                     this.activeName = '0'
 
             }
-            getOrderList({ params: { pageSize: 10, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
-                this.orderList = res.list
-                this.counts = res.count
-            })
+            this.getOrderLists()
         },
         formatCancelType: function(type) {
             switch (type) {
@@ -285,12 +293,11 @@ export default {
                     type: 'success',
                     message: '取消成功!'
                 });
-                this.getOrderListData({ pageId: this.pageId, orderStatus: this.orderStatus })
+                this.getOrderLists()
             }).catch((err) => {
                 this.cancelLoading=false
                 this.$message.error(err.message);
             });
-
         },
         //确定接单
         acceptOrder: function(orderId, orderType) {
@@ -301,7 +308,7 @@ export default {
                         type: 'success',
                         message: '接单成功!'
                     });
-                    this.getOrderListData({ pageId: this.pageId, orderStatus: this.orderStatus })
+                    this.getOrderLists()
                 })
             }
         },
@@ -314,7 +321,7 @@ export default {
                         type: 'success',
                         message: '操作成功!'
                     });
-                    this.getOrderListData({ pageId: this.pageId, orderStatus: this.orderStatus })
+                    this.getOrderLists()
                 })
             }
         },
@@ -326,7 +333,7 @@ export default {
                 type: 'info'
             }).then(() => {
                 printOrder(orderId).then(() => {
-                    this.getOrderList({ pageId: this.pageId, orderStatus: this.orderStatus })
+                    this.getOrderLists()
                 })
                 this.$message({
                     type: 'success',
@@ -343,7 +350,7 @@ export default {
 
     beforeRouteEnter: function (to,from,next) {
             next(vm => {
-                   vm.getOrderListData({pageId: 1, orderStatus: vm.orderStatus ,index:'0'})     
+                   vm.tabClick({pageId: 1, orderStatus: vm.orderStatus ,index:'0'})
             });
     }
 

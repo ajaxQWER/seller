@@ -30,7 +30,7 @@
             </el-row>
         </el-row>
         <el-row class="AppraisementContent">
-            <el-tabs v-model="activeName" @tab-click="showShopAppraise">
+            <el-tabs v-model="activeName" @tab-click="tabClick">
                 <el-tab-pane label="全部评价" name="0">
                 </el-tab-pane>
                 <el-tab-pane label="已回复" name="1">
@@ -38,7 +38,7 @@
                 <el-tab-pane label="未回复" name="2">
                 </el-tab-pane>
             </el-tabs>
-            <el-row  v-if="commentList.length>0">
+            <el-row  v-if="commentList.length>0" v-loading="loading" element-loading-text="拼命加载中">
                 <ul class="clientRepalyContainer">
                     <li v-for="(item,index) in commentList" :key="index">
                         <el-row>
@@ -109,12 +109,12 @@
 export default {
     data: function() {
         return {
+            loading:false,
             headerImage: '',
             activeName: '0',
             appraiseTotal:"",
         	commentsAppraise: false,
             pageId: 1,
-            pageSize: 5,
             counts: 0,
             shopAppraise: '',
             reply: '',
@@ -161,9 +161,9 @@ export default {
     },
     methods:{
       //分页
-        currentChange(){
+        currentChange(val){
             this.pageId = val;
-            this. showShopAppraise(val)
+            this.getAppraiseList()
         },
         //获取评价的头部信息
         getHeadInfo(){
@@ -181,8 +181,22 @@ export default {
                 }
             })
         },
+        //获取评价列表
+        getAppraiseList(){
+            this.loading=true
+            getShopAppraise({params:{shopAppraise:this.shopAppraise, reply: this.reply,commentsAppraise: this.commentsAppraise, pageSize: 5, pageId: this.pageId}}).then(res => {
+                this.loading=false
+                this.counts = res.count;
+                this.commentList = res.list
+                var commentList=res.list
+                commentList.forEach((item) => {
+                    //****这里需要动态添加属性***
+                    this.$set(item,'replay',false)
+                });
+            })
+        },
         //获取评价信息
-        showShopAppraise(tab){
+        tabClick(tab){
             console.log(tab)
             if (!tab || !tab.index) {
                 return false
@@ -204,27 +218,7 @@ export default {
                     this.reply = '';
                     this.activeName = '0'
             }
-            getShopAppraise({params:{shopAppraise:this.shopAppraise, reply: this.reply,commentsAppraise: this.commentsAppraise, pageSize: this.pageSize, pageId: this.pageId}}).then(res => {
-                this.counts = res.count;
-                this.commentList = res.list
-                var commentList=res.list
-                commentList.forEach((item) => {
-                    //****这里需要动态添加属性***
-                    this.$set(item,'replay',false)
-                });
-                if(res.count == 0){
-                    this.isEmpty = true;
-                    this.allLoaded = true;
-                }else{
-                    this.isEmpty = false;
-                    this.canLoad = true;
-                }
-                if(Math.ceil(this.counts / this.pageSize) == this.pageId){
-                    this.allLoaded = true;
-                    this.canLoad = false;
-                    return;
-                }
-            })
+            this.getAppraiseList()
         },
         // 点击回复
         clientReply(AppraiseId,index){
@@ -243,7 +237,7 @@ export default {
                 shopAppraiseId: this.shopAppraiseId
             }
             commentReply(params).then(() => {
-                this.showShopAppraise({index:'0'})
+                this.getAppraiseList()
                 this.commentContent=""
                 this.$set(this.commentList[index],'replay', false)
                 this.$message({
@@ -255,7 +249,7 @@ export default {
     },
     created(){
         this.getHeadInfo();
-        this.showShopAppraise({index:'0'})
+        this.getAppraiseList()
     },
     computed : {
         reversionRate : function(){
@@ -407,7 +401,7 @@ export default {
     }
     .replyTextareaBox{
         margin-top: 10px;
-        margin-left: 10px;
+        margin-left: 53px;
         width: 90%;
     }
     .firstAppraise{
