@@ -82,7 +82,7 @@
                             <el-row>
                                 <el-col :span="3" :offset="21" class="replyBtn1">
                                     <el-button type="text" size="mini" @click="cancelReplay(index)">取消</el-button>
-                                    <el-button type="success" size="mini" @click="commentsReply()">回复</el-button>
+                                    <el-button type="success" size="mini" @click="commentsReply(index)">回复</el-button>
                                 </el-col>
                             </el-row>
                         </el-row>
@@ -237,15 +237,15 @@ export default {
             this.$set(this.commentList[index],'replay', false)
         },
         // 回复
-        commentsReply: function(){
+        commentsReply: function(index){
             var params = {
                 commentContent: this.commentContent,
                 shopAppraiseId: this.shopAppraiseId
             }
             commentReply(params).then(() => {
-                this.showShopAppraise()
-                this.replay=false
+                this.showShopAppraise({index:'0'})
                 this.commentContent=""
+                this.$set(this.commentList[index],'replay', false)
                 this.$message({
                     type: 'success',
                     message: '操作成功',
