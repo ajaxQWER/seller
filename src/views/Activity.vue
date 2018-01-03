@@ -487,33 +487,64 @@ export default {
     		this.activityList[index].state = false;
     	},
     	async saveUpdateActivity(item,index){
-    		console.log(this.firstActivity)
     		switch(item.activityType){
     			case 'FIRST':
-    				await updateActivityDetails(item.activityId,this.firstActivity)
-    				this.getActivitys()
+    				if(this.firstActivity.beginTime < this.firstActivity.endTime){
+    					await updateActivityDetails(item.activityId,this.firstActivity)
+    				}else{
+    					this.$message({
+		                    type: 'error',
+		                    message: '开始时间不能小于结束时间'
+		                });
+    				}
     				break;
     			case 'DELGOLD':
-    				await updateActivityDetails(item.activityId,this.delgoldActivity)
-    				this.getActivitys()
+    				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime){
+    					await updateActivityDetails(item.activityId,this.delgoldActivity)
+    				}else{
+    					this.$message({
+		                    type: 'error',
+		                    message: '开始时间不能小于结束时间'
+		                });
+    				}
     				break;
     			case 'COMPLIMENTARY':
-    				await updateActivityDetails(item.activityId,this.complimentaryActivity)
-    				this.getActivitys()
+    				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime){
+    					await updateActivityDetails(item.activityId,this.complimentaryActivity)
+    				}else{
+    					this.$message({
+		                    type: 'error',
+		                    message: '开始时间不能小于结束时间'
+		                });
+    				}
     				break;
     			case 'SALE':
-    				await updateActivityDetails(item.activityId,this.saleActivity)
-    				this.getActivitys()
+    				if(this.saleActivity.beginTime < this.saleActivity.endTime){
+    					await updateActivityDetails(item.activityId,this.saleActivity)
+    				}else{
+    					this.$message({
+		                    type: 'error',
+		                    message: '开始时间不能小于结束时间'
+		                });
+    				}
     				break;
     			case 'SPECIFIC':
-    				await updateActivityDetails(item.activityId,this.specificActivity)
-    				this.getActivitys()
+    				if(this.specificActivity.beginTime < this.specificActivity.endTime){
+    					await updateActivityDetails(item.activityId,this.specificActivity)
+    				}else{
+    					this.$message({
+		                    type: 'error',
+		                    message: '开始时间不能小于结束时间'
+		                });
+    				}
     				break;
     		}
     		this.activityList[index].state = true
+    		this.getActivitys()
     	},
     	cancelActivity(index){
     		this.activityList[index].state = true
+    		this.getActivitys()
     	},
     	currentChange: function(val) {
             this.params.pageId = val;
@@ -631,15 +662,22 @@ export default {
 	                endTime:  this.formatDate(this.endTime),
 	                isValid: true
 		        }
-		        await addActivity(activityParams)
-				this.addDialog = false
-				this.getActivitys()
-				this.typeName = ""
-		        this.couponCount = ""
-		        this.couponId = ""
-		        this.full = ""
-	            this.beginTime = ''
-	            this.endTime = ''
+		        if(this.beginTime < this.endTime){
+		        	await addActivity(activityParams)
+					this.addDialog = false
+					this.getActivitys()
+					this.typeName = ""
+			        this.couponCount = ""
+			        this.couponId = ""
+			        this.full = ""
+		            this.beginTime = ''
+		            this.endTime = ''
+		        }else{
+		        	this.$message({
+	                    type: 'error',
+	                    message: '开始时间不能小于结束时间'
+	                });
+		        }
 			}else if(this.value == 2){
 				activityParams = {
 	                activityContent: {
@@ -651,12 +689,19 @@ export default {
 	                endTime: this.formatDate(this.endTime),
 	                isValid: true
 	            }
-	            await addActivity(activityParams)
-	            this.addDialog = false
-				this.getActivitys()
-				this.money=""
-				this.beginTime = ''
-	            this.endTime = ''
+	            if(this.beginTime < this.endTime){
+		        	await addActivity(activityParams)
+		            this.addDialog = false
+					this.getActivitys()
+					this.money=""
+					this.beginTime = ''
+		            this.endTime = ''
+		        }else{
+		        	this.$message({
+	                    type: 'error',
+	                    message: '开始时间不能小于结束时间'
+	                });
+		        }
 			}else if(this.value == 3){
 				activityParams = {
 		        	activityContent:{
@@ -668,16 +713,23 @@ export default {
 	                endTime:  this.formatDate(this.endTime),
 	                isValid: true
 		        }
-		        await addActivity(activityParams)
-				this.addDialog = false
-				this.getActivitys()
-		        this.full = ""
-		        this.activityObj = [{
-		        	full:null,
-	            	subtract:null
-		        }]
-	            this.beginTime = ''
-	            this.endTime = ''
+	            if(this.beginTime < this.endTime){
+		        	await addActivity(activityParams)
+					this.addDialog = false
+					this.getActivitys()
+			        this.full = ""
+			        this.activityObj = [{
+			        	full:null,
+		            	subtract:null
+			        }]
+		            this.beginTime = ''
+		            this.endTime = ''
+		        }else{
+		        	this.$message({
+	                    type: 'error',
+	                    message: '开始时间不能小于结束时间'
+	                });
+		        }
 			}else if(this.value == 4){
 				activityParams = {
 	                activityContent: {
@@ -689,12 +741,19 @@ export default {
 	                activityName: this.activityName,
 	                isValid: true
 	            }
-	            await addActivity(activityParams)
-	            this.addDialog = false
-				this.getActivitys()
-				this.activityName=""
-				this.beginTime = ''
-	            this.endTime = ''
+	            if(this.beginTime < this.endTime){
+		        	await addActivity(activityParams)
+		            this.addDialog = false
+					this.getActivitys()
+					this.activityName=""
+					this.beginTime = ''
+		            this.endTime = ''
+		        }else{
+		        	this.$message({
+	                    type: 'error',
+	                    message: '开始时间不能小于结束时间'
+	                });
+		        }
 			}else if(this.value == 5){
 				activityParams = {
 					activityContent: {
@@ -707,12 +766,19 @@ export default {
 		            activityName: this.activityName,
 	                isValid: true
 				}
-                await addActivity(activityParams)
-	            this.addDialog = false
-				this.getActivitys()
-				this.activityName=""
-				this.beginTime = ''
-	            this.endTime = ''
+				if(this.beginTime < this.endTime){
+		        	await addActivity(activityParams)
+		            this.addDialog = false
+					this.getActivitys()
+					this.activityName=""
+					this.beginTime = ''
+		            this.endTime = ''
+		        }else{
+		        	this.$message({
+	                    type: 'error',
+	                    message: '开始时间不能小于结束时间'
+	                });
+		        }
 			}else{
 				this.$message({
                     type: 'error',
