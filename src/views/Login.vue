@@ -13,9 +13,7 @@
                             <el-input class="code-input" type="text" v-model="ruleForm.code" auto-complete="off" placeholder="验证码" :maxlength="4"></el-input>
                             <el-button type="success" class="get-code-btn" @click="getCode" :disabled="isClickGetCode">获取验证码</el-button>
                         </el-form-item>
-                        <el-form-item style="width:100%;">
-                            <el-button type="success" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
-                        </el-form-item>
+                        <el-button type="success" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
                     </el-form>
                 </div>
             </div>
@@ -122,7 +120,7 @@ export default {
     margin: auto;
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center; 
+    justify-content: space-around; 
 }
 .login-container {
     -webkit-border-radius: 5px;
