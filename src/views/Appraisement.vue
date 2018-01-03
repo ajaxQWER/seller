@@ -5,13 +5,13 @@
             <el-row>
                 <el-col :span="4" :offset="1">
                     <el-row class="grades">{{appraiseTotal.comprehensiveApprise}}</el-row>
-                    <el-row class="gradeIntro">高于商圈{{~~(appraiseTotal.businessCircleRatio*100)}}%的商家</el-row>
+                    <el-row class="gradeIntro">高于商圈{{(appraiseTotal.businessCircleRatio*100)>>0}}%的商家</el-row>
                 </el-col>
                 <el-col :span="12" :offset="1">
                     <el-row class="Reply">
                         <el-row>
                             <el-col :span="7">
-                                <span class="replyText">近7天评价回复率：{{~~(appraiseTotal.reversionRate*100)}}%</span>
+                                <span class="replyText">近7天评价回复率：{{~~(appraiseTotal.reversionRate*100)>>0}}%</span>
                             </el-col>
                             <el-col :span="14">
                                 <el-progress :text-inside="true" :stroke-width="12" :percentage="reversionRate " class="Replyschedule"></el-progress>
@@ -19,7 +19,7 @@
                         </el-row>
                             <el-row>
                                 <el-col :span="7">
-                                    <span class="replyText">近7天差评回复率：{{~~(appraiseTotal.reviewRate*100)}}%</span>
+                                    <span class="replyText">近7天差评回复率：{{~~(appraiseTotal.reviewRate*100)>>0}}%</span>
                                 </el-col>
                                 <el-col :span="14">
                                     <el-progress :text-inside="true" :stroke-width="12" :percentage="reviewRate " status="exception"></el-progress>

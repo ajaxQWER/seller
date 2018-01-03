@@ -340,7 +340,7 @@
                                 // this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
                                 var addSpecs = res.goods.goodsSpecifications;
                                 addSpecs.forEach((item) => {
-                                    //****这里需要动态添加属性***
+                                    //***这里需要动态添加属性***
                                     this.$set(item,'isEditMode',false)
                                 });
                                 this.$set(this.editGoodsForm,'addSpecs',addSpecs);
