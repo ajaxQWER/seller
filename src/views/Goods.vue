@@ -35,9 +35,9 @@
                 </el-row>
                 <el-row class="goodsContentText">
                     <el-col class="goodsImg" :span="10">
-                        <img :src="UPLOADURL + item.goodsImgUrl+'/goods.png'" alt="">
+                        <img  :src=" UPLOADURL + item.goodsImgUrl + '/goods.png '" alt="">
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="14" style="padding-left: 6px">
                         <el-row class="goodsName">{{item.goodsName}}</el-row>
                         <el-row class="goodsPrice">￥{{item.goodsPrice}}</el-row>
                         <el-row class="goodsSales ">月销量：{{item.goodsSales}}</el-row>
@@ -79,6 +79,8 @@ export default {
         getGoodsLists(goodsCategoryId){
             getGoodsLists({params: {pageSize: 999999, goodsClassId: goodsCategoryId}}).then( res =>{
                 this.goodsList = res.list;
+                console.log(res.list)
+                console.log(6666666)
             })
         },
         //获取商品title列表
@@ -250,5 +252,10 @@ export default {
     .empty{
         padding: 30px;
         text-align: center;
+    }
+    .goodsImg{
+        background: url(../assets/images/default.jpg) no-repeat center center;
+        background-size: cover;
+        height: 100px;
     }
 </style>

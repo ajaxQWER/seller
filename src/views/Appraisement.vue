@@ -11,7 +11,7 @@
                     <el-row class="Reply">
                         <el-row>
                             <el-col :span="7">
-                                <span class="replyText">近7天评价回复率：{{appraiseTotal.reversionRate*100}}%</span>
+                                <span class="replyText">近7天评价回复率：{{~~(appraiseTotal.reversionRate*100)}}%</span>
                             </el-col>
                             <el-col :span="14">
                                 <el-progress :text-inside="true" :stroke-width="12" :percentage="reversionRate " class="Replyschedule"></el-progress>
@@ -19,7 +19,7 @@
                         </el-row>
                             <el-row>
                                 <el-col :span="7">
-                                    <span class="replyText">近7天差评回复率：{{appraiseTotal.reviewRate*100}}%</span>
+                                    <span class="replyText">近7天差评回复率：{{~~(appraiseTotal.reviewRate*100)}}%</span>
                                 </el-col>
                                 <el-col :span="14">
                                     <el-progress :text-inside="true" :stroke-width="12" :percentage="reviewRate " status="exception"></el-progress>
@@ -43,9 +43,7 @@
                     <li v-for="(item,index) in commentList" :key="index">
                         <el-row>
                             <el-col class="headPortrait" :span="2">
-                                <!--<img  :src="item.avatorUrl ? UPLOADURL + item.avatorUrl + '/avator.png': '../assets/images/default-avatar.png' " alt="">-->
-                                <img :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="" class="default-avatar">
-                                <!--<img  v-else="item.avatorUrl" src="../assets/images/default-avatar.png"  alt="">-->
+                                <img :src="UPLOADURL + item.avatorUrl + '/avator.png'"  alt="" >
                             </el-col>
                             <el-col :span="19">
                                 <el-col>
@@ -57,13 +55,13 @@
                                         </li>
                                         <li class="firstAppraise"><span >{{item.contentShopAppraise}}</span></li>
                                         <li class="lastAppraise">{{item.orderName}}</li>
-                                        <li class="AppraiseBox" v-for="(val,key) in item.commentList" :key="key"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
+                                        <li class="AppraiseBox" v-for="(val,index) in item.commentList" :key="index"><span class="AppraiseTitle">您的回复：</span><span>{{val.commentContent}}</span></li>
                                     </ul>
                                 </el-col>
                             </el-col>
                             <el-col :span="3" class="replyInfo">
                                 <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
-                                <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId)">回复</el-button></el-row>
+                                <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId,index)">回复</el-button></el-row>
                             </el-col>
                         </el-row>
                         <el-row class="clientRepalyContent">
@@ -79,12 +77,12 @@
                                 </li>
                             </ul>
                         </el-row>
-                        <el-row class="replyTextareaBox" v-if="replay">
+                        <el-row class="replyTextareaBox" v-if="item.replay">
                             <el-input type="textarea" placeholder="请输入回复内容" v-model="commentContent"></el-input>
                             <el-row>
                                 <el-col :span="3" :offset="21" class="replyBtn1">
-                                    <el-button type="text" size="mini" @click="cancelReplay">取消</el-button>
-                                    <el-button type="success" size="mini" @click="commentsReply">回复</el-button>
+                                    <el-button type="text" size="mini" @click="cancelReplay(index)">取消</el-button>
+                                    <el-button type="success" size="mini" @click="commentsReply()">回复</el-button>
                                 </el-col>
                             </el-row>
                         </el-row>
@@ -158,13 +156,10 @@ export default {
             imgPopup: false,
             bigImgUrl: '',
             replyTextarea:'', //回复内容
-            replay:false
+            // replay:false
         }
     },
     methods:{
-        cancelReplay(){
-            this.replay=false
-        },
       //分页
         currentChange(){
             this.pageId = val;
@@ -210,15 +205,13 @@ export default {
                     this.activeName = '0'
             }
             getShopAppraise({params:{shopAppraise:this.shopAppraise, reply: this.reply,commentsAppraise: this.commentsAppraise, pageSize: this.pageSize, pageId: this.pageId}}).then(res => {
-                console.log(res)
-                console.log(444)
                 this.counts = res.count;
-                if(this.init){
-                    this.commentList = res.list
-                }else{
-                    this.commentList = [].concat.apply(this.commentList, res.list)
-                }
-                console.log(this.commentList)
+                this.commentList = res.list
+                var commentList=res.list
+                commentList.forEach((item) => {
+                    //****这里需要动态添加属性***
+                    this.$set(item,'replay',false)
+                });
                 if(res.count == 0){
                     this.isEmpty = true;
                     this.allLoaded = true;
@@ -234,13 +227,14 @@ export default {
             })
         },
         // 点击回复
-        clientReply(AppraiseId){
-            this.replay=true
+        clientReply(AppraiseId,index){
+            // this.replay=true
             this.shopAppraiseId = AppraiseId
+            this.$set(this.commentList[index],'replay', true)
         },
         // 点击取消回复
-        cancelReplay(){
-            this.replay=false
+        cancelReplay(index){
+            this.$set(this.commentList[index],'replay', false)
         },
         // 回复
         commentsReply: function(){
@@ -312,15 +306,13 @@ export default {
         width: 40px;
         height: 40px;
         border-radius: 20px;
+        background: url(../assets/images/default-avatar.png) no-repeat center center #eaeaea;
+        background-size: cover;
     }
     .headPortrait>img{
         width: 40px;
         height: 40px;
         border-radius: 20px;
-    }
-    .default-avatar{
-        background: url(../assets/images/default-avatar.png) no-repeat center center #eaeaea;
-        background-size: cover;
     }
     .AppraisementContent{
         background-color: white;

@@ -220,15 +220,15 @@
                                     <el-col :span="21">
                                         <el-input type="text" v-model="item.goodsPropertyName" placeholder="请输入属性名称" :disabled="!item.isEditMode" style="width: 650px"></el-input>
                                     </el-col>
-                                </el-form-item> 
+                                </el-form-item>
                             </el-row>
                             <el-row>
                                 <el-form-item label="添加属性值" style="margin-top: 10px" v-if="item.isEditMode">
                                     <el-col :span="18">
-                                        <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px"></el-input>
+                                        <el-input type="text"  placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 690px" v-model="item.propValue"></el-input>
                                     </el-col>
                                     <el-col :span="2" :offset="1">
-                                        <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute">添加</el-button>
+                                        <el-button size="mini" type="success" style="float: right;margin-top: 6px" @click="addEditAttribute(item.goodsPropertyValueList,item.propValue,item)">添加</el-button>
                                     </el-col>
                                 </el-form-item>
                                 <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
@@ -307,7 +307,8 @@
                     goodsCategoryIdList: [],
                     goodsPropertys: [{ //已有属性
                         goodsPropertyName:'',
-                        isEditMode:false
+                        isEditMode:false,
+                        propValue:''
                     }],
                     addSpecs: [{   //已有的规格
                         goodsSpecificationName:'1',
@@ -434,7 +435,6 @@
         addSpecifications(){
             this.addSpecificationDialog=true
         },
-
         //取消添加规格
         cancelAddSpecs(){
             this.addSpecificationDialog=false
@@ -463,12 +463,11 @@
         },
         // 点击删除商品规格
         deleteSpecs : function(index){
-            debugger
-            // this.editGoodsForm.addSpecs.splice(index,1);
-              this.$nextTick(function () {
-              this.editGoodsForm.addSpecs.splice(index,1); // => '更新完成'
-      })
+            console.log(index)
+            console.log(5555)
+          this.editGoodsForm.addSpecs.splice(index,1);
             console.log(this.editGoodsForm.addSpecs)
+            console.log(6666)
             // this.$confirm('此操作将永久删除该规格, 是否继续?', '提示', {
             //     confirmButtonText: '确定',
             //     cancelButtonText: '取消',
@@ -488,7 +487,7 @@
         },
         //删除商品属性
         deleteGoodsProperty : function(index){
-            var goodsPropertys = this.editGoodsForm.goodsPropertys 
+            var goodsPropertys = this.editGoodsForm.goodsPropertys
             goodsPropertys.splice(index,1);
             // this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
         },
@@ -581,21 +580,18 @@
                 goodsPropertyValueList: [],
                 isEditMode:false
             }
-
         },
         //新增的小红点删除商品属性
             deleteItem: function(index){
             this.addGoodsAttribute.goodsPropertyValueList.splice(index,1);
         },
         //修改的添加商品属性
-            addEditAttribute(){
-
-            },
+            addEditAttribute(goodsPropertyValueList,propValue,item){
+                goodsPropertyValueList.push({value:propValue})
+                this.$set(item,"propValue","")
+        },
         //修改的小红点删除商品属性
             deleteAttribute: function(prop,index){
-                console.log(prop)
-                console.log(index)
-                console.log(1111)
                 prop.splice(index,1);
         },
         formatVal: function(val){
@@ -639,7 +635,7 @@
                 }
             })
 
-         //初始化图片上传   
+         //初始化图片上传
         var self = this;
         var image = document.getElementById('image');
         this.cropper = new Cropper(image, {
