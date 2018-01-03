@@ -242,6 +242,7 @@ export const getShopDetails = () => {
     return ajax.get('seller/shopDetail/');
 };
 //更改门店状态
+
 //营业
 export const openShop = () => {
     return ajax.put('seller/shopDetail/operatingState');
@@ -283,3 +284,62 @@ export const updateShopType = shopType => {
 export const setActivityGoods = (id,params) => {
     return ajax.put('seller/activity/goods/' + id, params);
 };
+
+// 资质
+
+//获取店铺分类
+export const shopCategoryList = () => {
+    return ajax.get('seller/shopCategory');
+};
+
+//获取省列表
+export const getProvinceList = () => {
+    return ajax.get('commons/region/province');
+};
+//获取市列表
+export const getAllCityList = () => {
+    return ajax.get('commons/region/city');
+};
+//获取区列表
+export const getDistrictList = cityId => {
+    return ajax.get('commons/region/area/' + cityId);
+};
+//根据省id获取市列表
+export const getCityListByProvinceId = provinceId => {
+    return ajax.get('commons/region/city/' + provinceId);
+};
+//商家入驻验证码登录
+export const openStoreLoginBySMSCode = params => {
+    return ajax.post('seller/seller/kaidianLogin',params);
+};
+//商家基础信息
+export const saveShopBaseInfo = params => {
+    return ajax.put('seller/openStore', params);
+};
+export const getShopBaseInfo = params => {
+    return ajax.get('seller/openStore', params);
+};
+//商家资质信息
+export const saveShopQualificationInfo = params => {
+    return ajax.put('seller/openStore/qualificationInfo', params);
+};
+export const getShopQualificationInfo = params => {
+    return ajax.get('seller/openStore/qualificationInfo', params);
+};
+//获取银行卡信息
+export const getBankCardInfoByCardNumber = cardNumber => {
+    return ajax.get('commons/bankCard/' + cardNumber);
+};
+//商家结算信息
+export const saveShopSettleInfo = params => {
+    return ajax.put('seller/openStore/settlement', params);
+};
+export const getShopSettleInfo = params => {
+    return ajax.get('seller/openStore/settlement', params);
+};
+
+//店铺logo
+export const setShopLogo = params => {
+    return ajax.post('seller/openStore/logo', params);
+};
+

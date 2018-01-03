@@ -16,6 +16,7 @@ const Setting = r => require.ensure([],() => r(require('../views/Setting.vue')),
 const Notice = r => require.ensure([],() => r(require('../views/Notice.vue')), 'Notice'); //通知中心
 const Bonus = r => require.ensure([],() => r(require('../views/Bonus.vue')), 'Bonus'); //红包设置
 const Printer = r => require.ensure([],() => r(require('../views/Printer.vue')), 'Printer'); //打印机设置
+const aptitude = r => require.ensure([],() => r(require('../views/aptitude.vue')), 'aptitude '); //资质
 let routes = [{
     path: '/login',
     component: Login,
@@ -133,7 +134,8 @@ let routes = [{
     children: [
         { path: '/bonus', component: Bonus, name: '红包设置' },
     ]
-},{
+},
+    {
     path: '/',
     component: Home,
     name: '',
@@ -143,6 +145,16 @@ let routes = [{
         { path: '/Printer', component: Printer, name: '打印机设置' },
     ]
 },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        leaf: true, //只有一个节点
+        iconCls: 'i-icon i-icon-shezhi',
+        children: [
+            { path: '/aptitude', component: aptitude, name: '资质' },
+        ]
+    },
     {
     path: '*',
     hidden: true,
