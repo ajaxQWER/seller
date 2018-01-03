@@ -111,8 +111,8 @@
                         <el-button type="primary" @click="saveAddSpecs" :loading="SpecsLoading" size="small">保 存</el-button>
                     </div>
                 </el-dialog>
-                <el-row v-if="editGoodsForm.addSpecs">
-                    <el-row v-for="(item,index) in editGoodsForm.addSpecs" :key="index" class="showSpecs">
+                <el-row v-if="editGoodsForm.goodsSpecifications">
+                    <el-row v-for="(item,index) in editGoodsForm.goodsSpecifications" :key="index" class="showSpecs">
                         <el-row class="standard-index">
                             <el-col :span="20">
                                 规格{{index+1}}
@@ -309,7 +309,8 @@
                     },
                     goodsCategoryIdList: [],
                     goodsPropertys: [],
-                    addSpecs: []
+                    addSpecs: [],
+                    goodsSpecifications:[]
                 },
                 goodsId:0,
                 goodsCategoryLists:[]
@@ -336,14 +337,14 @@
                                 console.log(res)
                                 this.editGoodsForm = res;
                                 this.goodsId = res.goodsId;
-                                // this.editGoodsForm.addSpecs = res.goods.goodsSpecifications;
+                                this.editGoodsForm.addSpecs = [];
                                 // this.editGoodsForm.goodsPropertys = res.goods.goodsPropertys;
-                                var addSpecs = res.goods.goodsSpecifications;
-                                addSpecs.forEach((item) => {
+                                var goodsSpecifications = res.goods.goodsSpecifications;
+                                goodsSpecifications.forEach((item) => {
                                     //***这里需要动态添加属性***
                                     this.$set(item,'isEditMode',false)
                                 });
-                                this.$set(this.editGoodsForm,'addSpecs',addSpecs);
+                                this.$set(this.editGoodsForm,'goodsSpecifications',goodsSpecifications);
                                 var goodsPropertys = res.goods.goodsPropertys;
                                 goodsPropertys.forEach((item) => {
                                     //****这里需要动态添加属性***
@@ -360,7 +361,21 @@
                 //编辑
                 if (this.goodsId) {
                     console.log(666)
-                    updateGoodsById(this.goodsId, this.editGoodsForm).then(() => {
+                    var reqData = {}
+                    reqData.info = this.editGoodsForm.goods
+                    reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList
+                    reqData.goodsPropertys = this.editGoodsForm.goodsPropertys
+                    reqData.updateSpecs = []
+                    this.editGoodsForm.goodsSpecifications.forEach(function(item){
+                        if (item.goodsSpecificationId) {
+                            reqData.updateSpecs.push(item);
+                        }
+                    })
+                    
+                    reqData.addSpecs = this.editGoodsForm.addSpecs //暂时写死，未开发
+                    reqData.deleteSpecIds = [] //暂时写死，未开发
+
+                    updateGoodsById(this.goodsId,reqData).then(() => {
                         this.$message.success("操作成功")
                         this.showData()
                     })
@@ -483,6 +498,7 @@
         //保存添加规格
         saveAddSpecs(){
             this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
+            this.editGoodsForm.goodsSpecifications.push(this.addGoodsSpecs)
             this.$message.success("保存成功")
             this.cancelAddSpecs()
         },
@@ -492,7 +508,7 @@
         },
         //点击修改商品规格
         editGoodsSpecs(index){
-            this.$set(this.editGoodsForm.addSpecs[index],'isEditMode', true)
+            this.$set(this.editGoodsForm.goodsSpecifications[index],'isEditMode', true)
         },
         // 点击删除商品规格
         deleteSpecs: function(index){
@@ -501,7 +517,7 @@
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.editGoodsForm.addSpecs.splice(index,1);
+                this.editGoodsForm.goodsSpecifications.splice(index,1);
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -530,7 +546,7 @@
         },
         //点击保存商品规格
         saveSpecs(index){
-            this.$set(this.editGoodsForm.addSpecs[index],'isEditMode',false)
+            this.$set(this.editGoodsForm.goodsSpecifications[index],'isEditMode',false)
             this.$message.success("保存成功！")
             // if(!this.editGoodsForm.addSpecs.infiniteInventory){
             //     this.$message({
