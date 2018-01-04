@@ -80,7 +80,7 @@
 			      <el-option label="ARES" value="ARES"></el-option>
 			    </el-select>
 			    <i class="el-icon-warning icon_color"></i>
-			    <span class="fontColor">更改门店地址，系统将再次审核~</span>
+			    <span class="fontColor">更改配送方式，系统将再次审核~</span>
 			    <el-button type="success" class="button">同意并保存</el-button>
 			  </el-form-item>
 			</el-form>
