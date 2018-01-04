@@ -93,6 +93,7 @@
                         <el-pagination
                             @current-change="currentChange"
                             :current-page="pageId"
+                            :page-size = "pageSize"
                             :total="counts">
                         </el-pagination>
                     </el-row>
@@ -115,6 +116,7 @@ export default {
             appraiseTotal:"",
         	commentsAppraise: false,
             pageId: 1,
+            pageSize:5,
             counts: 0,
             shopAppraise: '',
             reply: '',
@@ -193,6 +195,7 @@ export default {
                     //****这里需要动态添加属性***
                     this.$set(item,'replay',false)
                 });
+                window.scrollTo(0,0);
             })
         },
         //获取评价信息
