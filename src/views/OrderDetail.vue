@@ -68,7 +68,6 @@
                 orderLists: null
             }
         },
-
         methods: {
             back: function() {
                 this.$router.back()

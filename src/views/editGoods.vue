@@ -18,7 +18,7 @@
                     </div>
                     <div style="padding:20px;" class="imgBox">
                         <div class="show">
-                            <img class="goods-imgage" :src="headerImage ? headerImage:editGoodsForm.goods.goodsImgUrl" alt="商品图片">
+                            <img class="goods-imgage" :src="headerImage ? headerImage:UPLOADURL + editGoodsForm.goods.goodsImgUrl" alt="商品图片">
                         </div>
                         <div style="margin-top:20px;">
                             <div class="upload-bg"></div>
@@ -56,14 +56,14 @@
                                 <el-col :span="10">
                                     <el-form-item label="规格名称：">
                                         <el-col :span="13">
-                                            <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称"></el-input>
+                                            <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationName" placeholder="请输入规格名称" style="width: 150px"></el-input>
                                         </el-col>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="10" :offset="1">
                                     <el-form-item label="价格：">
                                         <el-col :span="13">
-                                            <el-input type="text" v-model="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格"></el-input>
+                                            <el-input type="number" v-model.number="addGoodsSpecs.goodsSpecificationPrice" placeholder="请输入规格价格" style="width: 150px"></el-input>
                                         </el-col>
                                     </el-form-item>
                                 </el-col>
@@ -83,7 +83,7 @@
                                 <el-col :span="10" :offset="1" v-if="!addGoodsSpecs.infiniteInventory">
                                     <el-form-item label="库存数量：">
                                         <el-col :span="13">
-                                            <el-input type="text" v-model="addGoodsSpecs.stock" placeholder="请输入库存数量"></el-input>
+                                            <el-input type="number" v-model.number="addGoodsSpecs.stock" placeholder="请输入库存数量" style="width: 150px"></el-input>
                                         </el-col>
                                     </el-form-item>
                                 </el-col>
@@ -92,14 +92,14 @@
                                 <el-col :span="10">
                                     <el-form-item label="餐盒数量：">
                                         <el-col :span="13">
-                                            <el-input type="text" v-model="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量"></el-input>
+                                            <el-input type="number" v-model.number="addGoodsSpecs.boxesNumber" placeholder="请输入餐盒数量" style="width: 150px"></el-input>
                                         </el-col>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="10" :offset="1">
                                     <el-form-item label="餐盒价格：">
                                         <el-col :span="13">
-                                            <el-input type="text" v-model="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格"></el-input>
+                                            <el-input type="number" v-model.number="addGoodsSpecs.boxesMoney" placeholder="请输入餐盒价格" style="width: 150px"></el-input>
                                         </el-col>
                                     </el-form-item>
                                 </el-col>
@@ -119,7 +119,7 @@
                             </el-col>
                             <el-col :span="4" style="text-align: center">
                                 <el-button type="text" style="color: #13ce66" @click="editGoodsSpecs(index)" v-if="!item.isEditMode">修改</el-button>
-                                <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(index)" v-else>保存</el-button>
+                                <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveSpecs(index,item)" v-else>保存</el-button>
                                 <el-button type="text" style="color: red" @click="deleteSpecs(index)">删除</el-button>
                             </el-col>
                         </el-row>
@@ -127,7 +127,7 @@
                             <el-col :span="25">
                                 <el-form-item label="库存">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model.number="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="number" v-model.number="item.stock" style="width: 643px" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -143,7 +143,7 @@
                             <el-col :span="10" :offset="1">
                                 <el-form-item label="价格">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model.number="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="number" v-model.number="item.goodsSpecificationPrice" placeholder="请输入规格价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -152,14 +152,14 @@
                             <el-col :span="10">
                                 <el-form-item label="餐盒数量">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model.number="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="number" v-model.number="item.boxesNumber" placeholder="请输入餐盒数量" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="10" :offset="1">
                                 <el-form-item label="餐盒价格">
                                     <el-col :span="18">
-                                        <el-input type="text" v-model.number="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
+                                        <el-input type="number" v-model.number="item.boxesMoney" placeholder="请输入餐盒价格" v-bind:disabled="!item.isEditMode"></el-input>
                                     </el-col>
                                 </el-form-item>
                             </el-col>
@@ -176,7 +176,7 @@
                     </el-row>
                     <!--添加商品属性弹窗-->
                     <el-dialog title="添加属性" :visible.sync="addAttributesDialog">
-                        <el-form :model="addGoodsSpecs" label-width="80px">
+                        <el-form :model="addGoodsAttribute" label-width="80px">
                             <el-row>
                                 <el-form-item label="属性名称">
                                     <el-col :span="13">
@@ -203,7 +203,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="cancelAttribute" size="small">取 消</el-button>
-                            <el-button type="primary" @click="saveAddAttribute" :loading="SpecsLoading" size="small">保 存</el-button>
+                            <el-button type="primary" @click="saveAddAttribute()" :loading="SpecsLoading" size="small">保 存</el-button>
                         </div>
                     </el-dialog>
                     <el-row v-if="editGoodsForm.goodsPropertys">
@@ -214,7 +214,7 @@
                                 </el-col>
                                 <el-col :span="4" style="text-align: center">
                                     <el-button type="text" style="color: #13ce66" @click="editGoodsAttribute(index)" v-if="!item.isEditMode">修改</el-button>
-                                    <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveAttribute(index)" v-if="item.isEditMode">保存</el-button>
+                                    <el-button type="text" style="color: rgba(32,160,255,0.87)" @click="saveAttribute(index,item)" v-if="item.isEditMode">保存</el-button>
                                     <el-button type="text" style="color: red" @click="deleteGoodsProperty(index)">删除</el-button>
                                 </el-col>
                             </el-row>
@@ -235,7 +235,6 @@
                                     </el-col>
                                 </el-form-item>
                                 <el-form-item label="属性值" style="margin-top: 10px" v-if="item.goodsPropertyValueList && item.goodsPropertyValueList.length">
-                                        <!--<el-input type="text" placeholder="请输入属性值，最多4项，每项最多6个字" style="width: 735px" :disabled="editAttributeDisabled"></el-input>-->
                                        <el-row >
                                            <el-col :span="2" v-for="(prop,propIndex) in item.goodsPropertyValueList" :key="propIndex" class="goodsPropertyItem">
                                                <span>{{prop.value}}</span>
@@ -275,7 +274,6 @@
                 croppable:false,
                 panel:false,
                 url:'' ,
-                panel: false,
                 SpecsLoading:false, //商品规格弹窗loading
                 AttributesLoading:false, //商品属性弹窗loading
                 addSpecificationDialog:false, //商品规格弹窗
@@ -310,8 +308,9 @@
                     goodsCategoryIdList: [],
                     goodsPropertys: [],
                     addSpecs: [],
-                    goodsSpecifications:[]
+                    goodsSpecifications:[],
                 },
+                deleteStandardObj: [],
                 goodsId:0,
                 goodsCategoryLists:[]
             }
@@ -351,16 +350,17 @@
                                     this.$set(item,'isEditMode',false)
                                 });
                                 this.$set(this.editGoodsForm,'goodsPropertys',goodsPropertys);
-                                this.editGoodsForm.goods.goodsImgUrl=this.UPLOADURL+res.goods.goodsImgUrl
+                                this.editGoodsForm.goods.goodsImgUrl=res.goods.goodsImgUrl
                             })
                         }
                     }
                 })
             },
             saveEditGoodsInfo(){
+                console.log(this.goodsId)
+                console.log(1111)
                 //编辑
                 if (this.goodsId) {
-                    console.log(666)
                     var reqData = {}
                     reqData.info = this.editGoodsForm.goods
                     reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList
@@ -369,27 +369,27 @@
                     this.editGoodsForm.goodsSpecifications.forEach(function(item){
                         if (item.goodsSpecificationId) {
                             reqData.updateSpecs.push(item);
+                        }else{
+                            this.editGoodsForm.addSpecs.push(item)
                         }
                     })
-                    
                     reqData.addSpecs = this.editGoodsForm.addSpecs //暂时写死，未开发
-                    reqData.deleteSpecIds = [] //暂时写死，未开发
-
+                    reqData.deleteSpecIds = this.deleteStandardObj, //暂时写死，未开发
                     updateGoodsById(this.goodsId,reqData).then(() => {
                         this.$message.success("操作成功")
                         this.showData()
                     })
                 }else{
                     //新增
-                    var names = [];
-                    this.goodsCategoryLists.forEach((item) => {
-                        if(this.editGoodsForm.goodsCategoryIdList.indexOf(item.goodsCategoryId) != -1){
-                            names.push(item.goodsCategoryName)
-                        }
-                    })
-                    this.editGoodsForm.goods.goodsClassNames = names.join(",");
-                    addGoods(this.editGoodsForm).then(() => {
-                        this.$message.success('操作成功');
+                    var reqData = {}
+                    reqData.info = this.editGoodsForm.goods
+                    reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList
+                    reqData.goodsPropertys = this.editGoodsForm.goodsPropertys
+                    reqData.addSpecs = this.editGoodsForm.addSpecs
+                    console.log(this.editGoodsForm.addSpecs)
+                    console.log(555)
+                    addGoods(reqData).then(() => {
+                        this.$message.success("操作成功")
                     })
                 }
             },
@@ -497,7 +497,48 @@
         },
         //保存添加规格
         saveAddSpecs(){
-            this.editGoodsForm.addSpecs.push(this.addGoodsSpecs)
+            if(!this.addGoodsSpecs.goodsSpecificationName){
+                this.$message({
+                    message: '请输入规格名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.addGoodsSpecs.goodsSpecificationPrice){
+                this.$message({
+                    message: '请输入规格价格',
+                    type: 'warning'
+                })
+                return;
+            }
+            // if(!this.addGoodsSpecs.infiniteInventory){
+            //     this.$message({
+            //         message: '请选择库存',
+            //         type: 'warning'
+            //     })
+            //     return;
+            // }
+            if(!this.addGoodsSpecs.stock){
+                this.$message({
+                    message: '请输入库存数量',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.addGoodsSpecs.boxesNumber){
+                this.$message({
+                    message: '请输入餐盒数量',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!this.addGoodsSpecs.boxesMoney){
+                this.$message({
+                    message: '请输入餐盒价格',
+                    type: 'warning'
+                })
+                return;
+            }
             this.editGoodsForm.goodsSpecifications.push(this.addGoodsSpecs)
             this.$message.success("保存成功")
             this.cancelAddSpecs()
@@ -517,7 +558,12 @@
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                //TODO把id放在删除数组里面
+                if (this.editGoodsForm.goodsSpecifications[index]['goodsSpecificationId']) {
+                    this.deleteStandardObj.push(this.editGoodsForm.goodsSpecifications[index]['goodsSpecificationId'])
+                }
                 this.editGoodsForm.goodsSpecifications.splice(index,1);
+                this.$message.success("删除成功")
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -545,76 +591,95 @@
             });
         },
         //点击保存商品规格
-        saveSpecs(index){
+        saveSpecs(index,item){
+            if(!item.stock){
+                this.$message({
+                    message: '请输入库存',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!item.goodsSpecificationName){
+                this.$message({
+                    message: '请输入规格名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!item.goodsSpecificationPrice){
+                this.$message({
+                    message: '请输入价格',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!item.boxesNumber){
+                this.$message({
+                    message: '请输入餐盒数量',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(!item.boxesMoney){
+                this.$message({
+                    message: '请输入餐盒价格',
+                    type: 'warning'
+                })
+                return;
+            }
             this.$set(this.editGoodsForm.goodsSpecifications[index],'isEditMode',false)
             this.$message.success("保存成功！")
-            // if(!this.editGoodsForm.addSpecs.infiniteInventory){
-            //     this.$message({
-            //         message: '请输入库存',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.goodsSpecificationName){
-            //     this.$message({
-            //         message: '请输入规格名称',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.goodsSpecificationPrice){
-            //     this.$message({
-            //         message: '请输入价格',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            //
-            // if(!this.editGoodsForm.addSpecs.boxesNumber){
-            //     this.$message({
-            //         message: '请输入餐盒数量',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
-            // if(!this.editGoodsForm.addSpecs.boxesMoney){
-            //     this.$message({
-            //         message: '请输入餐盒价格',
-            //         type: 'warning'
-            //     })
-            //     return;
-            // }
         },
         //点击保存编辑商品属性
-        saveAttribute(index){
+        saveAttribute(index,item){
+            if(!item.goodsPropertyName){
+                this.$message({
+                    message: '请输入属性名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(item.goodsPropertyValueList.length == 0){
+                this.$message({
+                    message: '请添加属性值',
+                    type: 'warning'
+                })
+                return;
+            }
             this.$set(this.editGoodsForm.goodsPropertys[index],'isEditMode',false)
-             this.$message.success("保存成功！")
+            this.$message.success("保存成功！")
         },
         // 添加商品属性
         addPropItem(){
-            // if(this.addGoodsAttribute.propValue === ''){
-            //         this.$message({
-            //             message: '请输入属性名称',
-            //             type: 'warning'
-            //         })
-            //     return;
-            // }
-            // if (this.addGoodsAttribute.goodsPropertyValueList.length == 4) {
-            //     this.$message({
-            //         message: '属性值最多四项',
-            //         type: 'warning'
-            //     })
-            //     this.addGoodsAttribute.propValue = '';
-            //     return;
-            // }
-            // if(this.addGoodsAttribute.goodsPropertyValueList.indexOf(this.addGoodsAttribute.propValue) != -1){
-            //     this.$message({
-            //         message: '属性值已经存在',
-            //         type: 'warning'
-            //     })
-            //     this.addGoodsAttribute.propValue = '';
-            //     return;
-            // }
+            if(!this.addGoodsAttribute.propValue){
+                this.$message({
+                    message: '请输入属性值',
+                    type: 'warning'
+                })
+                this.addGoodsAttribute.propValue = '';
+                return;
+            }
+            if (this.addGoodsAttribute.goodsPropertyValueList.length == 4) {
+                this.$message({
+                    message: '属性值最多四项',
+                    type: 'warning'
+                })
+                this.addGoodsAttribute.propValue = '';
+                return;
+            }
+            var tempArr=[]
+            this.addGoodsAttribute.goodsPropertyValueList.forEach(item=>{
+                tempArr.push(item.value)
+            })
+            if(tempArr.indexOf(this.addGoodsAttribute.propValue) != -1){
+                this.$message({
+                    message: '属性值已经存在',
+                    type: 'warning'
+                })
+                this.addGoodsAttribute.propValue = '';
+                return;
+            }
+
             this.addGoodsAttribute.goodsPropertyValueList.push({value: this.addGoodsAttribute.propValue});
             this.addGoodsAttribute.propValue=''
             },
@@ -624,8 +689,23 @@
         },
         // 点击保存新增商品属性
         saveAddAttribute(){
+            if(!this.addGoodsAttribute.goodsPropertyName){
+                this.$message({
+                    message: '请输入属性名称',
+                    type: 'warning'
+                })
+                return;
+            }
+            if(this.addGoodsAttribute.goodsPropertyValueList.length == 0){
+                this.$message({
+                    message: '请添加属性值',
+                    type: 'warning'
+                })
+                this.addGoodsAttribute.propValue = '';
+                return;
+            }
             this.addAttributesDialog=false
-           this.editGoodsForm.goodsPropertys.push(this.addGoodsAttribute)
+            this.editGoodsForm.goodsPropertys.push(this.addGoodsAttribute)
             this.$message.success("保存成功")
             this.addGoodsAttribute={
                 goodsPropertyName:'',
@@ -640,6 +720,37 @@
         },
         //修改的添加商品属性
             addEditAttribute(goodsPropertyValueList,propValue,item){
+                if(!item.propValue){
+                    this.$message({
+                        message: '请输入属性值',
+                        type: 'warning'
+                    })
+                    return;
+                }
+                if (goodsPropertyValueList.length == 4) {
+                    this.$message({
+                        message: '属性值最多4项',
+                        type: 'warning'
+                    })
+                 item.propValue = '';
+                    return;
+                }
+                var tempArr=[]
+                goodsPropertyValueList.forEach(item=>{
+                    tempArr.push(item.value)
+                })
+                if(tempArr.indexOf(item.propValue)>-1){
+                    this.$message({
+                        message: '属性值已存在',
+                        type: 'warning'
+                    })
+                    item.propValue = '';
+                    return;
+                }
+
+                console.log(goodsPropertyValueList)
+                console.log(item.propValue)
+                console.log(777)
                 goodsPropertyValueList.push({value:propValue})
                 this.$set(item,"propValue","")
         },
