@@ -662,7 +662,7 @@ export default {
 	                endTime:  this.formatDate(this.endTime),
 	                isValid: true
 		        }
-		        if(this.beginTime < this.endTime){
+		        if(this.beginTime < this.endTime || !this.beginTime=="" && this.endTime == ""){
 		        	await addActivity(activityParams)
 					this.addDialog = false
 					this.getActivitys()
@@ -678,7 +678,7 @@ export default {
 	                    message: '开始时间不能小于结束时间'
 	                });
 		        }
-			}else if(this.value == 2){
+			}else if(this.value == 2 && !this.money==""){
 				activityParams = {
 	                activityContent: {
 	                	typeName: "sharefood.models.activity.activity.entity.FirstActivityData",
@@ -689,7 +689,7 @@ export default {
 	                endTime: this.formatDate(this.endTime),
 	                isValid: true
 	            }
-	            if(this.beginTime < this.endTime){
+	            if(this.beginTime < this.endTime || !this.beginTime=="" && this.endTime == ""){
 		        	await addActivity(activityParams)
 		            this.addDialog = false
 					this.getActivitys()
@@ -713,7 +713,7 @@ export default {
 	                endTime:  this.formatDate(this.endTime),
 	                isValid: true
 		        }
-	            if(this.beginTime < this.endTime){
+	            if(this.beginTime < this.endTime || !this.beginTime=="" && this.endTime == ""){
 		        	await addActivity(activityParams)
 					this.addDialog = false
 					this.getActivitys()
@@ -730,7 +730,7 @@ export default {
 	                    message: '开始时间不能小于结束时间'
 	                });
 		        }
-			}else if(this.value == 4){
+			}else if(this.value == 4 && !this.activityName == ""){
 				activityParams = {
 	                activityContent: {
                 		typeName: "sharefood.models.activity.activity.entity.SaleActivityData"
@@ -741,7 +741,7 @@ export default {
 	                activityName: this.activityName,
 	                isValid: true
 	            }
-	            if(this.beginTime < this.endTime){
+	            if(this.beginTime < this.endTime || !this.beginTime=="" && this.endTime == ""){
 		        	await addActivity(activityParams)
 		            this.addDialog = false
 					this.getActivitys()
@@ -754,7 +754,7 @@ export default {
 	                    message: '开始时间不能小于结束时间'
 	                });
 		        }
-			}else if(this.value == 5){
+			}else if(this.value == 5 && !this.activityName == ""){
 				activityParams = {
 					activityContent: {
 	                	typeName: "sharefood.models.activity.activity.entity.SpecificActivityData",
@@ -766,7 +766,7 @@ export default {
 		            activityName: this.activityName,
 	                isValid: true
 				}
-				if(this.beginTime < this.endTime){
+				if(this.beginTime < this.endTime || !this.beginTime=="" && this.endTime == ""){
 		        	await addActivity(activityParams)
 		            this.addDialog = false
 					this.getActivitys()
