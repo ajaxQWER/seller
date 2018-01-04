@@ -489,8 +489,12 @@ export default {
     	async saveUpdateActivity(item,index){
     		switch(item.activityType){
     			case 'FIRST':
-    				if(this.firstActivity.beginTime < this.firstActivity.endTime){
+    				if(this.firstActivity.beginTime < this.firstActivity.endTime || !this.firstActivity.beginTime=="" && this.firstActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.firstActivity)
+    					this.$message({
+		                    type: 'success',
+		                    message: '保存成功'
+		                });
     				}else{
     					this.$message({
 		                    type: 'error',
@@ -499,8 +503,12 @@ export default {
     				}
     				break;
     			case 'DELGOLD':
-    				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime){
+    				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime || !this.delgoldActivity.beginTime=="" && this.delgoldActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.delgoldActivity)
+    					this.$message({
+		                    type: 'success',
+		                    message: '保存成功'
+		                });
     				}else{
     					this.$message({
 		                    type: 'error',
@@ -509,8 +517,12 @@ export default {
     				}
     				break;
     			case 'COMPLIMENTARY':
-    				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime){
+    				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime || !this.complimentaryActivity.beginTime=="" && this.complimentaryActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.complimentaryActivity)
+    					this.$message({
+		                    type: 'success',
+		                    message: '保存成功'
+		                });
     				}else{
     					this.$message({
 		                    type: 'error',
@@ -519,8 +531,12 @@ export default {
     				}
     				break;
     			case 'SALE':
-    				if(this.saleActivity.beginTime < this.saleActivity.endTime){
+    				if(this.saleActivity.beginTime < this.saleActivity.endTime || !this.saleActivity.beginTime=="" && this.saleActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.saleActivity)
+    					this.$message({
+		                    type: 'success',
+		                    message: '保存成功'
+		                });
     				}else{
     					this.$message({
 		                    type: 'error',
@@ -529,8 +545,12 @@ export default {
     				}
     				break;
     			case 'SPECIFIC':
-    				if(this.specificActivity.beginTime < this.specificActivity.endTime){
+    				if(this.specificActivity.beginTime < this.specificActivity.endTime || !this.specificActivity.beginTime=="" && this.specificActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.specificActivity)
+    					this.$message({
+		                    type: 'success',
+		                    message: '保存成功'
+		                });
     				}else{
     					this.$message({
 		                    type: 'error',
