@@ -158,6 +158,8 @@ export default {
             }
             this.addLoading = true;
             if (this.isAdd) {
+                this.addBonusForm.startTime=this.formatDate(this.addBonusForm.startTime)
+                this.addBonusForm.endTime=this.formatDate(this.addBonusForm.endTime)
                 addBonus(this.addBonusForm).then(data => {
                     this.getBonusList();
                     this.$message({
@@ -173,6 +175,8 @@ export default {
                     this.addLoading = false;
                 })
             } else {
+                this.addBonusForm.startTime=this.formatDate(this.addBonusForm.startTime)
+                this.addBonusForm.endTime=this.formatDate(this.addBonusForm.endTime)
                 updateBonusById(this.addBonusForm).then(data => {
                     this.getBonusList();
                     this.$message({
@@ -204,6 +208,10 @@ export default {
                 minimum:row.minimum,
                 couponId:row.couponId
             }
+        },
+        //时间格式化
+        formatDate(date){
+            return new Date(date).getTime()
         },
         // 点击添加红包按钮
         addNewBouns(){

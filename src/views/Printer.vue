@@ -50,13 +50,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备名称" v-if="addPrinterForm.deviceName">
-                    <el-input type="text" v-model="addPrinterForm.deviceName " auto-complete="off" placeholder="单行输入"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceName " auto-complete="off" placeholder="单行输入" style="width: 223px" :disabled="isEdit"></el-input>
                 </el-form-item>
                 <el-form-item label="设备编号">
-                    <el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入" style="width: 223px" :disabled="isEdit"></el-input>
                 </el-form-item>
                 <el-form-item label="设备密码" v-if="!addPrinterForm.deviceName">
-                    <el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位" style="width: 223px"></el-input>
                 </el-form-item>
                 <el-form-item label="纸张规则">
                     <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
@@ -69,7 +69,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备备注">
-                    <el-input type="text" v-model="addPrinterForm.deviceRemark" auto-complete="off" placeholder="请单行输入"></el-input>
+                    <el-input type="text" v-model="addPrinterForm.deviceRemark" auto-complete="off" placeholder="请单行输入" style="width: 223px"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -84,6 +84,7 @@
     export default {
         data: function() {
             return {
+                isEdit:true,
                 addDialog:false,
                 addLoading:false,
                 isAdd:true,
@@ -101,7 +102,7 @@
                     printerId: 0,
                     printerPageType: "MM58",
                     printerType: "CLOUD_YILIANYUN_K4",
-                    shopId: 0
+                    shopId: 0,
                 },
                 loginUser: JSON.parse(localStorage.getItem('seller')).sellerName,
                 printerList:'',
@@ -200,6 +201,7 @@
                         this.addLoading = false;
                     })
                 } else {
+                    this.isEdit=true
                     updatePrinter(this.addPrinterForm).then(data => {
                         this.getPrinterList();
                         this.$message({
@@ -220,6 +222,7 @@
             editPrinter(row){
                 this.isAdd = false;
                 this.addDialog = true;
+                this.isEdit=true
                 this.addPrinterForm = {
                     copies: row.copies,
                     deviceId: row.deviceId,
@@ -235,6 +238,7 @@
             // 点击添加打印机按钮
             addPrinterBtn(){
                 this.addDialog = true
+                this.isEdit=false
             },
             // 获取打印机列表
             getPrinterList: function(printer) {
