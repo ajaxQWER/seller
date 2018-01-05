@@ -5,8 +5,8 @@
                 <li v-for="(item,index) in noticeList" :key="index" >
                     <el-row>
                         <el-col :span="2" class="orderImg">
-                            <!--<img src="../assets/images/newOrder.png" alt="">-->
-                            <img src="../assets/images/notice.png" alt="">
+                            <img :src="formatImgType(item.contentType)" alt="">
+                            <!--<img src="../assets/images/notice.png" alt="">-->
                         </el-col>
                         <el-col :span="19">
                             <el-row><span class="orderName">{{item.title}}</span></el-row>
@@ -49,6 +49,12 @@
 </template>
 <script>
 import { getNoticeLists, deleteNoticeById } from '@/api/api';
+import ORDER_FINISHED from "@/assets/images/finishOrder.png";
+import ORDER_DELIVERED from "@/assets/images/arriveOrder.png";
+import ORDER_SHIPPING from "@/assets/images/finishedOrder.png";
+import ORDER_CONFIRM from "@/assets/images/finishOrder.png";
+import ORDER_CANCELLATION from "@/assets/images/cancelOrder.png";
+import ORDER_CREATE from "@/assets/images/newOrder.png";
 export default {
     data: function() {
         return {
@@ -67,6 +73,7 @@ export default {
         getNoticeListData(){
             getNoticeLists({ params: { pageSize: 10, pageId: this.pageId } }).then(res => {
                 this.noticeList = res.list;
+                console.log(res.list)
                 this.counts = res.count;
             })
         },
@@ -86,7 +93,25 @@ export default {
             }).catch((message) => {
                 this.$message.error(message)
             });
-        }
+        },
+        formatImgType: function(contentType) {
+            switch (contentType) {
+                case 'ORDER_FINISHED':
+                    return ORDER_FINISHED;
+                case 'ORDER_DELIVERED':
+                    return ORDER_DELIVERED;
+                case 'ORDER_SHIPPING':
+                    return ORDER_SHIPPING;
+                case 'ORDER_CONFIRM':
+                    return ORDER_CONFIRM;
+                case 'ORDER_CANCELLATION':
+                    return ORDER_CANCELLATION;
+                case 'ORDER_CREATE':
+                    return ORDER_CREATE;
+                default:
+                    return '-'
+            }
+        },
     },
     created(){
         this.getNoticeListData();

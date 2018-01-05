@@ -540,7 +540,7 @@
                 return;
             }
             this.editGoodsForm.goodsSpecifications.push(this.addGoodsSpecs)
-            
+
             this.$message.success("保存成功")
             this.cancelAddSpecs()
         },
