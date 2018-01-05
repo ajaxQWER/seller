@@ -14,7 +14,7 @@
 						<img v-if="item.activityType == 'DELGOLD'" src="../assets/images/discount_02.png" class="imgP">
 						<img v-if="item.activityType == 'COMPLIMENTARY'" src="../assets/images/discount_03.png" class="imgP">
 						<img v-if="item.activityType == 'SALE'" src="../assets/images/discount_04.png" class="imgP">
-						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_04.png" class="imgP">
+						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_05.png" class="imgP">
 					</el-col>
 					<el-col :span="19" :offset="1">
 						<h4 :class="['discountType',formatClassByType(item.activityType)]">{{formatActivityType(item.activityType)}}</h4>
@@ -33,7 +33,7 @@
 						<img v-if="item.activityType == 'DELGOLD'" src="../assets/images/discount_02.png" class="imgP">
 						<img v-if="item.activityType == 'COMPLIMENTARY'" src="../assets/images/discount_03.png" class="imgP">
 						<img v-if="item.activityType == 'SALE'" src="../assets/images/discount_04.png" class="imgP">
-						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_04.png" class="imgP">
+						<img v-if="item.activityType == 'SPECIFIC'" src="../assets/images/discount_05.png" class="imgP">
 					</el-col>
 					<el-col :span="12" :offset="1">
 						<el-form label-width="120px" v-if="item.activityType == 'FIRST'" v-model="firstActivity">
@@ -656,13 +656,15 @@ export default {
 		formatClassByType(type){
 			switch (type) {
 				case 'FIRST':
-					return 'type-3';
-				case 'DELGOLD':
-				case 'COMPLIMENTARY':
-					return 'type-2';
-				case 'SALE':
-				case 'SPECIFIC':
 					return 'type-1';
+				case 'DELGOLD':
+					return 'type-2'
+				case 'COMPLIMENTARY':
+					return 'type-3';
+				case 'SALE':
+					return 'type-4'
+				case 'SPECIFIC':
+					return 'type-5';
 			}
 		},
 		//增加店铺活动
@@ -862,13 +864,19 @@ export default {
 		/*color: #ff7426*/
 	}
 	.type-1{
-		color: #ff7426
+		color: #239a1e
 	}
 	.type-2{
-		color: #e20008
+		color: #ffa71d
 	}
 	.type-3{
-		color: #239a1e
+		color: #f65a99
+	}
+	.type-4{
+		color:#348ee0
+	}
+	.type-5{
+		color:#9d55d0
 	}
 	.discount{
 		color: #7a7a7a;
