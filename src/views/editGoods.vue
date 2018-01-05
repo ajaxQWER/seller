@@ -389,7 +389,7 @@
                     console.log(this.editGoodsForm.addSpecs.length)
                     console.log(555)
                     addGoods(reqData).then(() => {
-                        this.$message.success("操作成功")
+                        this.$message.success("操作成功")   
                     })
                 }
             },
