@@ -84,13 +84,24 @@
 			    <el-button type="success" class="button">同意并保存</el-button>
 			  </el-form-item>
 			</el-form>
+			<p class="title">接单设置</p>
+			<el-form>
+			  <el-form-item label="接单方式">
+			    <el-select v-model="automaticAcceptOrder" placeholder="请选择接单方式" class="input_width">
+			      <el-option label="自动接单" value="true"></el-option>
+			      <el-option label="手动接单" value="false"></el-option>
+			    </el-select>
+			    <el-button type="success" class="button" @click="saveReceiveOrderType">同意并保存</el-button>
+			  </el-form-item>
+			</el-form>
     </el-row>
 </template>
 <script>
-import { getShopDetails , openShop , closeShop , updateBusTime , updateTakeOutPhone , updateMinDeliveryPrice , openDrawInvoice , closeDrawInvoice , updateDistributionType , updateShopType } from "@/api/api"
+import { getShopDetails , openShop , closeShop , updateBusTime , updateTakeOutPhone , updateMinDeliveryPrice , openDrawInvoice , closeDrawInvoice , updateDistributionType , updateShopType , autoReceiveOrder ,handReceiveOrder} from "@/api/api"
 export default {
 		created(){
   		getShopDetails().then(res => {
+  			console.log(res)
   			if(res.operatingState){
   				this.business = "营业中"
   			}else{
@@ -109,6 +120,12 @@ export default {
   			}else{
   				this.canDrawInvoice = "否"
   			}
+  			// this.automaticAcceptOrder = res.automaticAcceptOrder
+  			if(res.automaticAcceptOrder){
+  				this.automaticAcceptOrder = "自动接单"
+  			}else{
+  				this.automaticAcceptOrder = "手动接单"
+  			}
   		})
   	},
     data() {
@@ -123,6 +140,7 @@ export default {
         	takeOutPhone:"",
         	minDeliveryPrice:"",
         	canDrawInvoice:"",
+        	automaticAcceptOrder:"",
         	businessOptions:[{
         		label:"营业中",
         		value:"true"
@@ -198,6 +216,35 @@ export default {
             type: 'info',
             message: '修改失败!'
           })
+      	}
+      },
+      async saveReceiveOrderType(){
+      	if(this.automaticAcceptOrder == "true"){
+      		const data = await autoReceiveOrder()
+      		if(data){
+	      		this.$message({
+	            type: 'success',
+	            message: '修改成功!'
+	          })
+	      	}else{
+	      		this.$message({
+	            type: 'info',
+	            message: '修改失败!'
+	          })
+	      	}
+      	}else if(this.automaticAcceptOrder == "false"){
+      		const data = await handReceiveOrder()
+      		if(data){
+	      		this.$message({
+	            type: 'success',
+	            message: '修改成功!'
+	          })
+	      	}else{
+	      		this.$message({
+	            type: 'info',
+	            message: '修改失败!'
+	          })
+	      	}
       	}
       }
     }

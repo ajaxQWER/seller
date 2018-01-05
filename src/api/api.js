@@ -337,9 +337,15 @@ export const saveShopSettleInfo = params => {
 export const getShopSettleInfo = params => {
     return ajax.get('seller/openStore/settlement', params);
 };
-
 //店铺logo
 export const setShopLogo = params => {
     return ajax.post('seller/openStore/logo', params);
 };
-
+//自动接单
+export const autoReceiveOrder = () => {
+    return ajax.put('seller/shop/automaticAcceptOrder');
+};
+//手动接单
+export const handReceiveOrder = () => {
+    return ajax.delete('seller/shop/automaticAcceptOrder');
+};
