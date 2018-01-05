@@ -385,7 +385,7 @@
                     reqData.info = this.editGoodsForm.goods
                     reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList
                     reqData.goodsPropertys = this.editGoodsForm.goodsPropertys
-                    reqData.addSpecs = this.editGoodsForm.addSpecs
+                    reqData.addSpecs = this.editGoodsForm.goodsSpecifications
                     console.log(this.editGoodsForm.addSpecs.length)
                     console.log(555)
                     addGoods(reqData).then(() => {
@@ -540,6 +540,7 @@
                 return;
             }
             this.editGoodsForm.goodsSpecifications.push(this.addGoodsSpecs)
+            
             this.$message.success("保存成功")
             this.cancelAddSpecs()
         },
