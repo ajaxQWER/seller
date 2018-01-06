@@ -76,8 +76,8 @@
 			  <el-form-item label="配送方式">
 			    <el-select v-model="distributionType" placeholder="请选择配送方式" class="input_width" disabled>
 			      <el-option label="商家自行送至" value="SELF_DELIVERY_BY_MERCHANTS"></el-option>
-			      <el-option label="蜂鸟专送" value="ANUBAS"></el-option>
-			      <el-option label="ARES" value="ARES"></el-option>
+			      <el-option label="蜂鸟专送" value="ANUBIS"></el-option>
+			      <el-option label="蜂鹰配送" value="ARES"></el-option>
 			    </el-select>
 			    <i class="el-icon-warning icon_color"></i>
 			    <span class="fontColor">更改配送方式，系统将再次审核~</span>

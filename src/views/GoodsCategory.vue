@@ -17,7 +17,7 @@
                 <template slot-scope="scope">
                     <el-button size="small" @click="updateGoodsCategory(scope.$index,scope.row)">编辑</el-button>
                     <el-button size="small" type="danger" @click="deleteGoodsCategory(scope.$index,scope.row)">删除</el-button>
-                    <el-button size="small" type="primary" @click="getDetail(scope.$index,scope.row)">查看详情</el-button>
+                    <el-button size="small" type="primary" @click="getDetail(scope.$index,scope.row)" disabled>查看详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -76,9 +76,9 @@ export default {
     			updateGoodsCategoryById(this.updateGoodsCategorys).then(data =>{
     				this.addDialog = false
     				this.$message({
-                type: 'success',
-                message: '编辑成功!'
-            });
+                        type: 'success',
+                        message: '编辑成功!'
+                    });
     			})
     		},
     		updateGoodsCategory(index,row){
@@ -105,15 +105,22 @@ export default {
         },
         //增加商品分类
         addGoodsCategorys() {
-            addGoodsCategory({ goodsCategoryName: this.goodsCategoryName }).then(data => {
+            if(this.goodsCategoryName){
+                addGoodsCategory({ goodsCategoryName: this.goodsCategoryName }).then(data => {
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    this.goodsCategoryName = null
+                    this.getGoodsCategorys()
+                })
+            }else{
                 this.$message({
-                    message: '添加成功',
-                    type: 'success'
+                    type: 'error',
+                    message: '分类名称不能为空'
                 });
-                this.goodsCategoryName = null
-                this.getGoodsCategorys()
-
-            })
+            }
+           
         },
         //删除商品分类
         deleteGoodsCategory(index, row) {
