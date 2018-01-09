@@ -3,6 +3,7 @@ const NotFound = r => require.ensure([],() => r(require('../views/404.vue')), 'N
 const Login = r => require.ensure([],() => r(require('../views/Login.vue')), 'Login'); //登录
 const Home = r => require.ensure([],() => r(require('../views/Home.vue')), 'Home'); //Home
 const Index = r => require.ensure([],() => r(require('../views/Index.vue')), 'Index'); //首页
+const settleAccountsDetail = r => require.ensure([],() => r(require('../views/settleAccountsDetail.vue')), 'Index'); //首页
 const Goods = r => require.ensure([],() => r(require('../views/Goods.vue')), 'Goods'); //商品
 const editGoods = r => require.ensure([],() => r(require('../views/editGoods.vue')), 'editGoods'); //商品编辑
 const Order = r => require.ensure([],() => r(require('../views/Order.vue')), 'Order'); //订单
@@ -33,7 +34,8 @@ let routes = [{
     redirect: '/index',
     name: '',
     hidden: true
-},  {
+},
+    {
     path: '/',
     component: Home,
     leaf: true, //只有一个节点
@@ -41,7 +43,17 @@ let routes = [{
     children: [
         { path: '/index', component: Index, name: '首页' }
     ]
-}, {
+},
+    {
+        path: '/',
+        component: Home,
+        leaf: true, //只有一个节点
+        iconCls: 'i-icon i-icon-shouye',
+        children: [
+            { path: '/settleAccountsDetail', component: settleAccountsDetail, name: '首页' }
+        ]
+    },
+    {
     path: '/',
     component: Home,
     name: '',
