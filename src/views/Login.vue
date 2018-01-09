@@ -31,7 +31,7 @@
             </el-col>
         </el-row>
         <el-row class="footer-bar">
-            <p class="p-margin">鑫圆共享电子商务股份有限公司©2017 &nbsp; 蜀ICP备17032496号-4 <br><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001128" class="beian-link">
+            <p class="p-margin">鑫圆共享餐饮文化管理有限公司©2017 &nbsp; 蜀ICP备17032496号-4 <br><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001128" class="beian-link">
                 <img src="../assets/images/beian-gov.png"/>川公网安备 51019002001128号</a>
             </p>
         </el-row>
