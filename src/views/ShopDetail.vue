@@ -11,7 +11,7 @@
 			<p class="title">门店基本信息</p>
 			<el-form>
 			  <el-form-item label="门店名称">
-			  	<el-button type="success" class="button">同意并保存</el-button>
+			  	<el-button type="success" class="button" disabled>同意并保存</el-button>
 			    <el-input placeholder="请输入内容" v-model="shopName" class="input_width" auto-complete="off" disabled></el-input>
 			    <i class="el-icon-warning icon_color"></i>
 			    <span class="fontColor">更改门店名称，系统将再次审核~</span>
@@ -81,7 +81,7 @@
 			    </el-select>
 			    <i class="el-icon-warning icon_color"></i>
 			    <span class="fontColor">更改配送方式，系统将再次审核~</span>
-			    <el-button type="success" class="button">同意并保存</el-button>
+			    <el-button type="success" class="button" disabled>同意并保存</el-button>
 			  </el-form-item>
 			</el-form>
 			<p class="title">接单设置</p>
