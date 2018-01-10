@@ -239,46 +239,46 @@ export const updateActivityDetails = (activityId,params) => {
 };
 //门店信息查询
 export const getShopDetails = () => {
-    return ajax.get('seller/shopDetail/');
+    return ajax.get('seller/shop/');
 };
 //更改门店状态
 
 //营业
 export const openShop = () => {
-    return ajax.put('seller/shopDetail/operatingState');
+    return ajax.put('seller/shop/operatingState');
 };
 //歇业
 export const closeShop = () => {
-    return ajax.delete('seller/shopDetail/operatingState');
+    return ajax.delete('seller/shop/operatingState');
 };
 //更改店铺营业时间
 export const updateBusTime = params => {
-    return ajax.put('seller/shopDetail/busTime' , params);
+    return ajax.put('seller/shop/busTime' , params);
 };
 //更改店铺联系方式
 export const updateTakeOutPhone = takeOutPhone => {
-    return ajax.put('seller/shopDetail/takeOutPhone/' + takeOutPhone);
+    return ajax.put('seller/shop/takeOutPhone/' + takeOutPhone);
 };
 //更改店铺最小配送金额
 export const updateMinDeliveryPrice = minDeliveryPrice => {
-    return ajax.put('seller/shopDetail/updateMinDeliveryPrice/' + minDeliveryPrice);
+    return ajax.put('seller/shop/updateMinDeliveryPrice/' + minDeliveryPrice);
 };
 //是否允许开票
 //允许开票
 export const openDrawInvoice = () => {
-    return ajax.put('seller/shopDetail/drawInvoice');
+    return ajax.put('seller/shop/drawInvoice');
 };
 //不允许开票
 export const closeDrawInvoice = () => {
-    return ajax.delete('seller/shopDetail/drawInvoice');
+    return ajax.delete('seller/shop/drawInvoice');
 };
 //更改配送类型
 export const updateDistributionType = distributionType => {
-    return ajax.put('seller/shopDetail/distributionType/' + distributionType);
+    return ajax.put('seller/shop/distributionType/' + distributionType);
 };
 //更改店铺类型
 export const updateShopType = shopType => {
-    return ajax.put('seller/shopDetail/shopType/' + shopType);
+    return ajax.put('seller/shop/shopType/' + shopType);
 };
 //添加活动商品
 export const setActivityGoods = (id,params) => {
