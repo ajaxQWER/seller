@@ -305,6 +305,7 @@
 import { getActivity , deleteActivity , addActivity , getBonusLists , getActivityDetails ,updateActivityDetails , getGoodsLists , setActivityGoods} from "@/api/api.js"
 export default {
 	created(){
+		console.log(localStorage.getItem("seller"))
 		this.getActivitys()
 		let bonusParams = {
 			pageId:1,
@@ -331,7 +332,7 @@ export default {
         	params:{
         		pageId:1,
         		pageSize: 4,
-        		shopId:localStorage.getItem("shopId")
+        		// shopId:localStorage.getItem("shopId")
         	},
         	pickerOptions0: {
 	          disabledDate(time) {
