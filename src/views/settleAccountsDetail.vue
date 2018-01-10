@@ -1,5 +1,12 @@
 <template>
     <el-row class="bg">
+        <el-row style="margin: 10px 0px 0px 20px">
+            <el-form :inline="true">
+                <el-form-item>
+                    <el-button type="primary" @click="back" size="small"><i class="el-icon--left el-icon-arrow-left"></i>返回首页</el-button>
+                </el-form-item>
+            </el-form>
+        </el-row>
         <el-row  v-if="orderList.length>0" v-loading="loading" element-loading-text="拼命加载中">
             <el-row class="countDetailTitle">
                 <span>结算明细</span>
@@ -92,6 +99,9 @@
             searchIconClick(){
                 console.log(this.orderSearchInput)
                 this.getOrderLists()
+            },
+            back: function() {
+                this.$router.back()
             },
             //分页
             currentChange(val) {

@@ -166,8 +166,6 @@
             settleAccounts(){
                 this.$router.push('/settleAccountsDetail')
             }
-
-
         },
         created() {
             this.getRealtimestatisticsData()

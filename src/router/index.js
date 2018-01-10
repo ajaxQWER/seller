@@ -41,18 +41,10 @@ let routes = [{
     leaf: true, //只有一个节点
     iconCls: 'i-icon i-icon-shouye',
     children: [
-        { path: '/index', component: Index, name: '首页' }
+        { path: '/index', component: Index, name: '首页' },
+        { path: '/settleAccountsDetail', component: settleAccountsDetail, name: '首页' }
     ]
 },
-    {
-        path: '/',
-        component: Home,
-        leaf: true, //只有一个节点
-        iconCls: 'i-icon i-icon-shouye',
-        children: [
-            { path: '/settleAccountsDetail', component: settleAccountsDetail, name: '首页' }
-        ]
-    },
     {
     path: '/',
     component: Home,
