@@ -490,6 +490,8 @@ export default {
     	async saveUpdateActivity(item,index){
     		switch(item.activityType){
     			case 'FIRST':
+    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
+    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
     				if(this.firstActivity.beginTime < this.firstActivity.endTime || !this.firstActivity.beginTime=="" && this.firstActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.firstActivity)
     					this.$message({
@@ -504,6 +506,8 @@ export default {
     				}
     				break;
     			case 'DELGOLD':
+    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
+    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
     				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime || !this.delgoldActivity.beginTime=="" && this.delgoldActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.delgoldActivity)
     					this.$message({
@@ -518,6 +522,8 @@ export default {
     				}
     				break;
     			case 'COMPLIMENTARY':
+    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
+    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
     				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime || !this.complimentaryActivity.beginTime=="" && this.complimentaryActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.complimentaryActivity)
     					this.$message({
@@ -532,6 +538,8 @@ export default {
     				}
     				break;
     			case 'SALE':
+    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
+    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
     				if(this.saleActivity.beginTime < this.saleActivity.endTime || !this.saleActivity.beginTime=="" && this.saleActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.saleActivity)
     					this.$message({
@@ -546,6 +554,8 @@ export default {
     				}
     				break;
     			case 'SPECIFIC':
+    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
+    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
     				if(this.specificActivity.beginTime < this.specificActivity.endTime || !this.specificActivity.beginTime=="" && this.specificActivity.endTime == ""){
     					await updateActivityDetails(item.activityId,this.specificActivity)
     					this.$message({
