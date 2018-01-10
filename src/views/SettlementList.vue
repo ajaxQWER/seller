@@ -95,7 +95,11 @@
                 pageId: 1,
                 counts: 0,
                 SettlementList: [],
-                settlementDetail:[],
+                settlementDetail:{
+                    order:{
+                        orderGoods:[]
+                    }
+                },
                 orderId:'',
                 currentId:''
             }
