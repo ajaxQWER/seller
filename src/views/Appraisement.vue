@@ -225,7 +225,6 @@ export default {
         },
         // 点击回复
         clientReply(AppraiseId,index){
-            // this.replay=true
             this.shopAppraiseId = AppraiseId
             this.$set(this.commentList[index],'replay', true)
         },

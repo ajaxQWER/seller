@@ -349,3 +349,15 @@ export const autoReceiveOrder = () => {
 export const handReceiveOrder = () => {
     return ajax.delete('seller/shopDetail/automaticAcceptOrder');
 };
+
+
+// 20180110
+// 结算明细
+//获取结算列表
+export const getSettlementLists = params => {
+    return ajax.get('seller/record', params);
+}
+//获取结算详情
+export const getSettlementByOrderId = orderId => {
+    return ajax.get('seller/record/' + orderId);
+}
