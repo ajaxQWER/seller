@@ -111,7 +111,7 @@
         data: function () {
             return {
                 activeIndex: 1,
-                loginShopId: JSON.parse(localStorage.getItem('seller')).shopId,
+                loginShopId: localStorage.getItem('shopId'),
                 loginUser: localStorage.getItem('shopName'),
                 shopSalesData: "",
                 shopStatusImg: '',

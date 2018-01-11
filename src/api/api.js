@@ -361,3 +361,7 @@ export const getSettlementLists = params => {
 export const getSettlementByOrderId = orderId => {
     return ajax.get('seller/record/' + orderId);
 }
+//获取店铺列表
+export const getShopLists = () => {
+    return ajax.get('seller/shopList');
+}

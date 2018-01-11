@@ -15,6 +15,7 @@
                             <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
                         </div>
                         <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="(item,index) in shopList" @click.native="changeShop(index)"><img :src="UPLOADURL + '/shopLogo/' + shopId + '.png/shopLogo.png'" alt="" width="30" height="30">{{item.shopName}}</el-dropdown-item>
                             <el-dropdown-item @click.native="updateSecretkey">修改密码</el-dropdown-item>
                             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
@@ -69,10 +70,13 @@
     </el-row>
 </template>
 <script>
-// import {updatePwd} from '@/api/api';
+import {getShopLists , getRealtimestatistics , getOrderList} from '@/api/api'
+// import { getRealtimestatisticsData,} from '@/views/index'
 export default {
     created(){
-        console.log(this)
+        this.shopIdList = JSON.parse(localStorage.getItem('seller')).shopList
+        this.getShopList()
+        console.log(this.shopList)
     },
     data: function () {
         return {
@@ -83,7 +87,9 @@ export default {
                 oldSecretkey: '',
                 secretkey: ''
             },
-            dialog: false
+            dialog: false,
+            shopIdList:null,
+            shopList:[] 
         }
     },
     methods: {
@@ -124,24 +130,36 @@ export default {
                 this.dialog = false;
                 this.clearStorage();
             })
+        },
+        async getShopList(){
+            for(let i=0;i<this.shopIdList.length;i++){
+                var data = await getShopLists();
+                this.shopList = [...this.shopList,...data];
+            }
+        },
+        changeShop(index){
+            localStorage.setItem('shopId',JSON.parse(localStorage.getItem('seller')).shopList[index].shopId)
+            localStorage.setItem('shopName',JSON.parse(localStorage.getItem('seller')).shopList[index].shopName)
+            this.$router.replace({
+                path: '/index'
+            });
+            
+            // await getRealtimestatistics()
+            // await getOrderList()
         }
     },
     mounted: function () {
         var seller = localStorage.getItem('seller');
         var shopName = localStorage.getItem('shopName')
+        var shopId = localStorage.getItem('shopId')
         if (seller) {
             seller = JSON.parse(seller);
             this.sysUserName = shopName || '';
-            this. shopId = seller.shopId
+            this. shopId = shopId
         }
 
     }
 }
-
-        // localStorage.setItem('seller', JSON.stringify(data.seller));
-        // localStorage.setItem('jwt', data.jwt);
-        // localStorage.setItem('shopName',data.shopName)
-        // localStorage.setItem('shopId',data.seller.shopId)
 </script>
 <style scoped lang="scss">
 .container {
