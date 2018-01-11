@@ -56,7 +56,7 @@
                     <el-input type="text" v-model="addPrinterForm.deviceId" auto-complete="off" placeholder="单行输入" style="width: 223px" :disabled="isEdit"></el-input>
                 </el-form-item>
                 <el-form-item label="设备密码" v-if="!addPrinterForm.deviceName">
-                    <el-input type="text" v-model="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位" style="width: 223px"></el-input>
+                    <el-input type="text" v-model.trim="addPrinterForm.deviceSecretKey" auto-complete="off" placeholder="请输入6-12位" style="width: 223px"></el-input>
                 </el-form-item>
                 <el-form-item label="纸张规则">
                     <el-select v-model="addPrinterForm.printerPageType" placeholder="请选择类型">
@@ -186,6 +186,9 @@
             saveAddPrinter(){
                 this.addLoading = true;
                 if (this.isAdd) {
+                    var reg = /\s/g;
+                    var ss= this.addPrinterForm.deviceSecretKey.replace(reg, "")
+                    this.addPrinterForm.deviceSecretKey=ss
                     addPrinter(this.addPrinterForm).then(data => {
                         this.getPrinterList();
                         this.$message({
