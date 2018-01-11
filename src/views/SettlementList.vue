@@ -97,8 +97,12 @@
                 SettlementList: [],
                 settlementDetail:{
                     order:{
-                        orderGoods:[]
-                    }
+                        orderGoods:[],
+                        orderTakeout:{
+                            mealFee:''
+                        }
+                    },
+
                 },
                 orderId:'',
                 currentId:''
