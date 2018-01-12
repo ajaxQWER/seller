@@ -113,7 +113,9 @@
                 activeIndex: 1,
                 loginShopId: localStorage.getItem('shopId'),
                 loginUser: localStorage.getItem('shopName'),
-                shopSalesData: null,
+                shopSalesData: {
+                    todayTurnover:""
+                },
                 shopStatusImg: null,
                 printerStatusImg: null,
                 orderList: [],
