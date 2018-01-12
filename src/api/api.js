@@ -14,6 +14,7 @@ ajax.interceptors.request.use(function(config) {
     //在请求发出之前进行一些操作
     if (localStorage.getItem('jwt')) {
         config.headers.TOKEN = localStorage.getItem('jwt');
+        config.headers['SHOP-ID'] = localStorage.getItem('shopId');
     }
     return config;
 }, function(err) {
@@ -352,7 +353,7 @@ export const handReceiveOrder = () => {
 
 
 // 20180110
-// 结算明细
+// **结算明细**
 //获取结算列表
 export const getSettlementLists = params => {
     return ajax.get('seller/record', params);
@@ -365,3 +366,28 @@ export const getSettlementByOrderId = orderId => {
 export const getShopLists = () => {
     return ajax.get('seller/shopList');
 }
+
+
+
+//**营业分析**
+//新客户趋势图
+export const getNewCustomerTendency = params => {
+    return ajax.get('seller/analysis/newCustomer', params);
+};
+//订单量趋势图
+export const getOrderQuantity = params => {
+    return ajax.get('seller/analysis/orderQuantity', params);
+};
+//订单量趋势图
+export const getTurnover = params => {
+    return ajax.get('seller/analysis/turnover', params);
+};
+//销售量趋势图
+export const getSalesTendency = params => {
+    return ajax.get('seller/analysis/goodsSales', params);
+};
+//销售量排行
+export const getSalesRank = params => {
+    return ajax.get('seller/analysis/salesRank', params);
+};
+

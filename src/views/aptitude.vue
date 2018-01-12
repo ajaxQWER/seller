@@ -1,105 +1,111 @@
 <template>
     <div class="store">
-        <el-row class="row store-content">
-            <h2>店铺绑定手机号:{{loginPhoneNumber}}</h2>
-            <el-form :model="store" :rules="rules" ref="store" label-width="100px">
-                <el-form-item class="normal-item" label="店铺名称" prop="shopName">
-                    <el-input v-model="store.shopName"></el-input>
-                </el-form-item>
-                <el-form-item class="small-item" label="联系电话" prop="takeOutPhone">
-                    <el-input v-model="store.takeOutPhone"></el-input>
-                </el-form-item>
-                <el-form-item class="small-item" label="联系人姓名" prop="name">
-                    <el-input v-model="store.name"></el-input>
-                </el-form-item>
-                <el-form-item label="店铺分类" class="required">
-                    <el-select class="normal-item" v-model="store.shopCategoryIdList" multiple :multiple-limit="5" placeholder="请选择店铺分类">
-                        <el-option v-for="item in shopCategory" :key="item.shopCategoryId" :label="item.shopCategoryName" :value="item.shopCategoryId"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="营业时间" class="required">
-                    <el-radio class="radio" v-model="isAllDay" label="true">全天</el-radio>
-                    <el-radio class="radio" v-model="isAllDay" label="false">自定义</el-radio>
-                    <span v-if="isAllDay=='false'">
-        <el-time-select v-model="store.busBeginTime" placeholder="营业开始时间" prop="busBeginTime" :picker-options="{start: '00:00',end: '23:30',step: '00:30'}"></el-time-select>
-        <el-time-select v-model="store.busEndTime" placeholder="营业结束时间" prop="busEndTime" :picker-options="{start: '00:00',end: '23:30',step: '00:30'}"></el-time-select>
-          <b><span style="color:red;">*</span>店铺营业时间如未包含,请自行输入</b>
-          </span>
-                </el-form-item>
-                <el-form-item label="店铺类型" class="required">
-                    <el-radio-group v-model="store.shopType">
-                        <el-radio class="radio" label="RESERVE">预定</el-radio>
-                        <el-radio class="radio" label="TAKEOUT">外卖</el-radio>
-                        <el-radio class="radio" label="RESERVE_TAKEOUT">预定加外卖</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="配送信息" class="required">
-                    <el-radio-group v-model="store.distributionType">
-                        <el-radio class="radio" label="ANUBIS">蜂鸟配送</el-radio>
-                        <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS">商家自送</el-radio>
-                    </el-radio-group>
-                    <span v-if="store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS'">
-            配送距离 <el-input class="small-input fee" v-model="store.distributionScope" placeholder="配送距离"></el-input>米
-            配送费 <el-input class="small-input fee" v-model="store.fee" placeholder="配送费"></el-input>元
-          </span>
-                </el-form-item>
-                <el-form-item label="店铺位置" class="required">
-                    <el-select v-model.number="store.provinceId" filterable placeholder="省" prop="type" @change="selectCity">
-                        <el-option v-for="item in provinceList" :key="item.provinceId" :label="item.provinceName" :value="item.provinceId">
-                        </el-option>
-                    </el-select>
-                    <el-select v-model.number="store.cityId" filterable placeholder="市" prop="type" @change="selectDistrict">
-                        <el-option v-for="item in cityList" :key="item.cityId" :label="item.cityName" :value="item.cityId">
-                        </el-option>
-                    </el-select>
-                    <el-select v-model.number="store.areaId" filterable placeholder="区/县" prop="type" ref="district">
-                        <el-option v-for="item in districtList" :key="item.areaId" :label="item.areaName" :value="item.areaId">
-                        </el-option>
-                    </el-select>
-                    <el-button type="primary" @click="position">定位</el-button>
-                </el-form-item>
-                <el-form-item class="large-item" label="详细地址" prop="address">
-                    <el-input v-model="store.address" placeholder="详细至街道和门牌号"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <div class="amap-container">
-                        <el-amap-search-box class="search-box" :on-search-result="onSearchResult"></el-amap-search-box>
-                        <el-amap vid="amapDemo" :plugin="plugin" class="amap" :zoom="zoom" :center="mapCenter" :events="events">
-                            <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
-                        </el-amap>
-                    </div>
-                </el-form-item>
-                <el-form-item label="照片信息" prop="type" class="required">
-                    <div class="photo-info">
-                        <div class="photo-title">店铺LOGO</div>
-                        <div class="photo-upload">
-                            <el-upload class="upload-demo" ref="logoUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadLogoUrl">
-                                <img v-if="logo" :src="logo" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <div class="photo-title">门脸照</div>
-                        <div class="photo-upload">
-                            <el-upload class="upload-demo" ref="shopFaceUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopFaceUrl">
-                                <img v-if="store.shopFaceUrl" :src="UPLOADURL + store.shopFaceUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <div class="photo-title">店内照片</div>
-                        <div class="photo-upload">
-                            <el-upload class="upload-demo" ref="shopInnerUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopInnerUrl">
-                                <img v-if="store.shopInnerUrl" :src="UPLOADURL + store.shopInnerUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </div>
-                    </div>
-                </el-form-item>
-            </el-form>
-        </el-row>
+        <template>
+            <el-tabs v-model="activeName" @tab-click="tabClick">
+                <el-tab-pane label="基本信息" name="0">
+                    <el-row class="row store-content">
+                        <h2>店铺绑定手机号:{{loginPhoneNumber}}</h2>
+                        <el-form :model="store" :rules="rules" ref="store" label-width="100px">
+                            <el-form-item class="normal-item" label="店铺名称" prop="shopName">
+                                <el-input v-model="store.shopName"></el-input>
+                            </el-form-item>
+                            <el-form-item class="small-item" label="联系电话" prop="takeOutPhone">
+                                <el-input v-model="store.takeOutPhone"></el-input>
+                            </el-form-item>
+                            <el-form-item class="small-item" label="联系人姓名" prop="name">
+                                <el-input v-model="store.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="店铺分类" class="required">
+                                <el-select class="normal-item" v-model="store.shopCategoryIdList" multiple :multiple-limit="5" placeholder="请选择店铺分类">
+                                    <el-option v-for="item in shopCategory" :key="item.shopCategoryId" :label="item.shopCategoryName" :value="item.shopCategoryId"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="营业时间" class="required">
+                                <el-radio class="radio" v-model="isAllDay" label="true">全天</el-radio>
+                                <el-radio class="radio" v-model="isAllDay" label="false">自定义</el-radio>
+                                <span v-if="isAllDay=='false'">
+                                <el-time-select v-model="store.busBeginTime" placeholder="营业开始时间" prop="busBeginTime" :picker-options="{start: '00:00',end: '23:30',step: '00:30'}"></el-time-select>
+                                <el-time-select v-model="store.busEndTime" placeholder="营业结束时间" prop="busEndTime" :picker-options="{start: '00:00',end: '23:30',step: '00:30'}"></el-time-select>
+                                 <b><span style="color:red;">*</span>店铺营业时间如未包含,请自行输入</b></span>
+                            </el-form-item>
+                            <el-form-item label="店铺类型" class="required">
+                                <el-radio-group v-model="store.shopType">
+                                    <el-radio class="radio" label="RESERVE">预定</el-radio>
+                                    <el-radio class="radio" label="TAKEOUT">外卖</el-radio>
+                                    <el-radio class="radio" label="RESERVE_TAKEOUT">预定加外卖</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                            <el-form-item label="配送信息" class="required">
+                                <el-radio-group v-model="store.distributionType">
+                                    <el-radio class="radio" label="ANUBIS">蜂鸟配送</el-radio>
+                                    <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS">商家自送</el-radio>
+                                </el-radio-group>
+                                <span v-if="store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS'">
+                                配送距离 <el-input class="small-input fee" v-model="store.distributionScope" placeholder="配送距离"></el-input>米
+                                配送费 <el-input class="small-input fee" v-model="store.fee" placeholder="配送费"></el-input>元</span>
+                            </el-form-item>
+                            <el-form-item label="店铺位置" class="required">
+                                <el-select v-model.number="store.provinceId" filterable placeholder="省" prop="type" @change="selectCity">
+                                    <el-option v-for="item in provinceList" :key="item.provinceId" :label="item.provinceName" :value="item.provinceId">
+                                    </el-option>
+                                </el-select>
+                                <el-select v-model.number="store.cityId" filterable placeholder="市" prop="type" @change="selectDistrict">
+                                    <el-option v-for="item in cityList" :key="item.cityId" :label="item.cityName" :value="item.cityId">
+                                    </el-option>
+                                </el-select>
+                                <el-select v-model.number="store.areaId" filterable placeholder="区/县" prop="type" ref="district">
+                                    <el-option v-for="item in districtList" :key="item.areaId" :label="item.areaName" :value="item.areaId">
+                                    </el-option>
+                                </el-select>
+                                <el-button type="primary" @click="position">定位</el-button>
+                            </el-form-item>
+                            <el-form-item class="large-item" label="详细地址" prop="address">
+                                <el-input v-model="store.address" placeholder="详细至街道和门牌号"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <div class="amap-container">
+                                    <el-amap-search-box class="search-box" :on-search-result="onSearchResult"></el-amap-search-box>
+                                    <el-amap vid="amapDemo" :plugin="plugin" class="amap" :zoom="zoom" :center="mapCenter" :events="events">
+                                        <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
+                                    </el-amap>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="照片信息" prop="type" class="required">
+                                <div class="photo-info">
+                                    <div class="photo-title">店铺LOGO</div>
+                                    <div class="photo-upload">
+                                        <el-upload class="upload-demo" ref="logoUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadLogoUrl">
+                                            <img v-if="logo" :src="logo" class="avatar">
+                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                                <div class="photo-info">
+                                    <div class="photo-title">门脸照</div>
+                                    <div class="photo-upload">
+                                        <el-upload class="upload-demo" ref="shopFaceUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopFaceUrl">
+                                            <img v-if="store.shopFaceUrl" :src="UPLOADURL + store.shopFaceUrl" class="avatar">
+                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                                <div class="photo-info">
+                                    <div class="photo-title">店内照片</div>
+                                    <div class="photo-upload">
+                                        <el-upload class="upload-demo" ref="shopInnerUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopInnerUrl">
+                                            <img v-if="store.shopInnerUrl" :src="UPLOADURL + store.shopInnerUrl" class="avatar">
+                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                            </el-form-item>
+                        </el-form>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="资质信息" name="1">配置管理</el-tab-pane>
+                <el-tab-pane label="结算信息" name="2">角色管理</el-tab-pane>
+            </el-tabs>
+        </template>
     </div>
 </template>
 <script>
@@ -108,6 +114,7 @@
         data() {
             var that = this;
             return {
+                activeName: '0',
                 store: {
                     address: "",
                     areaId: '',
@@ -131,7 +138,7 @@
                     takeOutPhone: ""
                 },
                 logo: '',
-                loginPhoneNumber: '',
+                loginPhoneNumber: null,
                 isAllDay: 'true',
                 province: [],
                 city: [],
@@ -214,6 +221,10 @@
             };
         },
         methods: {
+            // 点击tab选项
+            tabClick(tab, event) {
+                console.log(tab, event);
+            },
             selectCity: function() {
                 getCityListByProvinceId(this.store.provinceId).then(res => {
                     this.cityList = res;
@@ -297,7 +308,6 @@
                     console.log(res)
                     this.$router.push({ path: 'qualification', query: { step: '1' } })
                 })
-
             },
             uploadLogoUrl: function(e) {
                 var file = e.raw;
@@ -337,7 +347,7 @@
 
         },
         created: function() {
-            this.loginPhoneNumber = sessionStorage.getItem('user')
+            this.loginPhoneNumber = JSON.parse(localStorage.getItem('sellerName'))
             shopCategoryList().then(res => {
                 console.log(res)
                 this.shopCategory = res.list;
@@ -347,8 +357,9 @@
             })
             getShopBaseInfo().then(res => {
                 console.log(res)
+                console.log(5555)
                 this.store = {
-                    address: res.detail.address || '',
+                    address: res.address || '',
                     areaId: res.detail.areaId || '',
                     audit: res.detail.audit,
                     busBeginTime: res.detail.busBeginTime || '',
@@ -364,7 +375,7 @@
                     shopCategoryIdList: res.shopCategoryIdList || [],
                     shopFaceUrl: res.detail.shopFaceUrl || '',
                     shopInnerUrl: res.detail.shopInnerUrl || '',
-                    shopName: res.detail.shopName || '',
+                    shopName: res.shopName || '',
                     shopType: res.detail.shopType,
                     distributionType: res.detail.distributionType,
                     takeOutPhone: res.detail.takeOutPhone || ''
@@ -388,7 +399,7 @@
 </script>
 <style scoped>
     .store {
-        background-color: #ebebeb;
+        background-color: #fff;
     }
 
     .store-content {

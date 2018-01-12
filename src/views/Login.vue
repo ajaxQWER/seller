@@ -65,6 +65,7 @@ export default {
                         console.log(data)
                         console.log(4444)
                         localStorage.setItem('seller', JSON.stringify(data.seller));
+                        localStorage.setItem('sellerName', JSON.stringify(data.seller.sellerName));
                         localStorage.setItem('jwt', data.jwt);
                         localStorage.setItem('shopId',data.seller.shopList[0].shopId)
                         localStorage.setItem('shopName',data.seller.shopList[0].shopName)
@@ -120,7 +121,7 @@ export default {
     margin: auto;
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-around; 
+    justify-content: space-around;
 }
 .login-container {
     -webkit-border-radius: 5px;
