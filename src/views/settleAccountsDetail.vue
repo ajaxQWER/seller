@@ -81,13 +81,13 @@
                 active: 'order_1',
                 pageId: 1,
                 counts: 0,
-                orderStatus: '',
+                orderStatus: null,
                 totalOrderCount : 0,
                 orderList: [],
                 orderId: 0,
                 cancelLoading:false,
                 cancelOrderForm:{
-                    cancelContent: '',
+                    cancelContent: null,
                 },
                 dialogFormVisible:false
             }

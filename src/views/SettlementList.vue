@@ -57,7 +57,6 @@
                                 <el-col :span="6">扣除费用后的总代</el-col>
                                 <el-col :span="6" style="text-align: right">￥{{settlementDetail.orderAmount-settlementDetail.distributionFee}}</el-col>
                             </el-row>
-
                             <el-row style="margin-top: 10px">
                                 <el-col :span="6">配送费</el-col>
                                 <el-col :span="6" style="text-align: center;padding-right: 65px">￥{{settlementDetail.distributionFee}}</el-col>
@@ -99,13 +98,12 @@
                     order:{
                         orderGoods:[],
                         orderTakeout:{
-                            mealFee:''
+                            mealFee:null
                         }
                     },
-
                 },
-                orderId:'',
-                currentId:''
+                orderId:null,
+                currentId:null
             }
         },
         methods: {

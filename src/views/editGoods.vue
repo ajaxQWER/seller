@@ -268,12 +268,12 @@
         data: function () {
             return {
             // 图片上传以及裁图
-                headerImage:'',
-                picValue:'',
-                cropper:'',
+                headerImage:null,
+                picValue:null,
+                cropper:null,
                 croppable:false,
                 panel:false,
-                url:'' ,
+                url:null ,
                 SpecsLoading:false, //商品规格弹窗loading
                 AttributesLoading:false, //商品属性弹窗loading
                 addSpecificationDialog:false, //商品规格弹窗
@@ -283,26 +283,26 @@
                 editSpeciDisabled :true,  //禁止编辑商品规格
                 editAttributeDisabled :true,  //禁止编辑商品属性
                 addGoodsSpecs:{  //添加规格
-                    goodsSpecificationName:'',
-                    goodsSpecificationPrice:'',
-                    infiniteInventory:'',
-                    boxesNumber:'',
-                    boxesMoney:'',
-                    stock:'', //库存数量
+                    goodsSpecificationName:null,
+                    goodsSpecificationPrice:null,
+                    infiniteInventory:null,
+                    boxesNumber:null,
+                    boxesMoney:null,
+                    stock:null, //库存数量
                     isEditMode:false
                 },
                 addGoodsAttribute:{ //添加属性
-                    goodsPropertyName:'',
-                    propValue: '',
+                    goodsPropertyName:null,
+                    propValue: null,
                     goodsPropertyValueList: [],
                     isEditMode:false
                 },
                 // tempAttributeArr: [],
                 editGoodsForm:{
                     goods: {
-                        goodsContent: "",
-                        goodsImgUrl: "",
-                        goodsName: "",
+                        goodsContent: null,
+                        goodsImgUrl: null,
+                        goodsName: null,
                         goodsStatus: "SOLD_OUT",
                     },
                     goodsCategoryIdList: [],

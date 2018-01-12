@@ -33,8 +33,8 @@
                 <div class="turnoverContainer">
                     <ul class="turnover">
                         <li class="titleText">今日营业额</li>
-                        <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.todayTurnover)}}</li>
-                        <li>昨日 <i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.yesterdayTurnover)}}</li>
+                        <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.todayTurnover) || 0}}</li>
+                        <li>昨日 <i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.yesterdayTurnover) || 0}}</li>
                         <!--<li>-->
                             <!--<span>在线支付：<i class="fa fa-jpy"></i>983.00</span>-->
                             <!--<span>到货付款：<i class="fa fa-jpy"></i>983.00</span>-->
@@ -46,8 +46,8 @@
                 <div class="turnoverContainer Containermar ContainerT">
                     <ul class="turnover">
                         <li class="titleText">今日订单</li>
-                        <li class="totalNum">{{shopSalesData.todayOrderQuantity}}</li>
-                        <li>昨日{{shopSalesData.yesterdayOrderQuantity}}</li>
+                        <li class="totalNum">{{shopSalesData.todayOrderQuantity || 0 }}</li>
+                        <li>昨日{{shopSalesData.yesterdayOrderQuantity || 0 }}</li>
                         <!--<li>-->
                             <!--<span>按时送达：983</span>-->
                             <!--<span>延误送达：983</span>-->
@@ -60,7 +60,7 @@
                     <ul class="turnover">
                         <li class="titleText">可用余额</li>
                         <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.availableBalance) || 0}}</li>
-                        <li> 可提现<i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.amountWithdrawal)}}</li>
+                        <li> 可提现<i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.amountWithdrawal) || 0}}</li>
                         <!--<li>-->
                             <!--<span>可提现额度：<i class="fa fa-jpy"></i>983.00</span>-->
                         <!--</li>-->
@@ -113,15 +113,15 @@
                 activeIndex: 1,
                 loginShopId: localStorage.getItem('shopId'),
                 loginUser: localStorage.getItem('shopName'),
-                shopSalesData: "",
-                shopStatusImg: '',
-                printerStatusImg: '',
+                shopSalesData: null,
+                shopStatusImg: null,
+                printerStatusImg: null,
                 orderList: [],
                 pageSize: 5,
                 pageId: 1,
-                orderStatus: '',
+                orderStatus: null,
                 Loading:false,
-                totalOrderCount:''
+                totalOrderCount:null
             }
         },
         methods: {
