@@ -140,7 +140,7 @@ export default {
         changeShop(index){
             localStorage.setItem('shopId',JSON.parse(localStorage.getItem('seller')).shopList[index].shopId)
             localStorage.setItem('shopName',JSON.parse(localStorage.getItem('seller')).shopList[index].shopName)
-            this.$router.replace({
+            this.$router.go({
                 path: '/index'
             });
             
