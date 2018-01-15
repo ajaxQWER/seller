@@ -242,8 +242,8 @@ export const updateActivityDetails = (activityId,params) => {
 export const getShopDetails = () => {
     return ajax.get('seller/shop/');
 };
-//更改门店状态
 
+//更改门店状态
 //营业
 export const openShop = () => {
     return ajax.put('seller/shop/operatingState');

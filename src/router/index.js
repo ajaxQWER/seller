@@ -119,7 +119,7 @@ let routes = [{
     leaf: true, //只有一个节点
     iconCls: 'i-icon i-icon-shezhi',
     children: [
-        { path: '/setting', component: Setting, name: '设置' },
+        // { path: '/setting', component: Setting, name: '设置' },
     ]
 }, {
     path: '/',

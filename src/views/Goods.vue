@@ -24,7 +24,7 @@
         <el-row class="dishType">
             <el-col :span="2" class="Type" ><span >商家分类：</span></el-col>
             <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  >
-                <span @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span>
+                <span @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' ">{{item.goodsCategoryName}}</span>
             </el-col>
         </el-row>
         <el-row class="goodsContentBox" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
@@ -55,7 +55,6 @@
     </el-row>
 </template>
 <script>
-
 import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods} from '@/api/api'
 export default {
     data: function() {
@@ -123,6 +122,9 @@ export default {
             this.goodsCategoryLists.forEach(function(item,current){
                 item['isActiveItem'] = false;
                 if(index == current){
+                    console.log(index)
+                    console.log(current)
+                    console.log(6666)
                     item['isActiveItem'] = true;
                 }
             })
@@ -216,13 +218,6 @@ export default {
         padding: 10px;
         margin-top: 5px;
         margin-bottom: 10px;
-    }
-    .activeType{
-        background-color: #13ce66;
-        color: white;
-        border: 5px;
-        padding: 5px;
-        border-radius: 5px;
     }
     .Type{
         text-align: center;

@@ -135,18 +135,34 @@
                             <img src="../assets/images/empty-img.png" alt="">
                         </div>
                         <div class="chart-info saleCount" v-else>
-                            <table class="date-num">
-                                <tbody>
-                                <tr>
-                                    <th>商品名称</th>
-                                    <th>销售量</th>
-                                </tr>
-                                <tr v-for="(item,index) in rankData" :key="index">
-                                    <td>{{item.goodsName}}</td>
-                                    <td>{{item.salesCount}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <el-table
+                                :data="rankData"
+                                height="290"
+                                border
+                                style="width: 100%">
+                                <el-table-column
+                                    prop="goodsName"
+                                    label="商品名称"
+                                   >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="salesCount"
+                                    label="销售量"
+                                   >
+                                </el-table-column>
+                            </el-table>
+                            <!--<table class="date-num">-->
+                                <!--<tbody>-->
+                                    <!--<tr class="saleTitle">-->
+                                        <!--<th>商品名称</th>-->
+                                        <!--<th>销售量</th>-->
+                                    <!--</tr>-->
+                                    <!--<tr v-for="(item,index) in rankData" :key="index">-->
+                                        <!--<td>{{item.goodsName}}</td>-->
+                                        <!--<td>{{item.salesCount}}</td>-->
+                                    <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
                         </div>
                     </div>
                 </el-col>
@@ -599,8 +615,13 @@ export default {
     .sellH{
         height: 377px;
     }
+    /*.saleTitle{*/
+        /*position: fixed;*/
+    /*}*/
     .saleCount{
         margin-top: 10px;
+        height: 290px;
+        overflow-y:auto;
     }
     .empty{
         text-align: center;

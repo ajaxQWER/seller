@@ -9,10 +9,10 @@
                     <li><h3>{{loginUser}}</h3></li>
                     <ul class="admin-shop-status" v-if="shopSalesData">
                         <li class="status onBusiness">
-                            <img :src="printerStatusImg" alt="">
+                            <img v-lazy="printerStatusImg" alt="" class="img">
                         </li>
                         <li class="status">
-                            <img :src="shopStatusImg" alt="">
+                            <img v-lazy="shopStatusImg" alt="" class="img">
                         </li>
                     </ul>
                 </ul>
@@ -56,7 +56,7 @@
                 </div>
             </el-col>
             <el-col :span="8" >
-                <div class="turnoverContainer Containermar ContainerK" @click="settleAccounts">
+                <div class="turnoverContainer Containermar ContainerK">
                     <ul class="turnover">
                         <li class="titleText">可用余额</li>
                         <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.availableBalance) || 0}}</li>
@@ -71,19 +71,20 @@
         <el-row class="orderBox">
             <ul class="orderContainer">
                 <li class="msgBox">
-                    <ul class="msg">
-                        <li>
-                            <span class="msgnum">7</span>
-                            <span> 最新订单，希望尽快送达！</span>
-                        </li>
-                        <li class="receiveOrder"><el-button  type="success" size="small">一键接单</el-button></li>
-                    </ul>
+                    <!--<ul class="msg">-->
+                        <!--<li>-->
+                            <!--<span class="msgnum">7</span>-->
+                            <!--<span> 最新订单，希望尽快送达！</span>-->
+                        <!--</li>-->
+                        <!--<li class="receiveOrder"><el-button  type="success" size="small">一键接单</el-button></li>-->
+                    <!--</ul>-->
+                    <el-row style="margin-left: 20px;font-size: 16px">最新订单</el-row>
                 </li>
                 <li @click="changeClass(index)" :class=" activeIndex==index ? 'active' : ''" v-for="(item,index) in orderList" :key="index">
                     <el-row>
                         <el-col :span="10">
                             <el-col class="headPortrait" :span="9">
-                                <img src="../assets/images/portrait.jpg" alt="">
+                                <img src="../assets/images/default-avatar.png" alt="">
                             </el-col>
                             <el-col :span="9" class="headerTitle">
                                 <el-row>{{item.orderContact.contactName}}</el-row>
@@ -139,11 +140,11 @@
                     console.log(res)
                     this.shopSalesData = res;
                     if (res.operatingState) {
-                        this.shopStatusImg = '../assets/images/shop-open.png';
+                        this.shopStatusImg = '../../static/images/shop-open.png';
                     } else {
-                        this.shopStatusImg = '../assets/images/shop-close.png';
+                        this.shopStatusImg = '../../static/images/shop-close.png';
                     }
-                    this.printerStatusImg = '../assets/images/' + res.printerStatus.toLowerCase() + '.png';
+                    this.printerStatusImg = '../../static/images/' + res.printerStatus.toLowerCase() + '.png';
                 })
             },
             formatMoney: function (money) {
@@ -190,15 +191,6 @@
     .titleText{
         position:relative;
     }
-    .QRcodeconContainer{
-        background-color: #13ce66;
-        width: 130px;
-        height: 140px;
-        text-align: center;
-        position: absolute;
-        top: 0px;
-        right: 185px;
-    }
     .titleImg{
         width: 8%;
     }
@@ -220,28 +212,13 @@
         list-style: none;
         display: inline-block;
     }
-    .intro{
-        padding-left: 40px;
-        font-size: 15px;
-        color: gray;
-    }
     .status{
         float: right;
-        padding: 10px;
-
         background-color: #ffffff;
         border: 1px solid rgba(215, 215, 215, 0.3);
     }
     .onBusiness{
         margin-left: 5px;
-    }
-    .unBound{
-        color: #1d90e6;
-        font-size: 10px;
-    }
-    .onBusinessText{
-        color: #11b95c;
-        font-size: 10px;
     }
     .QRcode>img{
         width: 100px;
@@ -254,9 +231,6 @@
     }
     .logo>img{
         width: 40px;
-    }
-    .download{
-        color: white
     }
     .contentContainer{
         margin-top: 20px;
@@ -352,5 +326,9 @@
     }
     .admin-shop-status>li{
         list-style: none;
+    }
+    .img{
+        width: 50px;
+        height: 50px;
     }
 </style>

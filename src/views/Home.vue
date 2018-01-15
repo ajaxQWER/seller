@@ -89,7 +89,7 @@ export default {
             },
             dialog: false,
             shopIdList:null,
-            shopList:[] 
+            shopList:[]
         }
     },
     methods: {
