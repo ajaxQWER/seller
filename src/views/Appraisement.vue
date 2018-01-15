@@ -31,12 +31,8 @@
         </el-row>
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName" @tab-click="tabClick">
-                <el-tab-pane label="全部评价" name="0" v-for="(tab,tabIndex) in tabs " :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value">
+                <el-tab-pane   v-for="(tab,tabIndex) in tabs " :key="tabIndex" :label="tab.label" :name="tab.name">
                 </el-tab-pane>
-                <!--<el-tab-pane label="已回复" name="1">-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane label="未回复" name="2">-->
-                <!--</el-tab-pane>-->
             </el-tabs>
             <el-row v-loading="loading"  element-loading-text="拼命加载中" v-if="!isEmpty">
                 <ul class="clientRepalyContainer" v-if="commentList.length>0">
@@ -216,9 +212,7 @@ export default {
             console.log(params)
             console.log(5555)
             getShopAppraise({params:params}).then(res => {
-                if(res.count == 0){
-                    this.isEmpty = true;
-                }
+              this.isEmpty = res.list.length ? false : true
                 this.loading=false
                 this.counts = res.count;
                 this.commentList = res.list
@@ -268,7 +262,7 @@ export default {
         var reply = this.$route.query.reply || null;
         this.pageId = pageId;
         this.reply = reply;
-        this.activeName = reply;
+        this.activeName = reply || 'ALL';
         this.getHeadInfo();
         this.getAppraiseList()
     },

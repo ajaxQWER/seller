@@ -2,10 +2,13 @@
     <el-row class="bg">
         <el-row>
             <el-col>
-                <el-tabs v-model="activeName" @tab-click="tabClick">
-                    <el-tab-pane v-for="(tab, tabIndex) in tabs" :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value"></el-tab-pane>
-                </el-tabs>
-                <el-col :span="6">
+                <el-col :span="18">
+                    <el-tabs v-model="activeName" @tab-click="tabClick">
+                        <el-tab-pane v-for="(tab, tabIndex) in tabs" :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value"></el-tab-pane>
+                    </el-tabs>    
+                </el-col>
+                
+                <el-col :span="6" class="searchOrder">
                     <el-col :span="20">
                         <el-input
                             size="small"
@@ -183,7 +186,7 @@ export default {
         var orderStatus = this.$route.query.orderStatus || null;
         this.pageId = pageId;
         this.orderStatus = orderStatus;
-        this.activeName = orderStatus;
+        this.activeName = orderStatus || 'ALL';
         this.getOrderLists()
     },
     methods: {
@@ -205,9 +208,7 @@ export default {
                 orderNum: this.orderSearchInput
             }
             getOrderList({ params: params}).then(res => {
-                if(res.count == 0){
-                    this.isEmpty = true;
-                }
+               this.isEmpty = res.list.length ? false : true
                 var queryString = '?';
                 for(var key in params){
                     if(params[key]){
@@ -490,7 +491,10 @@ export default {
     {
         background-color: #f8f8f8;
     }
-
+    .searchOrder{
+        line-height: 41px;
+        border-bottom: 1px solid lightgrey;
+    }
 
     .mytable tfoot
     {
