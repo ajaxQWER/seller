@@ -944,5 +944,6 @@ export default {
 	}
 	.img-center{
 		text-align: center;
+		background-color: #fff
 	}
 </style>
