@@ -1,11 +1,11 @@
 <template>
     <el-row class="bg">
-        <el-row  v-if="SettlementList.length>0" v-loading="loading" element-loading-text="拼命加载中">
+        <el-row  v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
             <el-row class="countDetailTitle">
                 <span>结算明细</span>
             </el-row>
             <ul class="orderContainer">
-                <li v-for="(item,index) in SettlementList" :key="index">
+                <li v-for="(item,index) in SettlementList" :key="index" v-if="SettlementList.length">
                     <el-row class="settlementItem" @click.native="getSettlementDetail(item.orderId,index)">
                         <el-row class="orderTitle">
                             <el-col :span="6" class="orderTime">订单号：{{item.orderNum}}</el-col>
@@ -23,7 +23,7 @@
                             </el-col>
                         </el-row>
                     </el-row>
-                    <el-row class="mytable" v-if="item.orderId==currentId">
+                    <el-row class="mytable" v-if="item.orderId==currentId" v-loading="detailloading">
                         <table>
                                 <thead>
                                     <tr>
@@ -83,6 +83,9 @@
                 </el-pagination>
             </el-row>
         </el-row>
+        <el-row v-else class="empty">
+            <img src="../assets/images/empty-img.png" alt="">
+        </el-row>
     </el-row>
 </template>
 <script>
@@ -90,7 +93,9 @@
     export default {
         data: function() {
             return {
+                isEmpty:false,
                 loading:false,
+                detailloading:false,
                 pageId: 1,
                 counts: 0,
                 SettlementList: [],
@@ -116,6 +121,9 @@
             getSettlementListsData(){
                 this.loading=true
                 getSettlementLists({ params: { pageSize: 5, pageId: this.pageId}}).then(res => {
+                    if(res.count == 0){
+                        this.isEmpty = true
+                    }
                     this.loading=false
                     this.SettlementList = res.list
                     this.counts = res.count
@@ -131,10 +139,12 @@
             },
             //获取结算详情
             getSettlementDetail(orderId,index){
+                this.detailloading = true
                 this.$set(this.SettlementList[index],'showDetail', true)
                 this.currentId=orderId;
                 this.orderId=orderId
                 getSettlementByOrderId(this.orderId).then(res =>{
+                    this.detailloading = false
                     this.settlementDetail = res
                 })
             }
@@ -320,5 +330,9 @@
     }
     .discount{
         margin-left: -8px;
+    }
+    .empty{
+        padding: 30px;
+        text-align: center;
     }
 </style>

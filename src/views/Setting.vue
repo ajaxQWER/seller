@@ -155,6 +155,7 @@ import { getPrinterLists, deletePrinterById,addPrinter,updatePrinter } from '@/a
 export default {
     data: function() {
         return {
+            isEmpty:false,
             addDialog:false,
             addLoading:false,
             isAdd:true,

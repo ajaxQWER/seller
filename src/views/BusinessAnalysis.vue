@@ -8,20 +8,20 @@
                         <div class="chart">
                             <IEcharts :option="line" :loading="loading"></IEcharts>
                         </div>
-                        <div class="chart-info">
-                            <table class="date-num">
-                                <tbody>
-                                <tr>
-                                    <th>日期</th>
-                                    <th>新客户量</th>
-                                </tr>
-                                <tr v-for="(item,index) in customers" :key="index">
-                                    <td>{{moment(item.finishDay).format('YYYY/MM/DD')}}</td>
-                                    <td>{{item.newCustomerCount}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!--<div class="chart-info">-->
+                            <!--<table class="date-num">-->
+                                <!--<tbody>-->
+                                <!--<tr>-->
+                                    <!--<th>日期</th>-->
+                                    <!--<th>新客户量</th>-->
+                                <!--</tr>-->
+                                <!--<tr v-for="(item,index) in customers" :key="index">-->
+                                    <!--<td>{{moment(item.finishDay).format('YYYY/MM/DD')}}</td>-->
+                                    <!--<td>{{item.newCustomerCount}}</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
                     </div>
                 </el-col>
             </el-col>
@@ -32,20 +32,20 @@
                         <div class="chart">
                             <IEcharts :option="option" :loading="loading"></IEcharts>
                         </div>
-                        <div class="chart-info">
-                            <table class="date-num">
-                                <tbody>
-                                <tr>
-                                    <th>日期</th>
-                                    <th>订单量</th>
-                                </tr>
-                                <tr v-for="(item,index) in orders" :key="index">
-                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                    <td>{{item.orderQuantity}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!--<div class="chart-info">-->
+                            <!--<table class="date-num">-->
+                                <!--<tbody>-->
+                                <!--<tr>-->
+                                    <!--<th>日期</th>-->
+                                    <!--<th>订单量</th>-->
+                                <!--</tr>-->
+                                <!--<tr v-for="(item,index) in orders" :key="index">-->
+                                    <!--<td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>-->
+                                    <!--<td>{{item.orderQuantity}}</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
                     </div>
                 </el-col>
             </el-col>
@@ -58,20 +58,20 @@
                         <div class="chart">
                             <IEcharts :option="business" :loading="loading"></IEcharts>
                         </div>
-                        <div class="chart-info">
-                            <table class="date-num">
-                                <tbody>
-                                <tr>
-                                    <th>日期</th>
-                                    <th>营业额</th>
-                                </tr>
-                                <tr v-for="(item,index) in turnover">
-                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                    <td>{{formatMoney(item.turnoverCount)}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!--<div class="chart-info">-->
+                            <!--<table class="date-num">-->
+                                <!--<tbody>-->
+                                <!--<tr>-->
+                                    <!--<th>日期</th>-->
+                                    <!--<th>营业额</th>-->
+                                <!--</tr>-->
+                                <!--<tr v-for="(item,index) in turnover">-->
+                                    <!--<td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>-->
+                                    <!--<td>{{formatMoney(item.turnoverCount)}}</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
                     </div>
                 </el-col>
             </el-col>
@@ -97,20 +97,20 @@
                         <div class="chart">
                             <IEcharts :option="sell" :loading="loading"></IEcharts>
                         </div>
-                        <div class="chart-info">
-                            <table class="date-num">
-                                <tbody>
-                                <tr>
-                                    <th>日期</th>
-                                    <th>销售量</th>
-                                </tr>
-                                <tr v-for="(item,index) in salesData" :key="index">
-                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                    <td>{{item.goodsSaleCount}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!--<div class="chart-info">-->
+                            <!--<table class="date-num">-->
+                                <!--<tbody>-->
+                                <!--<tr>-->
+                                    <!--<th>日期</th>-->
+                                    <!--<th>销售量</th>-->
+                                <!--</tr>-->
+                                <!--<tr v-for="(item,index) in salesData" :key="index">-->
+                                    <!--<td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>-->
+                                    <!--<td>{{item.goodsSaleCount}}</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
                     </div>
                 </el-col>
             </el-col>
@@ -588,6 +588,7 @@ export default {
     }
     .date-num tbody tr td{
         width: 100px;
+        padding: 5px;
     }
     .date-num tbody tr th{
         width: 100px;
@@ -596,14 +597,14 @@ export default {
         margin-left: 20px;
     }
     .sellH{
-        height: 575px;
+        height: 377px;
     }
     .saleCount{
         margin-top: 10px;
     }
     .empty{
         text-align: center;
-        margin-top: 100px;
+        margin-top: 60px;
     }
     .empty img{
         width: 130px;
