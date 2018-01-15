@@ -1,30 +1,28 @@
 <template>
     <el-row class="bg">
-        <el-tabs v-model="activeName" @tab-click="tabClick">
-            <el-tab-pane :label="'全部订单'" name="0">
-            </el-tab-pane>
-            <el-tab-pane :label="'已接单'"  name="1">
-            </el-tab-pane>
-            <el-tab-pane :label="'配送中'" name="2">
-            </el-tab-pane>
-            <el-tab-pane :label="'已完成'" name="3">
-            </el-tab-pane>
-            <el-tab-pane :label="'已取消'" name="4">
-            </el-tab-pane>
-        </el-tabs>
-        <el-row  v-if="orderList.length>0" v-loading="loading" element-loading-text="拼命加载中">
-            <el-row class="searchBox">
-                <el-col :span="5">
-                    <el-input
-                        size="small"
-                        placeholder="搜索订单号"
-                        icon="search"
-                        v-model="orderSearchInput"
-                        :on-icon-click="searchIconClick">
-                    </el-input>
+        <el-row>
+            <el-col>
+                <el-tabs v-model="activeName" @tab-click="tabClick">
+                    <el-tab-pane v-for="(tab, tabIndex) in tabs" :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value"></el-tab-pane>
+                </el-tabs>
+                <el-col :span="6">
+                    <el-col :span="20">
+                        <el-input
+                            size="small"
+                            placeholder="搜索订单号"
+                            icon="search"
+                            v-model="orderSearchInput"
+                            :on-icon-click="searchIconClick">
+                        </el-input>
+                    </el-col>
                 </el-col>
-            </el-row>
-            <ul class="orderContainer">
+            </el-col>
+
+        </el-row>
+
+        <el-row  v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
+
+            <ul class="orderContainer" v-if="orderList.length">
                 <li v-for="(item,index) in orderList" :key="index">
                     <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
                     <el-row class="orderTitle">
@@ -149,9 +147,10 @@ import { getOrderList, cancelOrderById, finishOrderById, acceptOrderById ,printO
 export default {
     data: function() {
         return {
+            isEmpty: false, //判断是否有无数据
             loading:false,
             copy:false,
-            activeName: '0',
+            activeName: 'ALL',
             orderSearchInput:null,
             active: 'order_1',
             pageId: 1,
@@ -164,15 +163,35 @@ export default {
             cancelOrderForm:{
                 cancelContent: null,
             },
-            dialogFormVisible:false
+            dialogFormVisible:false,
+            tabs: [{
+                label: '全部订单',
+                name: 'ALL',
+            },{
+                label: '已接单',
+                name: 'MERCHANT_CONFIRM_RECEIPT'
+            },{
+                label: '配送中',
+                name: 'SHIPPING'
+            },{
+                label: '已完成',
+                name: 'TRANSACT_FINISHED'
+            },{
+                label: '已取消',
+                name: 'CANCELLATION'
+            }]
         }
     },
     created: function() {
-
+        var pageId = parseInt(this.$route.query.pageId) || 1;
+        var orderStatus = this.$route.query.orderStatus || null;
+        this.pageId = pageId;
+        this.orderStatus = orderStatus;
+        this.activeName = orderStatus;
+        this.getOrderLists()
     },
     methods: {
         searchIconClick(){
-            console.log(this.orderSearchInput)
             this.getOrderLists()
         },
         //分页
@@ -182,9 +201,25 @@ export default {
         },
         //获取列表
         getOrderLists(){
-            this.loading=true
-            getOrderList({ params: { pageSize: 5, pageId: this.pageId, orderStatus: this.orderStatus ,orderNum:this.orderSearchInput}}).then(res => {
-                this.loading=false
+            this.loading = true;
+            var params = {
+                pageSize: 5,
+                pageId: this.pageId,
+                orderStatus: this.orderStatus,
+                orderNum: this.orderSearchInput
+            }
+            getOrderList({ params: params}).then(res => {
+                if(res.count == 0){
+                    this.isEmpty = true;
+                }
+                var queryString = '?';
+                for(var key in params){
+                    if(params[key]){
+                        queryString += key + '=' + params[key] + '&';
+                    }
+                }
+                this.$router.push(queryString);
+                this.loading = false
                 this.orderList = res.list
                 this.counts = res.count
             })
@@ -194,32 +229,9 @@ export default {
             if (!tab || !tab.index) {
                 return false
             }
-            switch (tab.index) {
-                case '0':
-                    this.orderStatus = '';
-                    this.activeName = '0';
-                    break;
-                case '1':
-                    this.orderStatus = 'MERCHANT_CONFIRM_RECEIPT';
-                    this.activeName = '1';
-                    break;
-                case '2':
-                    this.orderStatus = 'SHIPPING';
-                    this.activeName = '2';
-                    break;
-                case '3':
-                    this.orderStatus = 'TRANSACT_FINISHED';
-                    this.activeName = '3';
-                    break;
-                case '4':
-                    this.orderStatus = 'CANCELLATION';
-                    this.activeName = '4';
-                    break;
-                default:
-                    this.orderStatus = '';
-                    this.activeName = '0'
-
-            }
+            this.orderStatus = tab.index == '0' ?  null : tab.name;
+            this.activeName = tab.name;
+            this.pageId = 1;
             this.getOrderLists()
         },
         formatCancelType: function(type) {
@@ -348,11 +360,11 @@ export default {
         }
     },
 
-    beforeRouteEnter: function (to,from,next) {
-            next(vm => {
-                   vm.tabClick({pageId: 1, orderStatus: vm.orderStatus ,index:'0'})
-            });
-    }
+    // beforeRouteEnter: function (to,from,next) {
+            // next(vm => {
+            //        vm.tabClick({pageId: 1, orderStatus: vm.orderStatus ,index:'0'})
+            // });
+    // }
 
 }
 

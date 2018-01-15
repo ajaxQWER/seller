@@ -9,6 +9,7 @@ import VueAMap from 'vue-amap'
 import './assets/theme/theme-default/index.css'
 // import 'font-awesome/css/font-awesome.min.css'
 import "./assets/font/iconfont.css"
+import VueLazyLoad from 'vue-lazyload'
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
@@ -24,7 +25,10 @@ VueAMap.initAMapApiLoader({
     // 插件集合
     plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation','AMap.Geocoder','AMap.DistrictSearch','AMap.Polygon']
 });
-
+Vue.use(VueLazyLoad,{
+    error:'./static/images/default.jpg',
+    loading:'./static/images/loading.svg'
+})
 
 const router = new VueRouter({
     mode: "history",

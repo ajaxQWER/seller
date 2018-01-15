@@ -114,7 +114,10 @@
                 loginShopId: localStorage.getItem('shopId'),
                 loginUser: localStorage.getItem('shopName'),
                 shopSalesData: {
-                    todayTurnover:""
+                    todayTurnover:0,
+                    yesterdayTurnover:0,
+                    availableBalance:0,
+                    amountWithdrawal:0
                 },
                 shopStatusImg: null,
                 printerStatusImg: null,

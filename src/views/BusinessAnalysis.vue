@@ -1,120 +1,161 @@
 <template>
     <el-row>
-        <el-row >
-            <el-col :span="12" class="bg">
-                <h4>新客户趋势图</h4>
-                <div class="customer-content">
-                    <div class="chart">
-                        <IEcharts :option="line" :loading="loading"></IEcharts>
+        <el-row class="bg">
+            <el-col :span="12" >
+                <el-col :span="23" class="saleBg">
+                    <h4>新客户趋势图</h4>
+                    <div class="customer-content">
+                        <div class="chart">
+                            <IEcharts :option="line" :loading="loading"></IEcharts>
+                        </div>
+                        <div class="chart-info">
+                            <table class="date-num">
+                                <tbody>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>新客户量</th>
+                                </tr>
+                                <tr v-for="(item,index) in customers" :key="index">
+                                    <td>{{moment(item.finishDay).format('YYYY/MM/DD')}}</td>
+                                    <td>{{item.newCustomerCount}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="chart-info">
-                        <table class="date-num">
-                            <tbody>
-                            <tr>
-                                <th>日期</th>
-                                <th>新客户量</th>
-                            </tr>
-                            <tr v-for="(item,index) in customers" :key="index">
-                                <td>{{moment(item.finishDay).format('YYYY/MM/DD')}}</td>
-                                <td>{{item.newCustomerCount}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </el-col>
             </el-col>
-            <el-col :span="12" class="bg">
-                <h4>订单量趋势图</h4>
-                <div class="customer-content">
-                    <div class="chart">
-                        <IEcharts :option="option" :loading="loading"></IEcharts>
+            <el-col :span="12" class="saleBg">
+                <el-col :span="20" class="saleBg">
+                    <h4 class="title">订单量趋势图</h4>
+                    <div class="customer-content">
+                        <div class="chart">
+                            <IEcharts :option="option" :loading="loading"></IEcharts>
+                        </div>
+                        <div class="chart-info">
+                            <table class="date-num">
+                                <tbody>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>订单量</th>
+                                </tr>
+                                <tr v-for="(item,index) in orders" :key="index">
+                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
+                                    <td>{{item.orderQuantity}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="chart-info">
-                        <table class="date-num">
-                            <tbody>
-                            <tr>
-                                <th>日期</th>
-                                <th>订单量</th>
-                            </tr>
-                            <tr v-for="(item,index) in orders" :key="index">
-                                <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                <td>{{item.orderQuantity}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </el-col>
             </el-col>
         </el-row>
         <el-row style="margin-top: 20px">
             <el-col :span="8" class="bg">
-                <h4>新客户趋势图</h4>
-                <div class="customer-content">
-                    <div class="chart">
-                        <IEcharts :option="business" :loading="loading"></IEcharts>
+                <el-col :span="24" class="saleBg sellH">
+                    <h4 class="title">营业额趋势图</h4>
+                    <div class="customer-content">
+                        <div class="chart">
+                            <IEcharts :option="business" :loading="loading"></IEcharts>
+                        </div>
+                        <div class="chart-info">
+                            <table class="date-num">
+                                <tbody>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>营业额</th>
+                                </tr>
+                                <tr v-for="(item,index) in turnover">
+                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
+                                    <td>{{formatMoney(item.turnoverCount)}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="chart-info">
-                        <table class="date-num">
-                            <tbody>
-                            <tr>
-                                <th>日期</th>
-                                <th>营业额</th>
-                            </tr>
-                            <tr v-for="(item,index) in turnover">
-                                <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                <td>{{formatMoney(item.turnoverCount)}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </el-col>
             </el-col>
             <el-col :span="8" class="bg">
-                <h4>销售量趋势图</h4>
-                <div class="customer-content">
-                    <el-row>
-                        <el-col :span="6"><span>商品名称：</span></el-col>
-                        <el-col :span="15">
-                            <el-select v-model="goodsName" placeholder="请选择" size="mini">
-                                <el-option
-                                    @change="selectGoods(item.goodsId,item.goodsName)"
-                                    v-for="item in goodsNamesData"
-                                    :key="item.goodsId"
-                                    :label="item.goodsName"
-                                    :value="item.goodsId"
+                <el-col :span="23" class="saleBg">
+                    <h4 class="title">销售量趋势图</h4>
+                    <div class="customer-content">
+                        <el-row>
+                            <el-col :span="7"><span>商品名称：</span></el-col>
+                            <el-col :span="15">
+                                <el-select v-model="goodsName" placeholder="请选择" size="mini">
+                                    <el-option
+                                        @change="selectGoods(item.goodsId,item.goodsName)"
+                                        v-for="item in goodsNamesData"
+                                        :key="item.goodsId"
+                                        :label="item.goodsName"
+                                        :value="item.goodsId"
                                     >
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                    </el-row>
-                    <div class="chart">
-                        <IEcharts :option="sell" :loading="loading"></IEcharts>
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                        <div class="chart">
+                            <IEcharts :option="sell" :loading="loading"></IEcharts>
+                        </div>
+                        <div class="chart-info">
+                            <table class="date-num">
+                                <tbody>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>销售量</th>
+                                </tr>
+                                <tr v-for="(item,index) in salesData" :key="index">
+                                    <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
+                                    <td>{{item.goodsSaleCount}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="chart-info">
-                        <table class="date-num">
-                            <tbody>
-                            <tr>
-                                <th>日期</th>
-                                <th>销售量</th>
-                            </tr>
-                            <tr v-for="(item,index) in salesData" :key="index">
-                                <td>{{moment(item.finishDayTime).format('YYYY/MM/DD')}}</td>
-                                <td>{{item.goodsSaleCount}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </el-col>
             </el-col>
-            <el-col :span="8">
-                
+            <el-col :span="8" class="bg saleBg sellH">
+                <el-col :span="22" class="saleAmount">
+                    <h4 class="title">销售量排行</h4>
+                    <div>
+                        <!--<div class="search-content">日期 ：<span @click="handleChange">{{dateNow}}</span></div>-->
+                        <div class="block">
+                            <span class="demonstration">日期 ：</span>
+                            <el-date-picker
+                                @change="handleChange"
+                                size="mini"
+                                v-model="dateNow"
+                                type="date"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                        </div>
+                    </div>
+                    <div class="customer-content">
+                        <div v-if="isEmpty" class="empty">
+                            <img src="../assets/images/empty-img.png" alt="">
+                        </div>
+                        <div class="chart-info saleCount" v-else>
+                            <table class="date-num">
+                                <tbody>
+                                <tr>
+                                    <th>商品名称</th>
+                                    <th>销售量</th>
+                                </tr>
+                                <tr v-for="(item,index) in rankData" :key="index">
+                                    <td>{{item.goodsName}}</td>
+                                    <td>{{item.salesCount}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </el-col>
             </el-col>
         </el-row>
     </el-row>
-
 </template>
 <script>
-import { getNewCustomerTendency,getOrderQuantity,getTurnover,getGoodsLists,getSalesTendency } from '@/api/api';
+import { getNewCustomerTendency,getOrderQuantity,getTurnover,getGoodsLists,getSalesTendency,getSalesRank } from '@/api/api';
 import IEcharts from 'vue-echarts-v3/src/full.js';
 export default {
     components: {
@@ -122,6 +163,7 @@ export default {
     },
     data: function() {
         return {
+            date:'',
             customers: null,
             orders:null,
             turnover:null,
@@ -404,6 +446,11 @@ export default {
             searchData: [],
             isEmpty: false,
             goodsId: '',
+            dateNow: '',
+            startDate: '',
+            endDate: '',
+            rankData: [],
+            isEmpty: false
         }
     },
     mounted(){
@@ -427,7 +474,6 @@ export default {
         _this.option.series[0].data = [];
         _this.loading = true;
         getOrderQuantity({ params: { days: 7 } }).then(res => {
-            console.log(res);
             res.sort((a, b) => {
                 return a.finishDayTime - b.finishDayTime;
             }).forEach((item) => {
@@ -437,7 +483,6 @@ export default {
             })
             _this.orders = res;
         })
-        var _this = this;
         _this.business.xAxis.data = [];
         _this.business.series[0].data = [];
         _this.loading = true;
@@ -453,6 +498,16 @@ export default {
         })
         this.getData();
         this.getGoodsListData()
+    },
+    created: function(){
+        //最大日期和最小日期限制在当年
+        var thisYear = new Date().getFullYear();
+        var thisStartDate = thisYear + '-01-01';
+        var thisEndDate = thisYear + '-12-31';
+        this.startDate = new Date(thisStartDate);
+        this.endDate = new Date(thisEndDate);
+        this.dateNow = this.moment(Date.now()).format('YYYY-MM-DD');
+        this.fetchData()
     },
     methods: {
         formatMoney: function(money) {
@@ -497,13 +552,33 @@ export default {
             this.sell.series[0].name = goodsName;
             this.getData();
         },
+        //获取销售量
+        fetchData: function(){
+            getSalesRank({params: {queryDate: this.dateNow}}).then(res => {
+                if(res.length){
+                    this.rankData = res;
+                    this.isEmpty = false;
+                }else{
+                    this.isEmpty = true;
+                }
+            })
+        },
+        handleChange: function(value){
+            this.dateNow = this.moment(value).format('YYYY-MM-DD')
+            this.fetchData()
+        },
+
     }
 }
 </script>
 <style scoped>
     .bg{
-        background-color: white;
+        background-color: #f5f5f5;
         padding-left: 15px;
+    }
+    .saleBg{
+        background-color: white;
+        padding-left: 10px;
     }
     .chart{
         height: 300px;
@@ -514,7 +589,24 @@ export default {
     .date-num tbody tr td{
         width: 100px;
     }
+    .date-num tbody tr th{
+        width: 100px;
+    }
     .chart-info{
         margin-left: 20px;
+    }
+    .sellH{
+        height: 575px;
+    }
+    .saleCount{
+        margin-top: 10px;
+    }
+    .empty{
+        text-align: center;
+        margin-top: 100px;
+    }
+    .empty img{
+        width: 130px;
+        height: 140px;
     }
 </style>

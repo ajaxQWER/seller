@@ -53,7 +53,6 @@ body {
 		margin-bottom: 10px;
 	}
 }
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: all .2s ease;
@@ -62,14 +61,6 @@ body {
 .fade-enter,
 .fade-leave-active {
 	opacity: 0;
-}
-img.thumb[lazy=error] {
-    background: url(assets/images/default.jpg) no-repeat center center;
-    background-size: cover;
-}
-img.thumb[lazy=loading] {
-    background: url(assets/images/loading.svg) no-repeat center center #eaeaea;
-    background-size: cover;
 }
 .inline-form{
 	display: inline-block;

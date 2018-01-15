@@ -10,22 +10,24 @@
                     :on-icon-click="searchGoodsBtn">
                 </el-input>
             </el-col>
-            <el-col :span="5" :offset="1" style="text-align:right">
-                <el-col :span="8">全部商品</el-col>
-                <el-col :span="8">已上架</el-col>
-                <el-col :span="8">已下架</el-col>
-            </el-col>
-            <el-col :span="5" :offset="8">
-                <el-col :span="8">回收站</el-col>
-                <el-col :span="8">批量管理</el-col>
-                <router-link :to="'/editGoods'"><el-button :span="8" size="mini" type="success" @click="addGoods">添加商品</el-button></router-link>
+            <!--<el-col :span="5" :offset="1" style="text-align:right">-->
+                <!--<el-col :span="8">全部商品</el-col>-->
+                <!--<el-col :span="8">已上架</el-col>-->
+                <!--<el-col :span="8">已下架</el-col>-->
+            <!--</el-col>-->
+            <el-col :span="3" :offset="16" style="text-align: right">
+                <!--<el-col :span="8">回收站</el-col>-->
+                <!--<el-col :span="8">批量管理</el-col>-->
+                <router-link :to="'/editGoods'"><el-button :span="8" size="mini" type="success">添加商品</el-button></router-link>
             </el-col>
         </el-row>
         <el-row class="dishType">
             <el-col :span="2" class="Type" ><span >商家分类：</span></el-col>
-            <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  ><span  @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span></el-col>
+            <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  >
+                <span  @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span>
+            </el-col>
         </el-row>
-        <el-row class="goodsContentBox" v-if="goodsList.length>0">
+        <el-row class="goodsContentBox" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
             <el-col :span="7" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
                 <el-row class="chageBtn">
                     <el-checkbox></el-checkbox>
@@ -35,7 +37,7 @@
                 </el-row>
                 <el-row class="goodsContentText">
                     <el-col class="goodsImg" :span="10">
-                        <img  :src=" UPLOADURL + item.goodsImgUrl + '/goods.png '" alt="">
+                        <img  v-lazy=" UPLOADURL + item.goodsImgUrl + '/goods.png '" alt="">
                     </el-col>
                     <el-col :span="14" style="padding-left: 6px">
                         <el-row class="goodsName">{{item.goodsName}}</el-row>
@@ -56,43 +58,48 @@ import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAway
 export default {
     data: function() {
         return {
+            isEmpty: false, //判断是否有无数据
+            loading:false,
             searchGoods:'',
-            type:1,
             pageId:1,
             pageSize:10,
-            counts:0,
             goodsList:[],
-            goodsCategoryLists:'',  //分类列表(title)
-            goodsCategoryId : '' // 当前选中分类ID
+            goodsCategoryLists:null,  //分类列表(title)
+            goodsCategoryId : null // 当前选中分类ID
         }
     },
     methods:{
         //搜索商品
         searchGoodsBtn(){
-
+            this.getGoodsListsData()
         },
         changeType(index){
             this.type=index
         },
-
         //获取商品列表
-        getGoodsLists(goodsCategoryId){
-            getGoodsLists({params: {pageSize: 999999, goodsClassId: goodsCategoryId}}).then( res =>{
+        getGoodsListsData(goodsCategoryId){
+            this.loading = true
+            var reqData={
+                pageSize: 999999,
+                goodsClassId: goodsCategoryId,
+                goodsNameLike:this.searchGoods
+            }
+            getGoodsLists({params:reqData }).then( res =>{
+                if(res.count == 0){
+                    this.isEmpty = true
+                }
+                this.loading = false
                 this.goodsList = res.list;
-                console.log(res.list)
-                console.log(6666666)
             })
         },
         //获取商品title列表
         getGoodsCategoryListsData(){
-            var paramas={
+            var reqData={
                 pageSize:99999,
             }
-            getGoodsCategoryLists(paramas).then( res =>{
-                console.log(res)
-                console.log(33333)
+            getGoodsCategoryLists({params:reqData}).then( res =>{
                 this.goodsCategoryId = res.list[0].goodsCategoryId
-                this.getGoodsLists(res.list[0].goodsCategoryId)
+                this.getGoodsListsData(res.list[0].goodsCategoryId)
                 this.goodsCategoryLists = res.list;
                 this.goodsCategoryLists.forEach(function(item,index){
                     item.isActiveItem = false;
@@ -118,7 +125,7 @@ export default {
                 }
             })
             this.goodsCategoryId = goodsCategoryId;
-            this.getGoodsLists(goodsCategoryId)
+            this.getGoodsListsData(goodsCategoryId)
         },
         //上架或者下架商品
         soldOut: function(id,index,status){
@@ -191,12 +198,9 @@ export default {
                 });
             });
         },
-        addGoods(){
-
-        }
     },
     created(){
-        this.getGoodsLists();
+        this.getGoodsListsData();
         this.getGoodsCategoryListsData()
     }
 }
