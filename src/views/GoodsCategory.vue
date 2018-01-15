@@ -1,5 +1,5 @@
 <template>
-    <el-row>
+    <el-row v-loading="loading">
         <el-form :inline="true">
             <el-form-item>
                 <el-input placeholder="请输入添加商品分类名称" v-model="goodsCategoryName"></el-input>
@@ -49,6 +49,7 @@ export default {
     },
     data: function() {
         return {
+            loading:true,
             params: {
                 pageId: 1,
                 pageSize: 15
@@ -66,29 +67,29 @@ export default {
         }
     },
     methods: {
-    		//详情
-    		getDetail(index,row){
-    			getGoodsCategoryDetail(row.goodsCategoryId).then(data =>{
-    				console.log(data)
-    			})
-    		},
-    		updateGoods(){
-    			updateGoodsCategoryById(this.updateGoodsCategorys).then(data =>{
-    				this.addDialog = false
-    				this.$message({
-                        type: 'success',
-                        message: '编辑成功!'
-                    });
-    			})
-    		},
-    		updateGoodsCategory(index,row){
-    			this.updateGoodsCategorys = row
-    			this.addDialog = true
-    		},
-    		closeAddDialog(){
-                this.getGoodsCategorys()
-    			this.addDialog = false
-    		},
+		//详情
+		getDetail(index,row){
+			getGoodsCategoryDetail(row.goodsCategoryId).then(data =>{
+				console.log(data)
+			})
+		},
+		updateGoods(){
+			updateGoodsCategoryById(this.updateGoodsCategorys).then(data =>{
+				this.addDialog = false
+				this.$message({
+                    type: 'success',
+                    message: '编辑成功!'
+                });
+			})
+		},
+		updateGoodsCategory(index,row){
+			this.updateGoodsCategorys = row
+			this.addDialog = true
+		},
+		closeAddDialog(){
+            this.getGoodsCategorys()
+			this.addDialog = false
+		},
         //分页
         currentChange(val) {
             this.$router.push('?page=' + val);
@@ -101,6 +102,7 @@ export default {
                 // console.log(data)
                 this.getGoodsCategoryList = data.list
                 this.counts = data.count
+                this.loading = false
             })
         },
         //增加商品分类

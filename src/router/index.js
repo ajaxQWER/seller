@@ -43,7 +43,7 @@ let routes = [{
     iconCls: 'i-icon i-icon-shouye',
     children: [
         { path: '/index', component: Index, name: '首页' },
-        { path: '/settleAccountsDetail', component: settleAccountsDetail, name: '首页' }
+        { path: '/settleAccountsDetail', component: settleAccountsDetail, name: '结算明细' }
     ]
 },
     {

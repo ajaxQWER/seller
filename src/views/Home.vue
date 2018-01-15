@@ -15,7 +15,7 @@
                             <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(item,index) in shopList" @click.native="changeShop(index)"><img :src="UPLOADURL + '/shopLogo/' + shopId + '.png/shopLogo.png'" alt="" width="30" height="30">{{item.shopName}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item,index) in shopList" :key="index" @click.native="changeShop(index)"><img :src="UPLOADURL + '/shopLogo/' + item.shopId + '.png/shopLogo.png'" alt="" width="30" height="30">{{item.shopName}}</el-dropdown-item>
                             <el-dropdown-item @click.native="updateSecretkey">修改密码</el-dropdown-item>
                             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
@@ -132,20 +132,20 @@ export default {
             })
         },
         async getShopList(){
+            console.log(this.shopIdList)
             for(let i=0;i<this.shopIdList.length;i++){
                 var data = await getShopLists();
-                this.shopList = [...this.shopList,...data];
+                this.shopList = [...data];
             }
+            console.log(this.shopList)
         },
         changeShop(index){
+            // console.log(index)
             localStorage.setItem('shopId',JSON.parse(localStorage.getItem('seller')).shopList[index].shopId)
             localStorage.setItem('shopName',JSON.parse(localStorage.getItem('seller')).shopList[index].shopName)
             this.$router.go({
                 path: '/index'
             });
-            
-            // await getRealtimestatistics()
-            // await getOrderList()
         }
     },
     mounted: function () {
