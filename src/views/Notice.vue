@@ -1,7 +1,7 @@
 <template>
     <el-row v-loading="loading">
-        <el-row class="bonusContentBox" v-if="noticeList.length>0">
-            <ul class="bonusContent">
+        <el-row class="bonusContentBox" v-if="!isEmpty">
+            <ul class="bonusContent" v-if="noticeList.length">
                 <li v-for="(item,index) in noticeList" :key="index" >
                     <el-row>
                         <el-col :span="2" class="orderImg">
@@ -47,7 +47,8 @@ export default {
             counts: 0,
             canLoad: false,
             noticeList: [],
-            loading: true
+            loading: true,
+            isEmpty:false
         }
     },
     methods:{
@@ -59,6 +60,9 @@ export default {
         },
         getNoticeListData(){
             getNoticeLists({ params: { pageSize: 10, pageId: this.pageId } }).then(res => {
+                if(res.count == 0){
+                    this.isEmpty = true
+                }
                 this.noticeList = res.list;
                 console.log(res.list)
                 this.counts = res.count;

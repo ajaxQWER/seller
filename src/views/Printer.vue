@@ -16,8 +16,8 @@
                             </el-button>
                         </el-col>
                     </el-row>
-                    <el-row class="bgColorW bgH">
-                        <el-row class="printerSetting" v-for="(item,index) in printerList" :key="index">
+                    <el-row class="bgColorW bgH" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
+                        <el-row class="printerSetting" v-for="(item,index) in printerList" :key="index" v-if="printerList.length">
                             <el-col :span="22">
                                 <el-row>
                                     <el-col :span="2">设备名称</el-col>
@@ -38,6 +38,9 @@
                                 <el-button size="small" @click="deletePrinter(item.printerId)" type="text" style="color: red">删除</el-button>
                             </el-col>
                         </el-row>
+                    </el-row>
+                    <el-row v-else class="empty">
+                        <img src="../assets/images/empty-img.png" alt="">
                     </el-row>
                 </el-row>
         </el-row>
@@ -84,6 +87,8 @@
     export default {
         data: function() {
             return {
+                loading:false,
+                isEmpty:false,
                 isEdit:true,
                 addDialog:false,
                 addLoading:false,
@@ -245,7 +250,12 @@
             },
             // 获取打印机列表
             getPrinterList: function(printer) {
+                this.loading = true
                 getPrinterLists({ params: { pageSize: 10, pageId: this.pageId } }).then(res => {
+                    this.loading = false
+                    if(res.count == 0){
+                        this.isEmpty = true;
+                    }
                     this.printerList = res.list;
                     this.counts = res.count;
                 })
@@ -338,5 +348,9 @@
     .dialog-footer{
         background-color: rgba(238, 238, 238, 0.4);
         line-height: 40px;
+    }
+    .empty{
+        padding: 30px;
+        text-align: center;
     }
 </style>

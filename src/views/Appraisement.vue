@@ -31,15 +31,15 @@
         </el-row>
         <el-row class="AppraisementContent">
             <el-tabs v-model="activeName" @tab-click="tabClick">
-                <el-tab-pane label="全部评价" name="0">
+                <el-tab-pane label="全部评价" name="0" v-for="(tab,tabIndex) in tabs " :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value">
                 </el-tab-pane>
-                <el-tab-pane label="已回复" name="1">
-                </el-tab-pane>
-                <el-tab-pane label="未回复" name="2">
-                </el-tab-pane>
+                <!--<el-tab-pane label="已回复" name="1">-->
+                <!--</el-tab-pane>-->
+                <!--<el-tab-pane label="未回复" name="2">-->
+                <!--</el-tab-pane>-->
             </el-tabs>
-            <el-row  v-if="commentList.length>0" v-loading="loading" element-loading-text="拼命加载中">
-                <ul class="clientRepalyContainer">
+            <el-row v-loading="loading"  element-loading-text="拼命加载中" v-if="!isEmpty">
+                <ul class="clientRepalyContainer" v-if="commentList.length>0">
                     <li v-for="(item,index) in commentList" :key="index">
                         <el-row>
                             <el-col class="headPortrait" :span="2">
@@ -112,7 +112,7 @@ export default {
         return {
             loading:false,
             headerImage: '',
-            activeName: '0',
+            activeName: 'ALL',
             appraiseTotal:"",
         	commentsAppraise: false,
             pageId: 1,
@@ -158,7 +158,17 @@ export default {
             imgPopup: false,
             bigImgUrl: '',
             replyTextarea:'', //回复内容
-            // replay:false
+            tabs:[{
+                label:"全部评价",
+                name: 'ALL',
+            },{
+                label:"已回复",
+                name: 'true',
+            },{
+                label:"未回复",
+                name: 'false',
+            },
+            ]
         }
     },
     methods:{
@@ -183,13 +193,42 @@ export default {
                 }
             })
         },
+        //获取评价tab
+        tabClick(tab){
+            if (!tab || !tab.index) {
+                return false
+            }
+            this.reply = tab.index == '0' ?  "" : tab.name;
+            this.activeName = tab.name;
+            this.pageId = 1;
+            this.getAppraiseList()
+        },
         //获取评价列表
         getAppraiseList(){
             this.loading=true
-            getShopAppraise({params:{shopAppraise:this.shopAppraise, reply: this.reply,commentsAppraise: this.commentsAppraise, pageSize: 5, pageId: this.pageId}}).then(res => {
+            var params={
+                shopAppraise:this.shopAppraise,
+                reply: this.reply,
+                commentsAppraise: this.commentsAppraise,
+                pageSize: 5,
+                pageId: this.pageId
+            }
+            console.log(params)
+            console.log(5555)
+            getShopAppraise({params:params}).then(res => {
+                if(res.count == 0){
+                    this.isEmpty = true;
+                }
                 this.loading=false
                 this.counts = res.count;
                 this.commentList = res.list
+                var queryString = '?';
+                for(var key in params){
+                    if(params[key]){
+                        queryString += key + '=' + params[key] + '&';
+                    }
+                }
+                this.$router.push(queryString);
                 var commentList=res.list
                 commentList.forEach((item) => {
                     //****这里需要动态添加属性***
@@ -197,31 +236,6 @@ export default {
                 });
                 window.scrollTo(0,0);
             })
-        },
-        //获取评价信息
-        tabClick(tab){
-            console.log(tab)
-            if (!tab || !tab.index) {
-                return false
-            }
-            switch (tab.index) {
-                case '0':
-                    this.reply = '';
-                    this.activeName = '0';
-                    break;
-                case '1':
-                    this.reply = 'true';
-                    this.activeName = '1';
-                    break;
-                case '2':
-                    this.reply = 'false';
-                    this.activeName = '2';
-                    break;
-                default:
-                    this.reply = '';
-                    this.activeName = '0'
-            }
-            this.getAppraiseList()
         },
         // 点击回复
         clientReply(AppraiseId,index){
@@ -250,6 +264,11 @@ export default {
         },
     },
     created(){
+        var pageId = parseInt(this.$route.query.pageId) || 1;
+        var reply = this.$route.query.reply || null;
+        this.pageId = pageId;
+        this.reply = reply;
+        this.activeName = reply;
         this.getHeadInfo();
         this.getAppraiseList()
     },

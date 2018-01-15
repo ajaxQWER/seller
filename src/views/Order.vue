@@ -17,11 +17,8 @@
                     </el-col>
                 </el-col>
             </el-col>
-
         </el-row>
-
         <el-row  v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
-
             <ul class="orderContainer" v-if="orderList.length">
                 <li v-for="(item,index) in orderList" :key="index">
                     <!--<router-link :to="'/orderDetail?orderId='+item.orderId" class="link">-->
@@ -94,7 +91,6 @@
                                         <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
                                     </el-col>
                                     </el-row>
-
                                 </td>
                                 <td v-else>
                                      <el-row type="flex" justify="center">

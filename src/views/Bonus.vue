@@ -3,14 +3,13 @@
         <el-row class="bonusTitle">
             <el-col :span="22">
                 <el-row class="bonusSetting">红包设置</el-row>
-                <el-row>Lorem ipsum dolor sit amet, consectetur adipisicing.</el-row>
             </el-col>
             <el-col :span="2">
                 <el-button type="success" size="small" @click="addNewBouns">添加红包</el-button>
             </el-col>
         </el-row>
-        <el-row class="bonusContentBox" v-if="bonusList.length>0">
-            <ul class="bonusContent" v-loading="loading">
+        <el-row class="bonusContentBox" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
+            <ul class="bonusContent"   v-if="bonusList.length">
                 <li v-for="(item, index) in bonusList " :key="index">
                     <el-row>
                         <el-col :span="2">
@@ -89,6 +88,7 @@
 export default {
     data: function() {
         return {
+            isEmpty:false,
             isAdd: true,
             addDialog:false,
             addLoading:false,
@@ -96,7 +96,7 @@ export default {
             pageSize: 5,
             counts: 0,
             bonusList:'',
-            loading: true,
+            loading: false,
             addBonusForm:{
                 couponName:'',
                 pickUpType:'HAND',
@@ -221,10 +221,15 @@ export default {
         },
         //获取红包列表
         getBonusList: function(){
+            this.loading = true
             getBonusLists({params: {pageSize:this.pageSize,pageId:this.pageId}}).then(res => {
+                this.loading = false
+                if(res.count == 0){
+                    this.isEmpty = true;
+                }
                 this.bonusList = res.list;
                 this.counts = res.count;
-                this.loading = false
+
             })
         },
         //删除红包

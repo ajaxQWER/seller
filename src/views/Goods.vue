@@ -18,33 +18,35 @@
             <el-col :span="3" :offset="16" style="text-align: right">
                 <!--<el-col :span="8">回收站</el-col>-->
                 <!--<el-col :span="8">批量管理</el-col>-->
-                <router-link :to="'/editGoods'"><el-button :span="8" size="mini" type="success">添加商品</el-button></router-link>
+                <router-link :to="'/editGoods'"><el-button :span="8" size="small" type="success">添加商品</el-button></router-link>
             </el-col>
         </el-row>
         <el-row class="dishType">
             <el-col :span="2" class="Type" ><span >商家分类：</span></el-col>
             <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  >
-                <span  @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' "  >{{item.goodsCategoryName}}</span>
+                <span @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' ">{{item.goodsCategoryName}}</span>
             </el-col>
         </el-row>
         <el-row class="goodsContentBox" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
-            <el-col :span="7" class="goodsContent" v-for="(item,index) in goodsList" :key="index">
-                <el-row class="chageBtn">
-                    <el-checkbox></el-checkbox>
-                    <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)" style="color: orange">{{formatStatus(item.goodsStatus)}}</el-button>
-                    <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
-                    <el-button type="text" @click="deleteGoods(item.goodsId)" style="color: red">删除</el-button>
-                </el-row>
-                <el-row class="goodsContentText">
-                    <el-col class="goodsImg" :span="10">
-                        <img  v-lazy=" UPLOADURL + item.goodsImgUrl + '/goods.png '" alt="">
-                    </el-col>
-                    <el-col :span="14" style="padding-left: 6px">
-                        <el-row class="goodsName">{{item.goodsName}}</el-row>
-                        <el-row class="goodsPrice">￥{{item.goodsPrice}}</el-row>
-                        <el-row class="goodsSales ">月销量：{{item.goodsSales}}</el-row>
-                    </el-col>
-                </el-row>
+            <el-col :span="8"  v-for="(item,index) in goodsList" :key="index" >
+                <el-col :span="22" class="goodsContent">
+                    <el-row class="chageBtn">
+                        <el-checkbox></el-checkbox>
+                        <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)" style="color: orange">{{formatStatus(item.goodsStatus)}}</el-button>
+                        <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
+                        <el-button type="text" @click="deleteGoods(item.goodsId)" style="color: red">删除</el-button>
+                    </el-row>
+                    <el-row class="goodsContentText">
+                        <el-col class="goodsImg" :span="10">
+                            <img  v-lazy=" UPLOADURL + item.goodsImgUrl + '/goods.png '" alt="">
+                        </el-col>
+                        <el-col :span="14" style="padding-left: 6px">
+                            <el-row class="goodsName">{{item.goodsName}}</el-row>
+                            <el-row class="goodsPrice">￥{{item.goodsPrice}}</el-row>
+                            <el-row class="goodsSales ">月销量：{{item.goodsSales}}</el-row>
+                        </el-col>
+                    </el-row>
+                </el-col>
             </el-col>
         </el-row>
         <el-row v-else class="empty">
@@ -53,7 +55,6 @@
     </el-row>
 </template>
 <script>
-
 import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods} from '@/api/api'
 export default {
     data: function() {
@@ -121,6 +122,9 @@ export default {
             this.goodsCategoryLists.forEach(function(item,current){
                 item['isActiveItem'] = false;
                 if(index == current){
+                    console.log(index)
+                    console.log(current)
+                    console.log(6666)
                     item['isActiveItem'] = true;
                 }
             })
@@ -215,13 +219,6 @@ export default {
         margin-top: 5px;
         margin-bottom: 10px;
     }
-    .activeType{
-        background-color: #13ce66;
-        color: white;
-        border: 5px;
-        padding: 5px;
-        border-radius: 5px;
-    }
     .Type{
         text-align: center;
     }
@@ -232,7 +229,6 @@ export default {
     }
     .goodsContent{
         border: 1px solid lavender;
-        margin-left: 10px;
         margin-bottom: 15px;
     }
     .goodsContentText{
@@ -252,6 +248,7 @@ export default {
     }
     .goodsContentBox{
         margin-bottom: 10px;
+        padding-left: 20px;
     }
     .empty{
         padding: 30px;
