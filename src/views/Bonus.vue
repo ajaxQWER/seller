@@ -2,7 +2,6 @@
     <el-row>
         <el-row class="bonusTitle">
             <el-col :span="22">
-                <!--<el-row class="i-icon i-icon-shouye"></el-row>-->
                 <el-row class="bonusSetting">红包设置</el-row>
                 <el-row>Lorem ipsum dolor sit amet, consectetur adipisicing.</el-row>
             </el-col>
@@ -10,8 +9,8 @@
                 <el-button type="success" size="small" @click="addNewBouns">添加红包</el-button>
             </el-col>
         </el-row>
-        <el-row class="bonusContentBox"v-if="bonusList.length>0">
-            <ul class="bonusContent">
+        <el-row class="bonusContentBox" v-if="bonusList.length>0">
+            <ul class="bonusContent" v-loading="loading">
                 <li v-for="(item, index) in bonusList " :key="index">
                     <el-row>
                         <el-col :span="2">
@@ -24,7 +23,7 @@
                         </el-col>
                         <el-col :span="3" class="operation">
                             <el-button type="text" @click="editBouns(item)">编辑</el-button>
-                            <el-button type="text"  @click="deleteBonus(item.couponId)" style="color: red">删除</el-button>
+                            <el-button type="text" @click="deleteBonus(item.couponId)" style="color: red">删除</el-button>
                         </el-col>
                     </el-row>
                 </li>
@@ -33,6 +32,7 @@
                 <el-pagination
                     @current-change="currentChange"
                     :current-page="pageId"
+                    :page-size="pageSize"
                     :total="counts">
                 </el-pagination>
             </el-row>
@@ -93,8 +93,10 @@ export default {
             addDialog:false,
             addLoading:false,
             pageId: 1,
+            pageSize: 5,
             counts: 0,
             bonusList:'',
+            loading: true,
             addBonusForm:{
                 couponName:'',
                 pickUpType:'HAND',
@@ -219,9 +221,10 @@ export default {
         },
         //获取红包列表
         getBonusList: function(){
-            getBonusLists({params: {pageSize: 5,pageId:this.pageId}}).then(res => {
+            getBonusLists({params: {pageSize:this.pageSize,pageId:this.pageId}}).then(res => {
                 this.bonusList = res.list;
                 this.counts = res.count;
+                this.loading = false
             })
         },
         //删除红包

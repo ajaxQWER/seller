@@ -1,5 +1,5 @@
 <template>
-    <el-row>
+    <el-row v-loading="loading">
         <el-row class="bonusContentBox" v-if="noticeList.length>0">
             <ul class="bonusContent">
                 <li v-for="(item,index) in noticeList" :key="index" >
@@ -18,21 +18,6 @@
                         </el-col>
                     </el-row>
                 </li>
-                    <!--<li>-->
-                        <!--<el-row>-->
-                            <!--<el-col :span="2" class="orderImg">-->
-                                <!--<img src="../assets/images/acceptOrder.png" alt="">-->
-                            <!--</el-col>-->
-                            <!--<el-col :span="19">-->
-                                <!--<el-row><span class="orderName">已接单</span></el-row>-->
-                                <!--<el-row class="bonusNameBox"><span class="bonusName">2017-09-09 12:30</span></el-row>-->
-                                <!--<el-row>Lorem ipsum dolor sit amet.</el-row>-->
-                            <!--</el-col>-->
-                            <!--<el-col :span="3" class="operation">-->
-                                <!--<el-button type="text" class="deleteOrder">删除</el-button>-->
-                            <!--</el-col>-->
-                        <!--</el-row>-->
-                    <!--</li>-->
             </ul>
             <el-row class="PaginationBox">
                 <el-pagination
@@ -62,11 +47,13 @@ export default {
             counts: 0,
             canLoad: false,
             noticeList: [],
+            loading: true
         }
     },
     methods:{
         //分页
         currentChange(val) {
+            this.loading = true;
             this.pageId = val;
             this.getNoticeListData(val)
         },
@@ -75,6 +62,7 @@ export default {
                 this.noticeList = res.list;
                 console.log(res.list)
                 this.counts = res.count;
+                this.loading = false
             })
         },
         deleteNotice: function(noticeId) {

@@ -1,5 +1,5 @@
 <template>
-    <el-row>
+    <el-row v-loading="loading">
 		<el-row class="activityTitle">
 			<p class="activitySize">活动设置</p>
 			<p class="activityColor">活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置</p>
@@ -339,6 +339,7 @@ export default {
 	            return time.getTime() < Date.now() - 8.64e7;
 	          }
 	        },
+	        loading:true,
 	        goodsLists:[],
 	        goodsAdministration:false,
 	        isEmpty:false,
@@ -620,6 +621,7 @@ export default {
     		this.counts = res.count
     		if(res.count === 0){
     			this.isEmpty = true
+    			this.loading = false
     		}else{
     			this.isEmpty = false
     			let data = res.list
@@ -627,6 +629,7 @@ export default {
 	    		this.activityList = data.map((item) =>{
 	    			return {...item,...state}
 	    		})
+	    		this.loading = false
     		}
         },
         //删除店铺活动

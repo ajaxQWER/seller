@@ -1,5 +1,5 @@
 <template>
-    <el-row class="right_width">
+    <el-row class="right_width" v-loading="loading">
     	<el-form>
 			  <el-form-item label="营业状态">
 			  	<el-button type="success" class="button" @click="saveOperatingState">同意并保存</el-button>
@@ -126,6 +126,7 @@ export default {
   			}else{
   				this.automaticAcceptOrder = "手动接单"
   			}
+  			this.loading = false
   		})
   	},
     data() {
@@ -141,6 +142,7 @@ export default {
         	minDeliveryPrice:"",
         	canDrawInvoice:"",
         	automaticAcceptOrder:"",
+        	loading:true,
         	businessOptions:[{
         		label:"营业中",
         		value:"true"
