@@ -137,7 +137,12 @@
 				</el-row>
 			</div>
 			<el-col class="pagination">
-                <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout=" prev, pager, next, jumper" :total="counts">
+                <el-pagination 
+                	@current-change="currentChange" 
+                	:current-page="params.pageId" 
+                	:page-size="params.pageSize" 
+                	layout=" prev, pager, next, jumper" 
+                	:total="counts">
                 </el-pagination>
             </el-col>
 		</el-row>

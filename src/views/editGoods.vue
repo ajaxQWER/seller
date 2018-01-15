@@ -207,7 +207,7 @@
                         </div>
                     </el-dialog>
                     <el-row v-if="editGoodsForm.goodsPropertys">
-                        <el-row v-for="(item,index) in editGoodsForm.goodsPropertys" >
+                        <el-row v-for="(item,index) in editGoodsForm.goodsPropertys" :key="index">
                             <el-row class="standard-index">
                                 <el-col :span="20">
                                     属性{{index+1}}
