@@ -9,22 +9,22 @@
                 </el-col>
                 <el-col :span="12" :offset="1">
                     <el-row class="Reply">
-                        <el-row>
+                        <el-row class="replyProgress">
                             <el-col :span="7">
                                 <span class="replyText">近7天评价回复率：{{~~(appraiseTotal.reversionRate*100)>>0}}%</span>
                             </el-col>
                             <el-col :span="14">
-                                <el-progress :text-inside="true" :stroke-width="12" :percentage="reversionRate " class="Replyschedule"></el-progress>
+                                <el-progress :text-inside="true" :stroke-width="18" :percentage="reversionRate " class="Replyschedule"></el-progress>
                             </el-col>
                         </el-row>
-                            <el-row>
-                                <el-col :span="7">
-                                    <span class="replyText">近7天差评回复率：{{~~(appraiseTotal.reviewRate*100)>>0}}%</span>
-                                </el-col>
-                                <el-col :span="14">
-                                    <el-progress :text-inside="true" :stroke-width="12" :percentage="reviewRate " status="exception"></el-progress>
-                                </el-col>
-                            </el-row>
+                        <el-row class="replyProgress">
+                            <el-col :span="7">
+                                <span class="replyText">近7天差评回复率：{{~~(appraiseTotal.reviewRate*100)>>0}}%</span>
+                            </el-col>
+                            <el-col :span="14">
+                                <el-progress :text-inside="true" :stroke-width="18" :percentage="reviewRate " status="exception"></el-progress>
+                            </el-col>
+                        </el-row>
                     </el-row>
                 </el-col>
             </el-row>
@@ -430,5 +430,8 @@ export default {
     .empty{
         padding: 30px;
         text-align: center;
+    }
+    .replyProgress{
+        margin-top: 5px;
     }
 </style>

@@ -5,9 +5,9 @@
                 <el-col :span="18">
                     <el-tabs v-model="activeName" @tab-click="tabClick">
                         <el-tab-pane v-for="(tab, tabIndex) in tabs" :key="tabIndex" :label="tab.label" :name="tab.name" :value="tab.value"></el-tab-pane>
-                    </el-tabs>    
+                    </el-tabs>
                 </el-col>
-                
+
                 <el-col :span="6" class="searchOrder">
                     <el-col :span="20">
                         <el-input
@@ -77,7 +77,7 @@
                                 </td>
                                 <td v-if="item.orderType=='TAKEOUT'" >
                                     <el-row type="flex" justify="center">
-                                          <el-col :span="7">
+                                          <el-col>
                                         <el-button size="mini" type="success" @click="printOrderBtn(item.orderId)" >打印小票</el-button>
                                     </el-col>
                                     <el-col v-if="item.orderStatus=='PAYED'" :span="12">

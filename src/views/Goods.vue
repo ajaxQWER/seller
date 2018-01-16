@@ -98,8 +98,10 @@ export default {
                 pageSize:99999,
             }
             getGoodsCategoryLists({params:reqData}).then( res =>{
-                this.goodsCategoryId = res.list[0].goodsCategoryId
-                this.getGoodsListsData(res.list[0].goodsCategoryId)
+                if(res.list.length){
+                    this.goodsCategoryId = res.list[0].goodsCategoryId
+                    this.getGoodsListsData(res.list[0].goodsCategoryId)
+                }
                 this.goodsCategoryLists = res.list;
                 this.goodsCategoryLists.forEach(function(item,index){
                     item.isActiveItem = false;
@@ -236,7 +238,8 @@ export default {
     .activeType{
         background-color: #11c15b;
         color: white;
-        padding: 5px
+        padding: 5px;
+        border-radius: 5px;
 
     }
     .goodsImg>img{
