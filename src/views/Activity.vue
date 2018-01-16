@@ -2,7 +2,7 @@
     <el-row v-loading="loading">
 		<el-row class="activityTitle">
 			<p class="activitySize">活动设置</p>
-			<p class="activityColor">活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置活动设置</p>
+			<p class="activityColor"></p>
 		</el-row>
 		<el-button class="addButton" size="small" type="success" @click="showAddActivity">添加活动</el-button>
 		<el-row class="content" v-if="!isEmpty">
@@ -336,7 +336,7 @@ export default {
         return {
         	params:{
         		pageId:1,
-        		pageSize: 4,
+        		pageSize: 5,
         		// shopId:localStorage.getItem("shopId")
         	},
         	pickerOptions0: {
