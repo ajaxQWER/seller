@@ -72,13 +72,14 @@ export default {
     methods:{
         //搜索商品
         searchGoodsBtn(){
-            this.getGoodsListsData()
+            this.getGoodsListsData(this.goodsCategoryId)
         },
         changeType(index){
             this.type=index
         },
         //获取商品列表
         getGoodsListsData(goodsCategoryId){
+            var that  = this;
             this.loading = true
             var reqData={
                 pageSize: 999999,
@@ -86,11 +87,9 @@ export default {
                 goodsNameLike:this.searchGoods
             }
             getGoodsLists({params:reqData }).then( res =>{
-                if(res.count == 0){
-                    this.isEmpty = true
-                }
-                this.loading = false
-                this.goodsList = res.list;
+                that.isEmpty = res.list.length ? false : true
+                that.loading = false
+                that.goodsList = res.list;
             })
         },
         //获取商品title列表
@@ -99,8 +98,10 @@ export default {
                 pageSize:99999,
             }
             getGoodsCategoryLists({params:reqData}).then( res =>{
-                this.goodsCategoryId = res.list[0].goodsCategoryId
-                this.getGoodsListsData(res.list[0].goodsCategoryId)
+                if(res.list.length){
+                    this.goodsCategoryId = res.list[0].goodsCategoryId
+                    this.getGoodsListsData(res.list[0].goodsCategoryId)
+                }
                 this.goodsCategoryLists = res.list;
                 this.goodsCategoryLists.forEach(function(item,index){
                     item.isActiveItem = false;
@@ -204,7 +205,7 @@ export default {
         },
     },
     created(){
-        this.getGoodsListsData();
+        // this.getGoodsListsData(this.goodsCategoryId);
         this.getGoodsCategoryListsData()
     }
 }
@@ -233,6 +234,13 @@ export default {
     }
     .goodsContentText{
         padding: 10px;
+    }
+    .activeType{
+        background-color: #11c15b;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+
     }
     .goodsImg>img{
         width: 100px;

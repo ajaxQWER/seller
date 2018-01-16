@@ -56,7 +56,7 @@
                 </div>
             </el-col>
             <el-col :span="8" >
-                <div class="turnoverContainer Containermar ContainerK">
+                <div class="turnoverContainer Containermar ContainerK" @click="settleAccounts">
                     <ul class="turnover">
                         <li class="titleText">可用余额</li>
                         <li class="totalNum"><i class="fa fa-jpy"></i>{{formatMoney(shopSalesData.availableBalance) || 0}}</li>
