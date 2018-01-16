@@ -68,7 +68,7 @@
                 </div>
             </el-col>
         </el-row>
-        <el-row class="orderBox">
+        <el-row class="orderBox"  v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
             <ul class="orderContainer">
                 <li class="msgBox">
                     <!--<ul class="msg">-->
@@ -78,7 +78,18 @@
                         <!--</li>-->
                         <!--<li class="receiveOrder"><el-button  type="success" size="small">一键接单</el-button></li>-->
                     <!--</ul>-->
-                    <el-row style="margin-left: 20px;font-size: 16px">最新订单</el-row>
+                    <el-col style="margin-left: 18px;font-size: 16px" :span="18">全部订单</el-col>
+                    <el-col :span="5">
+                        <el-col :span="24">
+                            <el-input
+                                size="small"
+                                placeholder="搜索订单号"
+                                icon="search"
+                                v-model="orderSearchInput"
+                                :on-icon-click="searchIconClick">
+                            </el-input>
+                        </el-col>
+                    </el-col>
                 </li>
                 <li @click="changeClass(index)" :class=" activeIndex==index ? 'active' : ''" v-for="(item,index) in orderList" :key="index">
                     <el-row>
@@ -86,9 +97,10 @@
                             <el-col class="headPortrait" :span="9">
                                 <img src="../assets/images/default-avatar.png" alt="">
                             </el-col>
-                            <el-col :span="9" class="headerTitle">
+                            <el-col :span="15" class="headerTitle">
                                 <el-row>{{item.orderContact.contactName}}</el-row>
                                 <el-row class="address" ><span :title="item.orderContact.address">{{(item.orderContact.address).substr(item.orderContact.address,10)}}</span></el-row>
+                                <el-row class="orderNum">订单号：{{item.orderNum}}</el-row>
                             </el-col>
                         </el-col>
                         <el-col :span="10">
@@ -98,11 +110,19 @@
                             </el-col>
                         </el-col>
                         <el-col :span="4"class="phone">
-                            <i class="fa fa-phone">{{item.orderContact.contactPhone}}</i>
+                            <el-row type="flex" justify="center"><i class="fa fa-phone">{{item.orderContact.contactPhone}}</i></el-row>
+                            <el-row type="flex" justify="center" class="showDetail" @click.native="showOrderInfo(item,index)">查看详情</el-row>
                         </el-col>
                     </el-row>
                 </li>
             </ul>
+            <el-row class="PaginationBox">
+                <el-pagination
+                    @current-change="currentChange"
+                    :current-page="pageId"
+                    :total="counts">
+                </el-pagination>
+            </el-row>
         </el-row>
     </el-row>
 </template>
@@ -111,7 +131,10 @@
     export default {
         data: function () {
             return {
-                activeIndex: 1,
+                loading:false,
+                isEmpty:false,
+                orderSearchInput:null,
+                activeIndex: 0,
                 loginShopId: localStorage.getItem('shopId'),
                 loginUser: localStorage.getItem('shopName'),
                 shopSalesData: {
@@ -125,14 +148,17 @@
                 orderList: [],
                 pageSize: 5,
                 pageId: 1,
+                counts:0,
                 orderStatus: null,
-                Loading:false,
-                totalOrderCount:null
             }
         },
         methods: {
             changeClass(index) {
                 this.activeIndex = index
+            },
+            //搜索订单
+            searchIconClick(){
+                this.getOrderListData()
             },
             // 获取店铺实时统计
             getRealtimestatisticsData() {
@@ -157,17 +183,34 @@
                 }
                 return t.split("").reverse().join("") + "." + r;
             },
+            //分页
+            currentChange(val) {
+                this.pageId = val;
+                this.getOrderListData()
+            },
             // 新订单列表
            getOrderListData(){
-               this.Loading=true
-               getOrderList({ params: { pageSize: this.pageSize, pageId: this.pageId, orderStatus: this.orderStatus}}).then(res => {
-                   this.Loading=false
-                   this.orderList = res.list
+                this.loading = true
+               var params={
+                   pageSize: this.pageSize,
+                   pageId: this.pageId,
+                   orderStatus: this.orderStatus,
+                   orderNum: this.orderSearchInput
+                }
+               getOrderList({ params:params }).then(res => {
+                   this.isEmpty = res.list.length ? false : true
+                   this.orderList = res.list;
+                   this.loading = false;
                    console.log(res.list)
                    console.log(555)
-                   this.totalOrderCount = res.count
+                   this.counts = res.count
                })
            },
+            //查看订单详情
+            showOrderInfo: function(item, index) {
+                var orderId = item.orderId;
+                this.$router.push('/orderDetail?orderId=' + orderId)
+            },
             // 点击查看结算详情
             settleAccounts(){
                 this.$router.push('/settleAccountsDetail')
@@ -280,11 +323,6 @@
         padding-left: 10px;
         padding-top:22px;
     }
-    .msgnum{
-        font-size: 20px;
-        color: #13ce66;
-        font-weight: 800;
-    }
     .msg>li{
         display: inline-block;
         margin: 0;
@@ -330,5 +368,19 @@
     .img{
         width: 50px;
         height: 50px;
+    }
+    .PaginationBox{
+        margin-top: 10px;
+        text-align: right;
+        margin-bottom: 20px;
+    }
+    .showDetail{
+        color: #20a0ff;
+        margin-top: 5px;
+    }
+    .orderNum{
+        font-size: 12px;
+        margin-top: 2px;
+        color: #a0a0a0;
     }
 </style>

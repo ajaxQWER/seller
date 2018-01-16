@@ -23,15 +23,15 @@
         </el-row>
         <el-row class="dishType">
             <el-col :span="2" class="Type" ><span >商家分类：</span></el-col>
-            <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index"  >
+            <el-col :span="2" class="Type" v-for="(item,index) in goodsCategoryLists" :key="index">
                 <span @click="getGoodsById(item.goodsCategoryId,index)" :class="item.isActiveItem ? 'activeType' : '' ">{{item.goodsCategoryName}}</span>
             </el-col>
         </el-row>
         <el-row class="goodsContentBox" v-if="!isEmpty" v-loading="loading" element-loading-text="拼命加载中">
-            <el-col :span="8"  v-for="(item,index) in goodsList" :key="index" >
+            <el-col :span="8"  v-for="(item,index) in goodsList" :key="index">
                 <el-col :span="22" class="goodsContent">
                     <el-row class="chageBtn">
-                        <el-checkbox></el-checkbox>
+                        <!--<el-checkbox></el-checkbox>-->
                         <el-button type="text" @click="soldOut(item.goodsId,index,item.goodsStatus)" style="color: orange">{{formatStatus(item.goodsStatus)}}</el-button>
                         <router-link :to="'/editGoods?goodsId='+item.goodsId"><el-button type="text">编辑</el-button></router-link>
                         <el-button type="text" @click="deleteGoods(item.goodsId)" style="color: red">删除</el-button>
