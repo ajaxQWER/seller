@@ -100,6 +100,8 @@ export default {
                 if(res.list.length){
                     this.goodsCategoryId = res.list[0].goodsCategoryId
                     this.getGoodsListsData(res.list[0].goodsCategoryId)
+                }else{
+                    this.isEmpty = true
                 }
                 this.goodsCategoryLists = res.list;
                 this.goodsCategoryLists.forEach(function(item,index){
