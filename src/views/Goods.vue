@@ -79,7 +79,6 @@ export default {
         },
         //获取商品列表
         getGoodsListsData(goodsCategoryId){
-            var that  = this;
             this.loading = true
             var reqData={
                 pageSize: 999999,
@@ -87,9 +86,9 @@ export default {
                 goodsNameLike:this.searchGoods
             }
             getGoodsLists({params:reqData }).then( res =>{
-                that.isEmpty = res.list.length ? false : true
-                that.loading = false
-                that.goodsList = res.list;
+                this.isEmpty = res.list.length ? false : true
+                this.loading = false
+                this.goodsList = res.list;
             })
         },
         //获取商品title列表
