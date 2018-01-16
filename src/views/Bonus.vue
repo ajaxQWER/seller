@@ -309,6 +309,7 @@ export default {
     .empty{
         padding: 30px;
         text-align: center;
+        background-color: #fff
     }
     .PaginationBox{
         text-align: right;

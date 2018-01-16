@@ -15,7 +15,7 @@
                             <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(item,index) in shopList" :key="index" @click.native="changeShop(index)"><img :src="UPLOADURL + '/shopLogo/' + item.shopId + '.png/shopLogo.png'" alt="" width="30" height="30">{{item.shopName}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item,index) in shopList" :key="index" @click.native="changeShop(index)"><img class="head-img" :src="UPLOADURL + '/shopLogo/' + item.shopId + '.png/shopLogo.png'" alt="" width="30" height="30"><p class="shopName">{{item.shopName}}</p></el-dropdown-item>
                             <el-dropdown-item @click.native="updateSecretkey">修改密码</el-dropdown-item>
                             <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
@@ -347,7 +347,14 @@ export default {
     padding: 0;
     cursor: pointer;
 }
-    .iconFont{
-        padding-right: 5px;
-    }
+.iconFont{
+    padding-right: 5px;
+}
+.head-img{
+    border-radius:15px
+}
+.shopName{
+    margin: 0;
+    float: right;
+}
 </style>
