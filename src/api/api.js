@@ -344,11 +344,11 @@ export const setShopLogo = params => {
 };
 //自动接单
 export const autoReceiveOrder = () => {
-    return ajax.put('seller/shopDetail/automaticAcceptOrder');
+    return ajax.put('seller/shop/automaticAcceptOrder');
 };
 //手动接单
 export const handReceiveOrder = () => {
-    return ajax.delete('seller/shopDetail/automaticAcceptOrder');
+    return ajax.delete('seller/shop/automaticAcceptOrder');
 };
 
 

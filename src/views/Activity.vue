@@ -348,20 +348,20 @@ export default {
 	        goodsLists:[],
 	        goodsAdministration:false,
 	        isEmpty:false,
-	        typeName:"",
-	        couponCount:"",
-	        couponId:"",
-	        full:"",
-            beginTime: '',
-            endTime: '',
-            money:"",
-            activityName:"",
+	        typeName:null,
+	        couponCount:null,
+	        couponId:null,
+	        full:null,
+            beginTime: null,
+            endTime: null,
+            money:null,
+            activityName:null,
             activityObj:[{
             	full:null,
             	subtract:null
             }],
-	        activityId:"",
-	        state:"",
+	        activityId:null,
+	        state:null,
         	addDialog:false,
         	counts:0,
             activityList:[],
@@ -428,9 +428,7 @@ export default {
             specificActivity: {
             	activityContent: {
                 	typeName: "sharefood.models.activity.activity.entity.SpecificActivityData",
-                    content: {
-                    	activityName:""
-                    }
+                    content: ""
                 },
                 activityType: "SPECIFIC",
                 beginTime: null,
@@ -498,7 +496,7 @@ export default {
     			case 'FIRST':
     				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
     				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
-    				if(this.firstActivity.beginTime < this.firstActivity.endTime || !this.firstActivity.beginTime=="" && this.firstActivity.endTime == ""){
+    				if(this.firstActivity.beginTime < this.firstActivity.endTime || this.firstActivity.beginTime && !this.firstActivity.endTime){
     					await updateActivityDetails(item.activityId,this.firstActivity)
     					this.$message({
 		                    type: 'success',
@@ -512,9 +510,9 @@ export default {
     				}
     				break;
     			case 'DELGOLD':
-    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
-    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
-    				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime || !this.delgoldActivity.beginTime=="" && this.delgoldActivity.endTime == ""){
+    				this.delgoldActivity.beginTime = this.formatDate(this.delgoldActivity.beginTime)
+    				this.delgoldActivity.endTime = this.formatDate(this.delgoldActivity.endTime)
+    				if(this.delgoldActivity.beginTime < this.delgoldActivity.endTime || this.delgoldActivity.beginTime && !this.delgoldActivity.endTime){
     					await updateActivityDetails(item.activityId,this.delgoldActivity)
     					this.$message({
 		                    type: 'success',
@@ -528,9 +526,9 @@ export default {
     				}
     				break;
     			case 'COMPLIMENTARY':
-    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
-    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
-    				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime || !this.complimentaryActivity.beginTime=="" && this.complimentaryActivity.endTime == ""){
+    				this.complimentaryActivity.beginTime = this.formatDate(this.complimentaryActivity.beginTime)
+    				this.complimentaryActivity.endTime = this.formatDate(this.complimentaryActivity.endTime)
+    				if(this.complimentaryActivity.beginTime < this.complimentaryActivity.endTime || this.complimentaryActivity.beginTime && !this.complimentaryActivity.endTime){
     					await updateActivityDetails(item.activityId,this.complimentaryActivity)
     					this.$message({
 		                    type: 'success',
@@ -544,9 +542,9 @@ export default {
     				}
     				break;
     			case 'SALE':
-    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
-    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
-    				if(this.saleActivity.beginTime < this.saleActivity.endTime || !this.saleActivity.beginTime=="" && this.saleActivity.endTime == ""){
+    				this.complimentaryActivity.beginTime = this.formatDate(this.complimentaryActivity.beginTime)
+    				this.complimentaryActivity.endTime = this.formatDate(this.complimentaryActivity.endTime)
+    				if(this.saleActivity.beginTime < this.saleActivity.endTime || this.saleActivity.beginTime && !this.saleActivity.endTime){
     					await updateActivityDetails(item.activityId,this.saleActivity)
     					this.$message({
 		                    type: 'success',
@@ -560,9 +558,10 @@ export default {
     				}
     				break;
     			case 'SPECIFIC':
-    				this.firstActivity.beginTime = this.formatDate(this.firstActivity.beginTime)
-    				this.firstActivity.endTime = this.formatDate(this.firstActivity.endTime)
-    				if(this.specificActivity.beginTime < this.specificActivity.endTime || !this.specificActivity.beginTime=="" && this.specificActivity.endTime == ""){
+    				this.specificActivity.beginTime = this.formatDate(this.specificActivity.beginTime)
+    				this.specificActivity.endTime = this.formatDate(this.specificActivity.endTime)
+    				this.specificActivity.activityContent.content = this.specificActivity.activityName
+    				if(this.specificActivity.beginTime < this.specificActivity.endTime || this.specificActivity.beginTime && !this.specificActivity.endTime){
     					await updateActivityDetails(item.activityId,this.specificActivity)
     					this.$message({
 		                    type: 'success',

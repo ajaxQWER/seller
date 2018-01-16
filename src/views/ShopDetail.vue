@@ -59,20 +59,20 @@
 			  </el-form-item>
 			</el-form>
 			<p class="title">金额设置</p>
-			<el-form>
-			  <el-form-item label="配送最小金额">
-			  	<el-button type="success" class="button" @click="saveMinMoneyAddDrawInvoice">同意并保存</el-button>
-			    <el-input placeholder="请输入最小配送金额" v-model="minDeliveryPrice" class="input_width" auto-complete="off"></el-input>
-			  </el-form-item>
+			<el-form><!-- 
+			  <el-form-item label="配送最小金额"> -->
+			   <!--  <el-input placeholder="请输入最小配送金额" v-model="minDeliveryPrice" class="input_width" auto-complete="off"></el-input>
+			  </el-form-item> -->
 			  <el-form-item label="是否允许开票">
+			  	<el-button type="success" class="button" @click="saveMinMoneyAddDrawInvoice">同意并保存</el-button>
 			   	<el-select v-model="canDrawInvoice" placeholder="请选择是否允许开票" class="input_width">
 			   		<el-option label="是" value="true"></el-option>
 			      <el-option label="否" value="false"></el-option>
 			    </el-select>
 			  </el-form-item>
 			</el-form>
-			<p class="title">配送设置</p>
-			<el-form>
+			<!-- <p class="title">配送设置</p> -->
+			<!-- <el-form>
 			  <el-form-item label="配送方式">
 			    <el-select v-model="distributionType" placeholder="请选择配送方式" class="input_width" disabled>
 			      <el-option label="商家自行送至" value="SELF_DELIVERY_BY_MERCHANTS"></el-option>
@@ -83,7 +83,7 @@
 			    <span class="fontColor">更改配送方式，系统将再次审核~</span>
 			    <el-button type="success" class="button" disabled>同意并保存</el-button>
 			  </el-form-item>
-			</el-form>
+			</el-form> -->
 			<p class="title">接单设置</p>
 			<el-form>
 			  <el-form-item label="接单方式">
@@ -113,8 +113,8 @@ export default {
   			this.startTime = res.busBeginTime;
   			this.endTime = res.busEndTime;
   			this.shopType = res.shopType;
-  			this.distributionType = res.distributionType;
-  			this.minDeliveryPrice = res.minDeliveryPrice;
+  			// this.distributionType = res.distributionType;
+  			// this.minDeliveryPrice = res.minDeliveryPrice;
   			if(res.canDrawInvoice){
   				this.canDrawInvoice = "是"
   			}else{
@@ -202,12 +202,13 @@ export default {
       	}
       },
       async saveMinMoneyAddDrawInvoice(){
+      	var data;
       	if(this.canDrawInvoice == "true"){
-      		await openDrawInvoice()
+      		data = await openDrawInvoice()
       	}else if(this.canDrawInvoice == "false"){
-      		await closeDrawInvoice()
+      		data = await closeDrawInvoice()
       	}
-      	const data = await updateMinDeliveryPrice(this.minDeliveryPrice)
+      	// const data = await updateMinDeliveryPrice(this.minDeliveryPrice)
       	if(data){
       		this.$message({
             type: 'success',
