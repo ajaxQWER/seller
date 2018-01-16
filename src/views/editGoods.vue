@@ -361,20 +361,20 @@
                 console.log(1111)
                 //编辑
                 if (this.goodsId) {
-                    var reqData = {}
-                    reqData.info = this.editGoodsForm.goods
-                    reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList
-                    reqData.goodsPropertys = this.editGoodsForm.goodsPropertys
-                    reqData.updateSpecs = []
+                    let reqData = {};
+                    reqData.info = this.editGoodsForm.goods;
+                    reqData.goodsCategoryIdList = this.editGoodsForm.goodsCategoryIdList;
+                    reqData.goodsPropertys = this.editGoodsForm.goodsPropertys;
+                    reqData.updateSpecs = [];
                     this.editGoodsForm.goodsSpecifications.forEach(function(item){
                         if (item.goodsSpecificationId) {
                             reqData.updateSpecs.push(item);
                         }else{
                             this.editGoodsForm.addSpecs.push(item)
                         }
-                    })
-                    reqData.addSpecs = this.editGoodsForm.addSpecs //暂时写死，未开发
-                    reqData.deleteSpecIds = this.deleteStandardObj, //暂时写死，未开发
+                    });
+                    reqData.addSpecs = this.editGoodsForm.addSpecs ;//暂时写死，未开发
+                    reqData.deleteSpecIds = this.deleteStandardObj; //暂时写死，未开发
                     updateGoodsById(this.goodsId,reqData).then(() => {
                         this.$message.success("操作成功")
                         this.showData()
@@ -901,6 +901,7 @@
         border:none;
         border-radius: 5px;
         background:red;
+        color: white;
     }
 #demo .show {
   width: 146px;

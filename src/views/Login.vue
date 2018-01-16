@@ -62,13 +62,11 @@ export default {
                         code: this.ruleForm.code
                     };
                     userLogin(loginParams).then(data => {
-                        console.log(data)
-                        console.log(4444)
                         localStorage.setItem('seller', JSON.stringify(data.seller));
                         localStorage.setItem('sellerName', JSON.stringify(data.seller.sellerName));
                         localStorage.setItem('jwt', data.jwt);
-                        localStorage.setItem('shopId',data.seller.shopList[0].shopId)
-                        localStorage.setItem('shopName',data.seller.shopList[0].shopName)
+                        localStorage.setItem('shopId',data.seller.shopList[0].shopId);
+                        localStorage.setItem('shopName',data.seller.shopList[0].shopName);
                         this.$router.push({
                             path: '/index'
                         });

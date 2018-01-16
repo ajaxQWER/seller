@@ -31,7 +31,7 @@
                     <el-row >
                         <el-col :span="20">
                             <el-col class="headPortrait" :span="4">
-                                <img src="../assets/images/portrait.jpg" alt="">
+                                <img src="../assets/images/default-avatar.png" alt="">
                             </el-col>
                             <el-col :span="17" class="headerTitle">
                                 <el-row class="mar">{{item.orderContact.contactName}}</el-row>
@@ -50,62 +50,62 @@
                     <el-row class="mytable">
                         <table>
                             <thead>
-                            <tr>
-                                <th>商品</th>
-                                <th>数量</th>
-                                <th>单价</th>
-                                <th>实付金额</th>
-                                <th>订单类型</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
+                                <tr>
+                                    <th>商品</th>
+                                    <th>数量</th>
+                                    <th>单价</th>
+                                    <th>实付金额</th>
+                                    <th>订单类型</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr >
-                                <td>
-                                    <span class="dishes">{{item.orderName}}</span>
-                                    <!--<span class="dishes dishesRemark">【大份+微辣】</span>-->
-                                </td>
-                                <td>{{item.orderGoodsCount}}</td>
-                                <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
-                                <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
-                                <td>{{formatOrderType(item.orderType)}}</td>
-                                <td rowspan="2">
-                                    <el-row class="cancel" v-if="item.orderCancel.cancelType"><span class="dishes">{{formatCancelType(item.orderCancel.cancelType)}}</span></el-row>
-                                    <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''"> <span class="dishes">{{formatOrderStatus(item.orderStatus)}}</span></el-row>
-                                </td>
-                                <td v-if="item.orderType=='TAKEOUT'" >
-                                    <el-row type="flex" justify="space-around">
-                                          <el-col>
-                                             <el-button size="mini" type="success" @click="printOrderBtn(item.orderId)" >打印小票</el-button>
-                                        </el-col>
-                                        <el-col v-if="item.orderStatus=='PAYED'">
-                                            <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
-                                            <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="success" >&emsp;接单&emsp;</el-button>
-                                        </el-col>
-                                        <el-col v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
-                                            <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
-                                        </el-col>
-                                        <el-col v-if="item.orderStatus=='WAIT_PICKUP'">
-                                            <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
-                                        </el-col>
-                                        <el-col v-if="item.orderStatus=='PICKUPING'">
-                                            <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
-                                        </el-col>
-                                    </el-row>
-                                </td>
-                                <td v-else>
-                                     <el-row type="flex" justify="space-around">
-                                        <el-col class="inline-block" v-if="item.orderStatus=='PAYED'">
-                                            <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
-                                            <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="info">接单</el-button>
-                                        </el-col>
-                                        <el-col class="inline-block" v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
-                                            <button @click="finishOrder(item.orderId)" class="btn deal-btn" size="mini" type="info">&emsp;完成&emsp;</button>
-                                        </el-col>
-                                     </el-row>
-                                </td>
-                            </tr>
+                                <tr >
+                                    <td>
+                                        <span class="dishes">{{item.orderName}}</span>
+                                        <!--<span class="dishes dishesRemark">【大份+微辣】</span>-->
+                                    </td>
+                                    <td>{{item.orderGoodsCount}}</td>
+                                    <td class="moneyColor"><i class="fa fa-jpy"></i>{{item.orderPrice}}</td>
+                                    <td class="moneyColor" rowspan="2"><i class="fa fa-jpy"></i>{{item.orderGoodsPrice}}</td>
+                                    <td>{{formatOrderType(item.orderType)}}</td>
+                                    <td rowspan="2">
+                                        <el-row class="cancel" v-if="item.orderCancel.cancelType"><span class="dishes">{{formatCancelType(item.orderCancel.cancelType)}}</span></el-row>
+                                        <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''"> <span class="dishes">{{formatOrderStatus(item.orderStatus)}}</span></el-row>
+                                    </td>
+                                    <td v-if="item.orderType=='TAKEOUT'" >
+                                        <el-row type="flex" justify="space-around">
+                                              <el-col>
+                                                 <el-button size="mini" type="success" @click="printOrderBtn(item.orderId)" >打印小票</el-button>
+                                            </el-col>
+                                            <el-col v-if="item.orderStatus=='PAYED'">
+                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
+                                                <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="success" >&emsp;接单&emsp;</el-button>
+                                            </el-col>
+                                            <el-col v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
+                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                            </el-col>
+                                            <el-col v-if="item.orderStatus=='WAIT_PICKUP'">
+                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                            </el-col>
+                                            <el-col v-if="item.orderStatus=='PICKUPING'">
+                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                            </el-col>
+                                        </el-row>
+                                    </td>
+                                    <td v-else>
+                                         <el-row type="flex" justify="space-around">
+                                            <el-col class="inline-block" v-if="item.orderStatus=='PAYED'">
+                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
+                                                <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="info">接单</el-button>
+                                            </el-col>
+                                            <el-col class="inline-block" v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
+                                                <button @click="finishOrder(item.orderId)" class="btn deal-btn" size="mini" type="info">&emsp;完成&emsp;</button>
+                                            </el-col>
+                                         </el-row>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <el-row v-if="item.orderTakeout.carrierDriverName" style="margin-top: 10px">
@@ -128,14 +128,16 @@
         </el-row>
         <!--取消订单弹窗-->
         <el-dialog title="取消订单" :visible.sync="dialogFormVisible">
-            <el-form :model="cancelOrderForm">
-                <el-form-item label="取消理由" :label-width="80">
-                    <el-input v-model="cancelOrderForm.cancelContent" auto-complete="off"></el-input>
+            <el-form :model="cancelOrderForm" label-width="85px">
+                <el-form-item label="取消理由 :">
+                    <el-col :span="20">
+                        <el-input v-model="cancelOrderForm.cancelContent" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="cfmCancelOrder" :loading="cancelLoading">确 定</el-button>
+                <el-button @click="dialogFormVisible = false" size="small">取 消</el-button>
+                <el-button type="primary" @click="cfmCancelOrder" :loading="cancelLoading" size="small">确 定</el-button>
             </div>
         </el-dialog>
     </el-row>
@@ -148,6 +150,8 @@ export default {
             isEmpty: false, //判断是否有无数据
             loading:false,
             copy:false,
+            orderTimeBeginTime:'',
+            orderTimeEndTime:'',
             activeName: 'ALL',
             orderSearchInput:null,
             active: 'order_1',
@@ -181,6 +185,14 @@ export default {
         }
     },
     created: function() {
+        var today = Boolean(this.$route.query.today) || null;
+        if(today){
+            var now = new Date();
+            var start = now.setHours(0, 0, 0, 0);
+            var end = now.setHours(23, 59, 59, 999)
+            this.orderTimeBeginTime = start;
+            this.orderTimeEndTime = end;
+        }
         var pageId = parseInt(this.$route.query.pageId) || 1;
         var orderStatus = this.$route.query.orderStatus || null;
         this.pageId = pageId;
@@ -204,7 +216,9 @@ export default {
                 pageSize: 5,
                 pageId: this.pageId,
                 orderStatus: this.orderStatus,
-                orderNum: this.orderSearchInput
+                orderNum: this.orderSearchInput,
+                orderTimeBeginTime: this.orderTimeBeginTime,
+                orderTimeEndTime: this.orderTimeEndTime
             }
             getOrderList({ params: params}).then(res => {
                this.isEmpty = res.list.length ? false : true
@@ -294,9 +308,11 @@ export default {
                 cancelContent: this.cancelOrderForm.cancelContent,
                 orderId: this.orderId
             }
-            console.log(params)
             cancelOrderById(params).then(() => {
-                this.cancelLoading=false
+                this.cancelLoading = false;
+                this.cancelOrderForm = {
+                    cancelContent:'',
+                }
                 this.$message({
                     type: 'success',
                     message: '取消成功!'
@@ -333,9 +349,9 @@ export default {
                 })
             }
         },
-        // 补打订单
+        // 打印小票
         printOrderBtn(orderId){
-            this.$confirm('是否确认补打订单？', '提示', {
+            this.$confirm('是否确认打印小票？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'info'
@@ -345,12 +361,12 @@ export default {
                 })
                 this.$message({
                     type: 'success',
-                    message: '补打成功!'
+                    message: '打印成功!'
                 });
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消补打'
+                    message: '已取消打印'
                 });
             });
         }

@@ -154,7 +154,6 @@
                     vm.getSettlementListsData()
                 });
             }
-
     }
 
 </script>
@@ -228,7 +227,7 @@
         font-size: 10px;
     }
     .totalCount>span{
-        color: #13ce66;
+        color: red;
         text-align: center;
     }
     .active{
