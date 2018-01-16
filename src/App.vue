@@ -66,4 +66,9 @@ body {
 	display: inline-block;
 	float: left;
 }
+.required .el-form-item__label:before {
+  content: '*';
+  color: #ff4949;
+  margin-right: 4px;
+}
 </style>
