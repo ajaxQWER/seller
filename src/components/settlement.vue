@@ -173,7 +173,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .settlement {
     background-color: #ebebeb;
 }
