@@ -56,7 +56,7 @@
                                 </el-col>
                             </el-col>
                             <el-col :span="3" class="replyInfo">
-                                <el-row>{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
+                                <el-row class="appraiseTime">{{moment(item.appraiseTime).format('YYYY-MM-DD')}}</el-row>
                                 <el-row class="replyBtn"><el-button type="success" size="small" @click="clientReply(item.shopAppraiseId,index)">回复</el-button></el-row>
                             </el-col>
                         </el-row>
@@ -212,7 +212,7 @@ export default {
             console.log(params)
             console.log(5555)
             getShopAppraise({params:params}).then(res => {
-              this.isEmpty = res.list.length ? false : true
+                this.isEmpty = res.list.length ? false : true
                 this.loading=false
                 this.counts = res.count;
                 this.commentList = res.list
@@ -353,6 +353,7 @@ export default {
     }
     .replyInfo{
         float: right;
+        padding-left: 20px;
     }
     .clientRepalyContent{
         background-color: #f9f9f9;

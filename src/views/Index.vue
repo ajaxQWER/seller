@@ -8,11 +8,11 @@
                 <ul>
                     <li><h3>{{loginUser}}</h3></li>
                     <ul class="admin-shop-status" v-if="shopSalesData">
-                        <li class="status onBusiness">
-                            <img v-lazy="printerStatusImg" alt="" class="img">
-                        </li>
                         <li class="status">
                             <img v-lazy="shopStatusImg" alt="" class="img">
+                        </li>
+                        <li class="status onBusiness">
+                            <img v-lazy="printerStatusImg" alt="" class="img">
                         </li>
                     </ul>
                 </ul>
