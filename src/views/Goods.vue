@@ -2,9 +2,9 @@
     <el-row class="bgColor">
         <el-row class="goodsHeader">
             <el-col :span="16">
-                <el-col :span="3" >全部商品</el-col>
-                <el-col :span="3">已上架</el-col>
-                <el-col :span="3">已下架</el-col>
+                <el-col :span="3" @click.native="changeGoodsStatus('')" :class="activeStatus == ''?'activeStatus' : '' " >全部商品</el-col>
+                <el-col :span="3" @click.native="changeGoodsStatus('PUTAWAY')" :class="activeStatus == 'PUTAWAY'?'activeStatus' : '' ">已上架</el-col>
+                <el-col :span="3" @click.native="changeGoodsStatus('SOLD_OUT')" :class="activeStatus == 'SOLD_OUT'?'activeStatus' : '' ">已下架</el-col>
             </el-col>
             <el-col :span="8">
                 <el-col :span="16">
@@ -17,7 +17,7 @@
                     </el-input>
                 </el-col>
                 <el-col :span="2" style="text-align: center"><i class="i-icon i-icon-shanchu"></i></el-col>
-                <el-col :span="4">回收站</el-col>
+                <el-col :span="4"  @click.native="changeGoodsStatus('DELETE')" :class="activeStatus == 'DELETE'?'activeStatus' : '' ">回收站</el-col>
             </el-col>
         </el-row>
         <el-row class="goods-content">
@@ -29,10 +29,14 @@
             </el-col>
             <el-col class="goods-details-lists" :span="21">
                 <el-row>
-                    <el-col :span="18" :offset="1"><h4>猪排饭</h4></el-col>
-                    <el-col :span="5" style="margin-top: 15px">
-                        <el-button  size="small" @click="batchShelves">批量下架</el-button>
-                        <router-link :to="'/editGoods'"><el-button size="small" type="success">添加商品</el-button></router-link>
+                    <el-col :span="11" :offset="1"><h4>猪排饭</h4></el-col>
+                    <el-col :span="12" style="margin-top: 15px">
+                        <el-button  size="small" :disabled="!hasSoldOut" @click="batchShelves(0)">批量上架</el-button>
+                        <el-button  size="small" :disabled="!hasPutAway" @click="batchShelves(1)">批量下架</el-button> 
+                        <el-button size="small" type="success" style="color: white;text-decoration: none">
+                            <router-link :to="'/editGoods'">添加商品</router-link>
+                        </el-button>
+                        <el-button  size="small" :disabled="multipleSelection.length<=0" @click="batchDelete()">批量删除</el-button> 
                     </el-col>
                 </el-row>
                 <el-row class="mytable">
@@ -71,6 +75,7 @@
                         :data="goodsList"
                         tooltip-effect="dark"
                         style="width: 100%"
+                        @selection-change="handleSelectionChange"
                         >
                         <el-table-column
                             type="selection"
@@ -113,11 +118,15 @@
                             fixed="right"
                             label="操作"
                            >
-                            <template slot-scope="scope">
-                                <el-button type="text" @click="soldOut(scope.row.goodsId,scope.$index,scope.row.goodsStatus)" style="color: orange">{{formatStatus(scope.row.goodsStatus)}}</el-button>
-                                <router-link :to="'/editGoods?goodsId='+scope.row.goodsId"><el-button type="text">编辑</el-button></router-link>
-                                <el-button type="text" @click="deleteGoods(scope.row.goodsId)" style="color: red">删除</el-button>
+                            <template slot-scope="scope" >
+                                <el-col v-if="scope.row.goodsStatus!='DELETE'">
+                                    <el-button type="text" @click="soldOut(scope.row.goodsId,scope.$index,scope.row.goodsStatus)" style="color: orange">{{formatStatus(scope.row.goodsStatus)}}</el-button>
+                                    <router-link :to="'/editGoods?goodsId='+scope.row.goodsId"><el-button type="text">编辑</el-button></router-link>
+                                    <el-button type="text"  @click="deleteGoodsByIds(scope.row.goodsId)" style="color: red">删除</el-button>
+                                </el-col>
+                                <el-col v-else style="color:gray">已删除</el-col>
                             </template>
+
                         </el-table-column>
                     </el-table>
                 </el-row>
@@ -126,12 +135,13 @@
     </el-row>
 </template>
 <script>
-import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods} from '@/api/api';
+import {getGoodsCategoryLists,getGoodsLists,deleteGoodsById,soldOutGoods,putAwayGoods,batchDelGoods} from '@/api/api';
 const cityOptions = ['上海', '北京', '广州', '深圳'];
 export default {
     data: function() {
         return {
-            checkAll: false,
+            activeStatus:'',//当前选中商品状态
+            multipleSelection:[], //多选结果 
             isEmpty: false, //判断是否有无数据
             loading:false,
             searchGoods:'',
@@ -160,11 +170,11 @@ export default {
             var reqData={
                 pageSize: 999999,
                 goodsClassId: goodsCategoryId,
-                goodsNameLike:this.searchGoods
+                goodsNameLike:this.searchGoods,
+                goodsStatus:this.activeStatus
             }
             getGoodsLists({params:reqData }).then( res =>{
-                console.log(res)
-                console.log(9999)
+
                 this.isEmpty = res.list.length ? false : true
                 this.loading = false
                 this.goodsList = res.list;
@@ -176,8 +186,7 @@ export default {
                 pageSize:99999,
             }
             getGoodsCategoryLists({params:reqData}).then( res =>{
-                console.log(res)
-                console.log(666)
+            
                 if(res.length){
                     this.goodsCategoryId = res[0].goodsCategoryId
                     this.getGoodsListsData(res[0].goodsCategoryId)
@@ -199,6 +208,8 @@ export default {
                     return '下架';
                 case 'SOLD_OUT':
                     return '上架';
+                  // case 'DELETE':
+                  //   return '删除';    
             }
         },
         getGoodsById(goodsCategoryId,index){
@@ -265,7 +276,7 @@ export default {
             });
         },
         //删除商品
-        deleteGoods(id){
+        deleteGoodsByIds(id){
             this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -285,23 +296,92 @@ export default {
                 });
             });
         },
-        handleCheckAllChange(val){
-            this.checkedCities = val ? cityOptions : [];
-            this.isIndeterminate = false;
+        /** 
+        * 改变展示商品状态
+        */
+        changeGoodsStatus : function(status){
+            this.activeStatus = status;
+            this.getGoodsListsData(this.goodsCategoryId)
         },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      /*
+      *  批量上架或者下架，isPutAway ：0 批量上架，1批量下架
+      */
+      batchShelves :function(isPutAway){
 
-        handleCheckedCitiesChange(value) {
-            let checkedCount = value.length;
-            this.checkAll = checkedCount === this.cities.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-        },
-        batchShelves(){
+        var putAwayList = [];
+        var soldOutList = [];
+        this.multipleSelection.forEach((item)=>{
+            if (item.goodsStatus == "PUTAWAY") {
+                putAwayList.push(item.goodsId);
+            }else  if (item.goodsStatus == "SOLD_OUT") {
+                soldOutList.push(item.goodsId);
+            }
+        })
 
+        if (isPutAway == 0) { //批量上架
+            putAwayGoods(soldOutList).then( ()=>{
+                this.$message({
+                    type: 'success',
+                    message: '批量上架成功!'
+                });
+                this.getGoodsListsData(this.goodsCategoryId)
+            })
+        }else{
+            soldOutGoods(putAwayList).then( ()=>{
+                this.$message({
+                    type: 'success',
+                    message: '批量下架成功!'
+                });
+                this.getGoodsListsData(this.goodsCategoryId)
+            })
         }
+      },
+      // 批量删除
+      batchDelete : function(){
+            let  DeteteList = [];
+            var that = this;
+           this.multipleSelection.forEach((item)=>{
+                DeteteList.push(item.goodsId);
+            })
+           console.log(222);
+           batchDelGoods(DeteteList).then( ()=>{
+                that.$message({
+                    type: 'success',
+                    message: '批量删除成功!'
+                });
+                that.getGoodsListsData(that.goodsCategoryId)
+            })
+      }
+
     },
     created(){
         // this.getGoodsListsData(this.goodsCategoryId);
         this.getGoodsCategoryListsData()
+    },
+    computed:{
+
+        hasSoldOut : function (){ //计算是否选中有上架商品
+            let isSoldOut = false;
+            this.multipleSelection.forEach((item)=>{
+                if (item.goodsStatus == "SOLD_OUT") {
+                    isSoldOut = true
+                }
+            })
+            return isSoldOut
+        },
+        hasPutAway :function (){//计算是否选中有下架商品
+            let isPutAway = false;
+            this.multipleSelection.forEach((item)=>{
+                if (item.goodsStatus == "PUTAWAY") {
+                    isPutAway = true
+                }
+            })
+            return isPutAway
+        }
+
     }
 }
 </script>
@@ -357,6 +437,9 @@ export default {
         padding-left: 30px;
         padding-bottom: 20px;
 
+    }
+    .activeStatus{
+        color: green;
     }
     .mytable table
     {
