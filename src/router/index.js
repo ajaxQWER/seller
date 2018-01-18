@@ -103,16 +103,18 @@ let routes = [{
     children: [
         { path: '/activity', component: Activity, name: '门店活动' },
     ]
-},{
-    path: '/',
-    component: Home,
-    name: '',
-    leaf: true, //只有一个节点
-    iconCls: 'i-icon i-icon-fenleishangpin',
-    children: [
-        { path: '/goodsCategory', component: GoodsCategory, name: '商品分类' },
-    ]
-}, {
+},
+// {
+//     path: '/',
+//     component: Home,
+//     name: '',
+//     leaf: true, //只有一个节点
+//     iconCls: 'i-icon i-icon-fenleishangpin',
+//     children: [
+//         { path: '/goodsCategory', component: GoodsCategory, name: '商品分类' },
+//     ]
+// }, 
+{
     path: '/',
     component: Home,
     name: '',

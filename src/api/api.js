@@ -142,8 +142,8 @@ export const updateBonusById = (params) => {
 
 
 //查询商品分类列表
-export const getGoodsCategory = params => {
-    return ajax.get('/seller/goodsCategory', params);
+export const getGoodsCategory = () => {
+    return ajax.get('/seller/goodsCategory');
 }
 
 //添加商品分类
@@ -154,6 +154,18 @@ export const addGoodsCategory = params => {
 export const deleteGoodsCategoryById = goodsCategoryId => {
     return ajax.delete('/seller/goodsCategory/' + goodsCategoryId);
 }
+//编辑商品分类
+export const updateGoodsCategoryById = params => {
+    return ajax.post('seller/goodsCategory/' + params.goodsCategoryId , params);
+};
+//编辑商品分类排序
+export const updateGoodsCategorySortOeder = params => {
+    return ajax.post('seller/goodsCategory/sortOrder/' + params.goodsCategoryId + "/" + params.sortOrder);
+};
+//获取商品分类详情
+export const getGoodsCategoryDetail = goodsCategoryId => {
+    return ajax.get('seller/goodsCategory/' + goodsCategoryId);
+};
 //商品分类
 export const getGoodsCategoryLists = params => {
     return ajax.get('seller/goodsCategory', params);
@@ -186,14 +198,7 @@ export const updateGoodsById = (goodsId,params) => {
 export const addGoods = params => {
     return ajax.put('seller/goods', params);
 };
-//编辑商品分类
-export const updateGoodsCategoryById = params => {
-    return ajax.post('seller/goodsCategory/' + params.goodsCategoryId , params);
-};
-//获取商品分类详情
-export const getGoodsCategoryDetail = goodsCategoryId => {
-    return ajax.get('seller/goodsCategory/' + goodsCategoryId);
-};
+
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);
@@ -320,6 +325,13 @@ export const saveShopBaseInfo = params => {
 export const getShopBaseInfo = params => {
     return ajax.get('seller/openStore', params);
 };
+//商家位置信息
+export const getShopDistributionInfo = params => {
+    return ajax.get('seller//openStore/distribution')
+}
+export const saveShopDistributionInfo = params => {
+    return ajax.put('seller//openStore/distribution', params)
+}
 //商家资质信息
 export const saveShopQualificationInfo = params => {
     return ajax.put('seller/openStore/qualificationInfo', params);
