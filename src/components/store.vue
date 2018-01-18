@@ -2,7 +2,7 @@
     <div class="store">
         <el-row class="row store-content">
             <el-form :model="store" ref="store" label-width="100px">
-                <el-form-item label="配送信息" class="required">
+                <!-- <el-form-item label="配送信息" class="required">
                     <el-radio-group v-model="store.distributionType">
                         <el-radio class="radio" label="ANUBIS" value="ANUBIS">蜂鸟配送</el-radio>
                         <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS" value="SELF_DELIVERY_BY_MERCHANTS">商家自送</el-radio>
@@ -12,7 +12,7 @@
                         配送距离 <el-input class="small-input fee" v-model="store.distributionScope" placeholder="配送距离"></el-input>米
                         配送费 <el-input class="small-input fee" v-model="store.fee" placeholder="配送费"></el-input>元
                       </span>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="店铺位置" class="required">
                     <el-select ref="province" v-model.number="store.provinceId" filterable placeholder="省" prop="type" @change="selectCity">
                         <el-option v-for="item in provinceList" :key="item.provinceId" :label="item.provinceName" :value="item.provinceId">
@@ -101,7 +101,7 @@ export default {
                 shopInnerUrl: null,
                 shopName: null,
                 shopType: null,
-                distributionType: 'ANUBIS',
+                // distributionType: 'ANUBIS',
                 takeOutPhone: null,
                 subjectDocument: null,
                 regNumber: null
@@ -277,73 +277,6 @@ export default {
             })
         },
         showStore: function() {
-            if(!this.store.shopName){
-                this.$message({
-                    type: 'error',
-                    message: '请输入店铺名称'
-                })
-                return;
-            }
-            if(!this.store.takeOutPhone){
-                this.$message({
-                    type: 'error',
-                    message: '请输入联系电话'
-                })
-                return;
-            }
-            if(!this.store.name){
-                this.$message({
-                    type: 'error',
-                    message: '联系人姓名'
-                })
-                return;
-            }
-            if(!this.store.shopCategoryIdList.length){
-                this.$message({
-                    type: 'error',
-                    message: '请选择店铺分类'
-                })
-                return;
-            }
-            if (this.isAllDay == 'true') {
-                this.store.busBeginTime = '00:00:00';
-                this.store.busEndTime = '23:59:59';
-            }else{
-                this.store.busBeginTime = this.beginHour + ':' + this.beginMin;
-                this.store.busEndTime = this.endHour + ':' + this.endMin;
-            }
-            if(!this.store.busBeginTime){
-                this.$message({
-                    type: 'error',
-                    message: '请输营业开始时间'
-                })
-                return;
-            }
-            if(!this.store.busEndTime){
-                this.$message({
-                    type: 'error',
-                    message: '请输营业结束时间'
-                })
-                return;
-            }
-            if (this.addShop && !this.store.subjectDocument) {
-                this.$message({
-                    type: 'error',
-                    message: '请选择主体资质类型'
-                })
-                return;
-            }
-            if (this.addShop && !this.store.regNumber) {
-                this.$message({
-                    type: 'error',
-                    message: '请输入主体资质注册号'
-                })
-                return;
-            }
-            if(!this.addShop){
-                delete this.store.subjectDocument;
-                delete this.store.regNumber;
-            }
             if(this.store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS' && this.store.distributionScope == 0){
                 this.$message({
                     type: 'error',
@@ -472,7 +405,7 @@ export default {
                     shopInnerUrl: res.detail.shopInnerUrl || null,
                     shopName: res.detail.shopName || null,
                     shopType: res.detail.shopType,
-                    distributionType: res.detail.distributionType,
+                    // distributionType: res.detail.distributionType,
                     takeOutPhone: res.detail.takeOutPhone || null
                 }
                 this.logo = res.detail.logoUrl ? this.UPLOADURL + res.detail.logoUrl : null
@@ -499,7 +432,8 @@ export default {
 
 .store-content {
     background-color: #fff;
-    padding: 0 50px;
+    padding: 40px 50px;
+    min-height: 650px;
 }
 
 .fee {

@@ -9,15 +9,17 @@
             </el-form-item>
         </el-form>
         <el-table :data="getGoodsCategoryList" stripe style="width: 100%">
+            <el-table-column prop="goodsCategoryId" label="分类id">
+            </el-table-column>
             <el-table-column prop="goodsCategoryName" label="分类名称">
             </el-table-column>
-            <el-table-column prop="sortOrder" label="排序">
-            </el-table-column>
+            <!-- <el-table-column prop="sortOrder" label="排序">
+            </el-table-column> -->
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button size="small" @click="updateGoodsCategory(scope.$index,scope.row)">编辑</el-button>
+                    <el-button size="small" @click="updateGoodsCategory(scope.$index,scope.row)">编辑分类</el-button>
+                    <el-button size="small" type="primary" @click="updateGoodsCategorySortOeders(scope.$index,scope.row)">编辑排序</el-button>
                     <el-button size="small" type="danger" @click="deleteGoodsCategory(scope.$index,scope.row)">删除</el-button>
-                    <el-button size="small" type="primary" @click="getDetail(scope.$index,scope.row)" disabled>查看详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -26,30 +28,38 @@
             </el-pagination>
         </el-row>
         <el-dialog :title="'编辑商品分类'" :visible.sync="addDialog" size="tiny" @close="closeAddDialog" class="dialog">
-		        <el-form :model="updateGoodsCategorys" label-width="120px">
-		            <el-form-item label="分类名称">
-		                <el-input v-model="updateGoodsCategorys.goodsCategoryName" ></el-input>
-		            </el-form-item>
-		            <el-form-item label="排序">
-		                <el-input v-model="updateGoodsCategorys.sortOrder" ></el-input>
-		            </el-form-item>
-		        </el-form>
-		        <div slot="footer" class="dialog-footer">
-		            <el-button @click="closeAddDialog">取 消</el-button>
-		            <el-button type="primary" @click="updateGoods" >确 定</el-button>
-		        </div>
-		    </el-dialog>
+	        <el-form :model="updateGoodsCategorys" label-width="120px">
+	            <el-form-item label="分类名称">
+	                <el-input v-model="updateGoodsCategorys.goodsCategoryName" ></el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="closeAddDialog">取 消</el-button>
+	            <el-button type="primary" @click="updateGoods" >确 定</el-button>
+	        </div>
+	    </el-dialog>
+        <el-dialog :title="'编辑商品分类排序'" :visible.sync="updateDialog" size="tiny" @close="closeUpdateDialog" class="dialog">
+            <el-form :model="GoodsCategorySortOeder" label-width="120px">
+                <el-form-item label="排序">
+                    <el-input v-model="GoodsCategorySortOeder.sortOrder" ></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeUpdateDialog">取 消</el-button>
+                <el-button type="primary" @click="saveGoodsCategorySortOeder" >确 定</el-button>
+            </div>
+        </el-dialog>
     </el-row>
 </template>
 <script>
-import { getGoodsCategory, addGoodsCategory, deleteGoodsCategoryById , updateGoodsCategoryById , getGoodsCategoryDetail} from "../api/api.js"
+import { getGoodsCategory, addGoodsCategory, deleteGoodsCategoryById , updateGoodsCategoryById , getGoodsCategoryDetail , updateGoodsCategorySortOeder} from "../api/api.js"
 export default {
     created() {
         this.getGoodsCategorys()
     },
     data: function() {
         return {
-            loading:true,
+            loading:false,
             params: {
                 pageId: 1,
                 pageSize: 15
@@ -57,22 +67,36 @@ export default {
             updateGoodsCategorys:{
             	 goodsCategoryId: 0,
 				 goodsCategoryName: "",
-				 sortOrder: 0
+            },
+            GoodsCategorySortOeder:{
+                sortOrder:null,
+                goodsCategoryId:0,
             },
             counts: 0,
             addDialog: false,
             addLoading: false,
+            updateDialog:false,
             goodsCategoryName: null,
             getGoodsCategoryList: [],
         }
     },
     methods: {
-		//详情
-		getDetail(index,row){
-			getGoodsCategoryDetail(row.goodsCategoryId).then(data =>{
-				console.log(data)
-			})
+        closeUpdateDialog(){
+            this.getGoodsCategorys()
+            this.updateDialog = false
+        },
+		//修改商品分类排序
+		updateGoodsCategorySortOeders(index,row){
+            this.GoodsCategorySortOeder.goodsCategoryId = row.goodsCategoryId
+            this.updateDialog = true
 		},
+        saveGoodsCategorySortOeder(){
+            console.log(this.GoodsCategorySortOeder)
+            this.GoodsCategorySortOeder.sortOrder = parseInt(this.GoodsCategorySortOeder.sortOrder)
+            updateGoodsCategorySortOeder(this.GoodsCategorySortOeder).then(data =>{
+                console.log(data)
+            })
+        },
 		updateGoods(){
 			updateGoodsCategoryById(this.updateGoodsCategorys).then(data =>{
 				this.addDialog = false
@@ -98,10 +122,10 @@ export default {
         },
         //获取商品分类列表
         getGoodsCategorys() {
-            getGoodsCategory({ params: this.params }).then(data => {
-                // console.log(data)
-                this.getGoodsCategoryList = data.list
-                this.counts = data.count
+            getGoodsCategory().then(data => {
+                console.log(data)
+                this.getGoodsCategoryList = data
+                this.counts = data.length
                 this.loading = false
             })
         },

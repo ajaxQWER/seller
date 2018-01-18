@@ -64,25 +64,25 @@
                         <el-radio class="radio" label="RESERVE_TAKEOUT">预定加外卖</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="主体资质" class="required" v-if="addShop">
+                <!-- <el-form-item label="主体资质" class="required" v-if="addShop">
                     <el-select v-model="store.subjectDocument" placeholder="请选择主体资质类型" class="select">
                         <el-option v-for="(item,index) in subjectDocumentList" :key="index" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="注册号" class="required" v-if="addShop">
-                    <!-- <div class="modal-input"> -->
+                    <div class="modal-input">
                         <el-input class="small-item" v-model="store.regNumber" placeholder="请输入主体资质注册号"></el-input>
-                    <!-- </div> -->
-                </el-form-item>
+                    </div>
+                </el-form-item> -->
+                <el-button  class="saveBase" type="primary" size="large" @click="showStore">保存</el-button>
             </el-form>
         </el-row>
     </div>
 </template>
 <script>
-import { shopCategoryList, saveShopBaseInfo, getShopBaseInfo, addShopBaseInfo } from '@/api/api'
+import { shopCategoryList, saveShopBaseInfo, getShopBaseInfo } from '@/api/api'
 export default {
-    name: 'baseMsg',
     data() {
         return {
             store: {
@@ -106,7 +106,7 @@ export default {
                 shopInnerUrl: null,
                 shopName: null,
                 shopType: null,
-                distributionType: 'ANUBIS',
+                // distributionType: 'ANUBIS',
                 takeOutPhone: null,
                 subjectDocument: null,
                 regNumber: null
@@ -136,10 +136,87 @@ export default {
                 label: '其他',
                 value: 'OTHER'
             }],
-            addShop: true
+            // addShop: true
         };
     },
     methods: {
+        back: function () {
+            this.$router.back()
+        },
+        showStore: function() {
+            if(!this.store.shopName){
+                this.$message({
+                    type: 'error',
+                    message: '请输入店铺名称'
+                })
+                return;
+            }
+            if(!this.store.takeOutPhone){
+                this.$message({
+                    type: 'error',
+                    message: '请输入联系电话'
+                })
+                return;
+            }
+            if(!this.store.name){
+                this.$message({
+                    type: 'error',
+                    message: '联系人姓名'
+                })
+                return;
+            }
+            if(!this.store.shopCategoryIdList.length){
+                this.$message({
+                    type: 'error',
+                    message: '请选择店铺分类'
+                })
+                return;
+            }
+            if (this.isAllDay == 'true') {
+                this.store.busBeginTime = '00:00:00';
+                this.store.busEndTime = '23:59:59';
+            }else{
+                this.store.busBeginTime = this.beginHour + ':' + this.beginMin;
+                this.store.busEndTime = this.endHour + ':' + this.endMin;
+            }
+            if(!this.store.busBeginTime){
+                this.$message({
+                    type: 'error',
+                    message: '请输营业开始时间'
+                })
+                return;
+            }
+            if(!this.store.busEndTime){
+                this.$message({
+                    type: 'error',
+                    message: '请输营业结束时间'
+                })
+                return;
+            }
+            // if (this.addShop && !this.store.subjectDocument) {
+            //     this.$message({
+            //         type: 'error',
+            //         message: '请选择主体资质类型'
+            //     })
+            //     return;
+            // }
+            // if (this.addShop && !this.store.regNumber) {
+            //     this.$message({
+            //         type: 'error',
+            //         message: '请输入主体资质注册号'
+            //     })
+            //     return;
+            // }
+            // if(!this.addShop){
+            //     delete this.store.subjectDocument;
+            //     delete this.store.regNumber;
+            // }
+            console.log(this.store)
+            // return
+            saveShopBaseInfo(this.store).then(res => {
+                console.log(res)
+            })
+        },
         isAllDayChange: function(val){
             if (val == 'true') {
                 this.store.busBeginTime = '00:00';
@@ -166,7 +243,7 @@ export default {
         }
         if(shopId){
             this.shopId = shopId;
-            this.addShop = false;
+            // this.addShop = false;
             getShopBaseInfo().then(res => {
                 console.log(res)
                 this.store = {
@@ -187,7 +264,7 @@ export default {
                     shopInnerUrl: res.detail.shopInnerUrl || null,
                     shopName: res.detail.shopName || null,
                     shopType: res.detail.shopType,
-                    distributionType: res.detail.distributionType,
+                    // distributionType: res.detail.distributionType,
                     takeOutPhone: res.detail.takeOutPhone || null
                 }
                 if (res.detail.busBeginTime.slice(0,5) == '00:00' && res.detail.busEndTime.slice(0,5) == '23:59') {
@@ -214,7 +291,8 @@ export default {
 
 .store-content {
     background-color: #fff;
-    padding: 40px 50px 0;
+    padding: 40px 50px;
+    min-height: 650px;
 }
 
 .fee {

@@ -2,29 +2,36 @@
     <div class="store">
         <el-tabs v-model="activeName" @tab-click="tabClick">
             <el-tab-pane label="基本信息" name="0">
-                <BaseMsg></BaseMsg>
+                <BaseMessage></BaseMessage>
+            </el-tab-pane>
+            <el-tab-pane label="配送信息" name="1">
+                <DistributionMessage></DistributionMessage>
+            </el-tab-pane>
+            <el-tab-pane label="位置信息" name="2">
                 <Store></Store>
             </el-tab-pane>
-            <el-tab-pane label="资质信息" name="1">
+            <el-tab-pane label="资质信息" name="3">
                 <Qualification></Qualification>
             </el-tab-pane>
-            <el-tab-pane label="结算信息" name="2">
+            <el-tab-pane label="结算信息" name="4">
                 <Settlement></Settlement>
             </el-tab-pane>
-        </el-tabs>
+        </el-tabs> 
     </div>
 </template>
 <script>
-    import BaseMsg from '../components/baseMsg.vue'
+    import BaseMessage from '../components/baseMessage.vue'
     import Qualification from '../components/qualification.vue'
     import Store from '../components/store.vue'
     import Settlement from '../components/settlement.vue'
+    import DistributionMessage from '../components/distributionMessage.vue'
     export default {
         components:{
-            BaseMsg,
+            BaseMessage,
             Store,
             Qualification,
-            Settlement
+            Settlement,
+            DistributionMessage
         },
         data(){
             return{
