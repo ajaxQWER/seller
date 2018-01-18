@@ -75,22 +75,24 @@
                                         <el-row class="status" :class="item.orderStatus=='CANCELLATION'?'cancel':''"> <span class="dishes">{{formatOrderStatus(item.orderStatus)}}</span></el-row>
                                     </td>
                                     <td v-if="item.orderType=='TAKEOUT'" >
-                                        <el-row type="flex" justify="space-around">
-                                              <el-col>
-                                                 <el-button size="mini" type="success" @click="printOrderBtn(item.orderId)" >打印小票</el-button>
+                                        <el-row type="flex" justify="center">
+                                            <el-col :span="6">
+                                                <el-button size="mini" type="success" @click="printOrderBtn(item.orderId)" >打印小票</el-button>
                                             </el-col>
-                                            <el-col v-if="item.orderStatus=='PAYED'">
-                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
-                                                <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="success" >&emsp;接单&emsp;</el-button>
-                                            </el-col>
-                                            <el-col v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
-                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
-                                            </el-col>
-                                            <el-col v-if="item.orderStatus=='WAIT_PICKUP'">
-                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
-                                            </el-col>
-                                            <el-col v-if="item.orderStatus=='PICKUPING'">
-                                                <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                            <el-col :span="10">
+                                                <el-col v-if="item.orderStatus=='PAYED'">
+                                                    <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >拒绝接单</el-button>
+                                                    <el-button @click="acceptOrder(item.orderId,item.orderType)" size="mini" type="success" >&emsp;接单&emsp;</el-button>
+                                                </el-col>
+                                                <el-col v-if="item.orderStatus=='MERCHANT_CONFIRM_RECEIPT'">
+                                                    <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                                </el-col>
+                                                <el-col v-if="item.orderStatus=='WAIT_PICKUP'">
+                                                    <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                                </el-col>
+                                                <el-col v-if="item.orderStatus=='PICKUPING'">
+                                                    <el-button @click="cancelOrder(item.orderId)" size="mini" type="danger" >取消订单</el-button>
+                                                </el-col>
                                             </el-col>
                                         </el-row>
                                     </td>
