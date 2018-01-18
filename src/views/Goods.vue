@@ -97,13 +97,15 @@ export default {
                 pageSize:99999,
             }
             getGoodsCategoryLists({params:reqData}).then( res =>{
-                if(res.list.length){
-                    this.goodsCategoryId = res.list[0].goodsCategoryId
-                    this.getGoodsListsData(res.list[0].goodsCategoryId)
+                console.log(res)
+                console.log(666)
+                if(res.length){
+                    this.goodsCategoryId = res[0].goodsCategoryId
+                    this.getGoodsListsData(res[0].goodsCategoryId)
                 }else{
                     this.isEmpty = true
                 }
-                this.goodsCategoryLists = res.list;
+                this.goodsCategoryLists = res;
                 this.goodsCategoryLists.forEach(function(item,index){
                     item.isActiveItem = false;
                     if(index == 0){
