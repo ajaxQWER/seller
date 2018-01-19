@@ -17,8 +17,8 @@ const Setting = r => require.ensure([],() => r(require('../views/Setting.vue')),
 const Notice = r => require.ensure([],() => r(require('../views/Notice.vue')), 'Notice'); //通知中心
 const Bonus = r => require.ensure([],() => r(require('../views/Bonus.vue')), 'Bonus'); //红包设置
 const Printer = r => require.ensure([],() => r(require('../views/Printer.vue')), 'Printer'); //打印机设置
-const aptitude = r => require.ensure([],() => r(require('../views/aptitude.vue')), 'aptitude '); //资质
-const SettlementList = r => require.ensure([],() => r(require('../views/SettlementList.vue')), 'aptitude '); //对账单
+const aptitude = r => require.ensure([],() => r(require('../views/aptitude.vue')), 'aptitude'); //资质
+const SettlementList = r => require.ensure([],() => r(require('../views/SettlementList.vue')), 'SettlementList'); //对账单
 let routes = [{
     path: '/login',
     component: Login,

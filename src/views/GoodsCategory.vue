@@ -91,10 +91,10 @@ export default {
             this.updateDialog = true
 		},
         saveGoodsCategorySortOeder(){
-            console.log(this.GoodsCategorySortOeder)
             this.GoodsCategorySortOeder.sortOrder = parseInt(this.GoodsCategorySortOeder.sortOrder)
             updateGoodsCategorySortOeder(this.GoodsCategorySortOeder).then(data =>{
                 console.log(data)
+                this.updateDialog = false
             })
         },
 		updateGoods(){

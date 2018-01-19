@@ -1,55 +1,55 @@
 <template>
     <div class="store">
         <el-row class="row store-content">
-            <el-form :model="store" ref="store" label-width="100px">
+            <el-form :model="baseMessage.store" ref="store" label-width="100px">
                 <el-form-item class="normal-item required" label="店铺名称">
-                    <el-input v-model="store.shopName"></el-input>
+                    <el-input v-model="baseMessage.store.shopName"></el-input>
                 </el-form-item>
                 <el-form-item class="small-item required" label="联系电话">
-                    <el-input v-model.number="store.takeOutPhone" :maxlength="11"></el-input>
+                    <el-input v-model.number="baseMessage.store.takeOutPhone" :maxlength="11"></el-input>
                 </el-form-item>
                 <el-form-item class="small-item required" label="联系人姓名">
-                    <el-input v-model="store.name"></el-input>
+                    <el-input v-model="baseMessage.store.name"></el-input>
                 </el-form-item>
                 <el-form-item label="店铺分类" class="required">
-                    <el-select class="normal-item" v-model="store.shopCategoryIdList" multiple :multiple-limit="5" placeholder="请选择店铺分类">
-                        <el-option v-for="item in shopCategory" :key="item.shopCategoryId" :label="item.shopCategoryName" :value="item.shopCategoryId"></el-option>
+                    <el-select class="normal-item" v-model="baseMessage.store.shopCategoryIdList" multiple :multiple-limit="5" placeholder="请选择店铺分类">
+                        <el-option v-for="item in baseMessage.shopCategory" :key="item.shopCategoryId" :label="item.shopCategoryName" :value="item.shopCategoryId"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="营业时间" class="required">
-                    <el-radio class="radio" v-model="isAllDay" label="true">全天</el-radio>
-                    <el-radio class="radio" v-model="isAllDay" label="false">自定义</el-radio>
-                    <div class="inline-block" v-if="isAllDay=='false'">
+                    <el-radio class="radio" v-model="baseMessage.isAllDay" label="true">全天</el-radio>
+                    <el-radio class="radio" v-model="baseMessage.isAllDay" label="false">自定义</el-radio>
+                    <div class="inline-block" v-if="baseMessage.isAllDay=='false'">
                         <span>营业开始时间
                         </span>
-                        <el-select v-model="beginHour" placeholder="小时" filterable :clearable="true" class="time-select">
+                        <el-select v-model="baseMessage.beginHour" placeholder="小时" filterable :clearable="true" class="time-select">
                             <el-option
-                                  v-for="(item,index) in timeStartArr"
+                                  v-for="(item,index) in baseMessage.timeStartArr"
                                   :key="index"
                                   :label="item"
                                   :value="item">
                                 </el-option>
                         </el-select>
-                        <el-select v-model="beginMin" placeholder="分钟" filterable :clearable="true" class="time-select">
+                        <el-select v-model="baseMessage.beginMin" placeholder="分钟" filterable :clearable="true" class="time-select">
                             <el-option
-                              v-for="(item,index) in timeEndArr"
+                              v-for="(item,index) in baseMessage.timeEndArr"
                               :key="index"
                               :label="item"
                               :value="item">
                             </el-option>
                         </el-select>-
                         <span>营业结束时间</span>
-                        <el-select v-model="endHour" placeholder="小时" filterable :clearable="true" class="time-select">
+                        <el-select v-model="baseMessage.endHour" placeholder="小时" filterable :clearable="true" class="time-select">
                             <el-option
-                                  v-for="(item,index) in timeStartArr"
+                                  v-for="(item,index) in baseMessage.timeStartArr"
                                   :key="index"
                                   :label="item"
                                   :value="item">
                                 </el-option>
                         </el-select>
-                        <el-select v-model="endMin" placeholder="分钟" filterable :clearable="true" class="time-select">
+                        <el-select v-model="baseMessage.endMin" placeholder="分钟" filterable :clearable="true" class="time-select">
                             <el-option
-                              v-for="(item,index) in timeEndArr"
+                              v-for="(item,index) in baseMessage.timeEndArr"
                               :key="index"
                               :label="item"
                               :value="item">
@@ -58,23 +58,12 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="店铺类型" class="required">
-                    <el-radio-group v-model="store.shopType">
+                    <el-radio-group v-model="baseMessage.store.shopType">
                         <el-radio class="radio" label="RESERVE">预定</el-radio>
                         <el-radio class="radio" label="TAKEOUT">外卖</el-radio>
                         <el-radio class="radio" label="RESERVE_TAKEOUT">预定加外卖</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <!-- <el-form-item label="主体资质" class="required" v-if="addShop">
-                    <el-select v-model="store.subjectDocument" placeholder="请选择主体资质类型" class="select">
-                        <el-option v-for="(item,index) in subjectDocumentList" :key="index" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="注册号" class="required" v-if="addShop">
-                    <div class="modal-input">
-                        <el-input class="small-item" v-model="store.regNumber" placeholder="请输入主体资质注册号"></el-input>
-                    </div>
-                </el-form-item> -->
                 <el-button  class="saveBase" type="primary" size="large" @click="showStore">保存</el-button>
             </el-form>
         </el-row>
@@ -83,203 +72,86 @@
 <script>
 import { shopCategoryList, saveShopBaseInfo, getShopBaseInfo } from '@/api/api'
 export default {
-    data() {
-        return {
-            store: {
-                address: null,
-                areaId: null,
-                areaName: null,
-                busBeginTime: null,
-                busEndTime: null,
-                cityId: null,
-                cityName: null,
-                fee: null,
-                distributionScope: null,
-                latitude: 0,
-                logoUrl: null,
-                longitude: 0,
-                name: null,
-                provinceId: null,
-                provinceName: null,
-                shopCategoryIdList: [],
-                shopFaceUrl: null,
-                shopInnerUrl: null,
-                shopName: null,
-                shopType: null,
-                // distributionType: 'ANUBIS',
-                takeOutPhone: null,
-                subjectDocument: null,
-                regNumber: null
-            },
-            beginHour: '',
-            beginMin: '',
-            endHour: '',
-            endMin: '',
-            shopId: null,
-            isAllDay: 'true',
-            timeStartArr: [],
-            timeEndArr: [],
-            shopCategory: [],
-            subjectDocumentList: [{
-                label: '营业执照',
-                value: 'BUSINESS_LICENSE'
-            }, {
-                label: '事业单位法人证书',
-                value: 'LEGAL_PERSON_CERTIFICATE_OF_INSTITUTION'
-            }, {
-                label: '民办非企业单位登记证书',
-                value: 'REGISTRATION_CERTIFICATE_OF_PRIVATE_NON_ENTERPRISE_UNITS'
-            }, {
-                label: '社会团体法人登记证书',
-                value: 'SOCIAL_ORGANIZATION_LEGAL_PERSON_REGISTRATION_CERTIFICATE'
-            }, {
-                label: '其他',
-                value: 'OTHER'
-            }],
-            // addShop: true
-        };
-    },
+    props:["baseMessage"],
     methods: {
-        back: function () {
-            this.$router.back()
+        showStore() {
+            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                if(!this.baseMessage.store.shopName){
+                    this.$message({
+                        type: 'error',
+                        message: '请输入店铺名称'
+                    })
+                    return;
+                    }
+                    if(!this.baseMessage.store.takeOutPhone){
+                        this.$message({
+                            type: 'error',
+                            message: '请输入联系电话'
+                        })
+                        return;
+                    }
+                    if(!this.baseMessage.store.name){
+                        this.$message({
+                            type: 'error',
+                            message: '联系人姓名'
+                        })
+                        return;
+                    }
+                    if(!this.baseMessage.store.shopCategoryIdList.length){
+                        this.$message({
+                            type: 'error',
+                            message: '请选择店铺分类'
+                        })
+                        return;
+                    }
+                    if (this.isAllDay == 'true') {
+                        this.baseMessage.store.busBeginTime = '00:00:00';
+                        this.baseMessage.store.busEndTime = '23:59:59';
+                    }else{
+                        this.baseMessage.store.busBeginTime = this.beginHour + ':' + this.beginMin;
+                        this.baseMessage.store.busEndTime = this.endHour + ':' + this.endMin;
+                    }
+                    if(!this.baseMessage.store.busBeginTime){
+                        this.$message({
+                            type: 'error',
+                            message: '请输营业开始时间'
+                        })
+                        return;
+                    }
+                    if(!this.baseMessage.store.busEndTime){
+                        this.$message({
+                            type: 'error',
+                            message: '请输营业结束时间'
+                        })
+                        return;
+                    }
+                    saveShopBaseInfo(this.baseMessage.store).then(res => {
+                        this.$message({
+                            type: 'success',
+                            message: '保存成功!'
+                        });
+                    })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消保存'
+                });          
+            }); 
         },
-        showStore: function() {
-            if(!this.store.shopName){
-                this.$message({
-                    type: 'error',
-                    message: '请输入店铺名称'
-                })
-                return;
-            }
-            if(!this.store.takeOutPhone){
-                this.$message({
-                    type: 'error',
-                    message: '请输入联系电话'
-                })
-                return;
-            }
-            if(!this.store.name){
-                this.$message({
-                    type: 'error',
-                    message: '联系人姓名'
-                })
-                return;
-            }
-            if(!this.store.shopCategoryIdList.length){
-                this.$message({
-                    type: 'error',
-                    message: '请选择店铺分类'
-                })
-                return;
-            }
-            if (this.isAllDay == 'true') {
-                this.store.busBeginTime = '00:00:00';
-                this.store.busEndTime = '23:59:59';
-            }else{
-                this.store.busBeginTime = this.beginHour + ':' + this.beginMin;
-                this.store.busEndTime = this.endHour + ':' + this.endMin;
-            }
-            if(!this.store.busBeginTime){
-                this.$message({
-                    type: 'error',
-                    message: '请输营业开始时间'
-                })
-                return;
-            }
-            if(!this.store.busEndTime){
-                this.$message({
-                    type: 'error',
-                    message: '请输营业结束时间'
-                })
-                return;
-            }
-            // if (this.addShop && !this.store.subjectDocument) {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请选择主体资质类型'
-            //     })
-            //     return;
-            // }
-            // if (this.addShop && !this.store.regNumber) {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请输入主体资质注册号'
-            //     })
-            //     return;
-            // }
-            // if(!this.addShop){
-            //     delete this.store.subjectDocument;
-            //     delete this.store.regNumber;
-            // }
-            console.log(this.store)
-            // return
-            saveShopBaseInfo(this.store).then(res => {
-                console.log(res)
-            })
-        },
+
         isAllDayChange: function(val){
             if (val == 'true') {
-                this.store.busBeginTime = '00:00';
-                this.store.busEndTime = '23:59';
+                this.baseMessage.store.busBeginTime = '00:00';
+                this.baseMessage.store.busEndTime = '23:59';
             }else{
-                this.store.busBeginTime = null;
-                this.store.busEndTime = null;
+                this.baseMessage.store.busBeginTime = null;
+                this.baseMessage.store.busEndTime = null;
             }
-        }
-    },
-    created: function() {
-        var shopId = localStorage.getItem('shopId');
-
-        shopCategoryList().then(res => {
-            console.log(res)
-            this.shopCategory = res.list;
-        })
-
-        for(var i = 0; i < 24; i++){
-            this.timeStartArr.push(i<10?'0'+i:i)
-        }
-        for(var i = 0; i < 60; i++){
-            this.timeEndArr.push(i<10?'0'+i:i)
-        }
-        if(shopId){
-            this.shopId = shopId;
-            // this.addShop = false;
-            getShopBaseInfo().then(res => {
-                console.log(res)
-                this.store = {
-                    address: res.detail.address || null,
-                    areaId: res.detail.areaId || null,
-                    busBeginTime: res.detail.busBeginTime.slice(0,5) || null,
-                    busEndTime: res.detail.busEndTime.slice(0,5) || null,
-                    cityId: res.detail.cityId || null,
-                    fee: res.detail.fee || 0,
-                    distributionScope: res.detail.distributionScope || 0,
-                    latitude: res.detail.latitude || 0,
-                    logoUrl: res.detail.logoUrl || null,
-                    longitude: res.detail.longitude || 0,
-                    name: res.detail.name || null,
-                    provinceId: res.detail.provinceId || null,
-                    shopCategoryIdList: res.shopCategoryIdList || [],
-                    shopFaceUrl: res.detail.shopFaceUrl || null,
-                    shopInnerUrl: res.detail.shopInnerUrl || null,
-                    shopName: res.detail.shopName || null,
-                    shopType: res.detail.shopType,
-                    // distributionType: res.detail.distributionType,
-                    takeOutPhone: res.detail.takeOutPhone || null
-                }
-                if (res.detail.busBeginTime.slice(0,5) == '00:00' && res.detail.busEndTime.slice(0,5) == '23:59') {
-                    this.isAllDay = 'true';
-                } else {
-                    this.isAllDay = 'false';
-                }
-                var beginTime = res.detail.busBeginTime.slice(0,5).split(':');
-                var endTime = res.detail.busEndTime.slice(0,5).split(':');
-                this.beginHour = beginTime[0];
-                this.beginMin = beginTime[1];
-                this.endHour = endTime[0];
-                this.endMin = endTime[1];
-            })
-        }
+        }    
     }
 }
 

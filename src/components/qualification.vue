@@ -162,44 +162,44 @@
 <script>
 import { saveShopQualificationInfo, getShopQualificationInfo, uploadFiles } from '@/api/api'
 export default {
-    name: 'qualification',
+    props:["qualification"],
     data() {
         return {
-            qualification: {
-                document: {
-                    documentNum: "",
-                    documentType: "",
-                    fullFacePhotoUrl: "",
-                    handFullFacePhotoUrl: "",
-                    readyName: "",
-                    reverseSideAsUrl: "",
-                    attachmentUrl: null
-                },
-                industry: {
-                    beginTime: '',
-                    endTime: '',
-                    foodUrl: "",
-                    intelligence: null,
-                    legal: "",
-                    licenseAddress: "",
-                    licenseNumber: "",
-                    longTerm: true,
-                    unitName: "",
-                    attachmentUrl: null
-                },
-                subject: {
-                    beginTime: '',
-                    businessUrl: '',
-                    endTime: "",
-                    legal: "",
-                    longTerm: true,
-                    regAddress: "",
-                    regNumber: "",
-                    subjectDocument: "",
-                    unitName: "",
-                    attachmentUrl: null
-                }
-            },
+            // qualification: {
+            //     document: {
+            //         documentNum: "",
+            //         documentType: "",
+            //         fullFacePhotoUrl: "",
+            //         handFullFacePhotoUrl: "",
+            //         readyName: "",
+            //         reverseSideAsUrl: "",
+            //         attachmentUrl: null
+            //     },
+            //     industry: {
+            //         beginTime: '',
+            //         endTime: '',
+            //         foodUrl: "",
+            //         intelligence: null,
+            //         legal: "",
+            //         licenseAddress: "",
+            //         licenseNumber: "",
+            //         longTerm: true,
+            //         unitName: "",
+            //         attachmentUrl: null
+            //     },
+            //     subject: {
+            //         beginTime: '',
+            //         businessUrl: '',
+            //         endTime: "",
+            //         legal: "",
+            //         longTerm: true,
+            //         regAddress: "",
+            //         regNumber: "",
+            //         subjectDocument: "",
+            //         unitName: "",
+            //         attachmentUrl: null
+            //     }
+            // },
             licenseObj: [{
                 label: '身份证',
                 value: 'ID_CARD'
@@ -263,9 +263,6 @@ export default {
         }
     },
     methods: {
-        back: function () {
-            this.$router.back()
-        },
         //上传身份证正面照
         uploadFullFacePhotoUrl: function(e) {
             var file = e.raw;
@@ -380,223 +377,130 @@ export default {
             this.qualification.industry.endTime = this.moment(time).format('YYYY-MM-DD')
         },
         submitQualification: function() {
-            // console.log(this.qualification.subject.longTerm)
-            // return
-            if (this.qualification.document.documentType == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请选择证件类型'
-                })
-                return;
-            }
-            if (this.qualification.document.readyName == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入真实姓名'
-                })
-                return;
-            }
-            if (this.qualification.document.documentNum == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入证件号码'
-                })
-                return;
-            }
-            if (this.qualification.document.fullFacePhotoUrl == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请上传证件正面照'
-                })
-                return;
-            }
-            if (this.qualification.document.reverseSideAsUrl == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请上传证件反面照'
-                })
-                return;
-            }
-            if (this.qualification.document.handFullFacePhotoUrl == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请上传手持证件照'
-                })
-                return;
-            }
-            if (this.qualification.subject.subjectDocument == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请选择主体资质'
-                })
-                return;
-            }
-            if (this.qualification.subject.unitName == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入单位名称'
-                })
-                return;
-            }
-            if (this.qualification.subject.legal == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入法定代表人'
-                })
-                return;
-            }
-            if (this.qualification.subject.regNumber == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入注册号'
-                })
-                return;
-            }
-            if (this.qualification.subject.regAddress == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请输入注册地址'
-                })
-                return;
-            }
-            if (this.qualification.subject.longTerm) {
-                delete this.qualification.subject.beginTime;
-                delete this.qualification.subject.endTime;
-            } else {
-                console.log(this.qualification.subject.beginTime)
-                if (!this.qualification.subject.beginTime) {
+            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                if (this.qualification.document.documentType == '') {
                     this.$message({
                         type: 'error',
-                        message: '请选择证件生效日期'
+                        message: '请选择证件类型'
                     })
                     return;
                 }
-                if (!this.qualification.subject.endTime) {
+                if (this.qualification.document.readyName == '') {
                     this.$message({
                         type: 'error',
-                        message: '请选择证件失效日期'
+                        message: '请输入真实姓名'
                     })
                     return;
                 }
-            }
-            if (this.qualification.subject.businessUrl == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请上传主体资质照片'
+                if (this.qualification.document.documentNum == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入证件号码'
+                    })
+                    return;
+                }
+                if (this.qualification.document.fullFacePhotoUrl == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传证件正面照'
+                    })
+                    return;
+                }
+                if (this.qualification.document.reverseSideAsUrl == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传证件反面照'
+                    })
+                    return;
+                }
+                if (this.qualification.document.handFullFacePhotoUrl == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传手持证件照'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.subjectDocument == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请选择主体资质'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.unitName == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入单位名称'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.legal == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入法定代表人'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.regNumber == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入注册号'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.regAddress == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入注册地址'
+                    })
+                    return;
+                }
+                if (this.qualification.subject.longTerm) {
+                    delete this.qualification.subject.beginTime;
+                    delete this.qualification.subject.endTime;
+                } else {
+                    console.log(this.qualification.subject.beginTime)
+                    if (!this.qualification.subject.beginTime) {
+                        this.$message({
+                            type: 'error',
+                            message: '请选择证件生效日期'
+                        })
+                        return;
+                    }
+                    if (!this.qualification.subject.endTime) {
+                        this.$message({
+                            type: 'error',
+                            message: '请选择证件失效日期'
+                        })
+                        return;
+                    }
+                }
+                if (this.qualification.subject.businessUrl == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传主体资质照片'
+                    })
+                    return;
+                }
+                console.log(this.qualification)
+                saveShopQualificationInfo(this.qualification).then(res => {
+                    this.$message({
+                        type: 'success',
+                        message: '保存成功!'
+                    });
                 })
-                return;
-            }
-            // if (this.qualification.industry.intelligence == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请选择行业资质'
-            //     })
-            //     return;
-            // }
-            // if (this.qualification.industry.unitName == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请输入单位名称'
-            //     })
-            //     return;
-            // }
-            // if (this.qualification.industry.legal == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请输入法定代表人'
-            //     })
-            //     return;
-            // }
-            // if (this.qualification.industry.licenseNumber == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请输入许可证编号'
-            //     })
-            //     return;
-            // }
-            // if (this.qualification.industry.licenseAddress == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请输入许可证地址'
-            //     })
-            //     return;
-            // }
-            // if (this.qualification.industry.longTerm) {
-            //     delete this.qualification.industry.beginTime;
-            //     delete this.qualification.industry.endTime;
-            // }else{
-            //     if(!this.qualification.industry.beginTime){
-            //         this.$message({
-            //             type: 'error',
-            //             message: '请选择许可证生效日期'
-            //         })
-            //         return;
-            //     }
-            //     if(!this.qualification.industry.endTime){
-            //         this.$message({
-            //             type: 'error',
-            //             message: '请选择许可证失效日期'
-            //         })
-            //         return;
-            //     }
-            // }
-            // if (this.qualification.industry.foodUrl == '') {
-            //     this.$message({
-            //         type: 'error',
-            //         message: '请上传行业资质照片'
-            //     })
-            //     return;
-            // }
-            console.log(this.qualification)
-            saveShopQualificationInfo(this.qualification).then(res => {
-                console.log(res)
+            }).catch(() =>{
+                this.$message({
+                    type: 'info',
+                    message: '已取消保存'
+                }); 
             })
         }
     },
-    created: function() {
-        getShopQualificationInfo().then(res => {
-            console.log(res)
-            if (res.document) {
-                this.qualification.document = {
-                    documentNum: res.document.documentNum || '',
-                    documentType: res.document.documentType || '',
-                    fullFacePhotoUrl: res.document.fullFacePhotoUrl || '',
-                    handFullFacePhotoUrl: res.document.handFullFacePhotoUrl || '',
-                    readyName: res.document.readyName || '',
-                    reverseSideAsUrl: res.document.reverseSideAsUrl || '',
-                    attachmentUrl: res.document.attachmentUrl || null,
-                }
-            }
-            if (res.industry) {
-                this.qualification.industry = {
-                    beginTime: res.industry.beginTime || '',
-                    endTime: res.industry.endTime || '',
-                    foodUrl: res.industry.foodUrl || '',
-                    intelligence: res.industry.intelligence || null,
-                    legal: res.industry.legal || '',
-                    licenseAddress: res.industry.licenseAddress || '',
-                    licenseNumber: res.industry.licenseNumber || '',
-                    longTerm: res.industry.longTerm || true,
-                    unitName: res.industry.unitName || '',
-                    attachmentUrl: res.industry.attachmentUrl || null,
-                }
-            }
-            if (res.subject) {
-                this.qualification.subject = {
-                    beginTime: res.subject.beginTime || '',
-                    businessUrl: res.subject.businessUrl || '',
-                    endTime: res.subject.endTime || '',
-                    legal: res.subject.legal || '',
-                    longTerm: res.subject.longTerm || true,
-                    regAddress: res.subject.regAddress || '',
-                    regNumber: res.subject.regNumber || '',
-                    subjectDocument: res.subject.subjectDocument || '',
-                    unitName: res.subject.unitName || '',
-                    attachmentUrl: res.subject.attachmentUrl || null,
-                }
-            }
-        })
-    }
 }
 
 </script>

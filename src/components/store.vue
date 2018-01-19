@@ -1,41 +1,30 @@
 <template>
     <div class="store">
         <el-row class="row store-content">
-            <el-form :model="store" ref="store" label-width="100px">
-                <!-- <el-form-item label="配送信息" class="required">
-                    <el-radio-group v-model="store.distributionType">
-                        <el-radio class="radio" label="ANUBIS" value="ANUBIS">蜂鸟配送</el-radio>
-                        <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS" value="SELF_DELIVERY_BY_MERCHANTS">商家自送</el-radio>
-                        <el-radio class="radio" label="ARES" value="ARES">蜂鹰配送</el-radio>
-                    </el-radio-group>
-                    <span v-if="store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS'">
-                        配送距离 <el-input class="small-input fee" v-model="store.distributionScope" placeholder="配送距离"></el-input>米
-                        配送费 <el-input class="small-input fee" v-model="store.fee" placeholder="配送费"></el-input>元
-                      </span>
-                </el-form-item> -->
+            <el-form :model="store.store" ref="store" label-width="100px">
                 <el-form-item label="店铺位置" class="required">
-                    <el-select ref="province" v-model.number="store.provinceId" filterable placeholder="省" prop="type" @change="selectCity">
-                        <el-option v-for="item in provinceList" :key="item.provinceId" :label="item.provinceName" :value="item.provinceId">
+                    <el-select ref="province" v-model.number="store.store.provinceId" filterable placeholder="省" prop="type" @change="selectCity">
+                        <el-option v-for="item in store.provinceList" :key="item.provinceId" :label="item.provinceName" :value="item.provinceId">
                         </el-option>
                     </el-select>
-                    <el-select ref="city" v-model.number="store.cityId" filterable placeholder="市" prop="type" @change="selectDistrict">
-                        <el-option v-for="item in cityList" :key="item.cityId" :label="item.cityName" :value="item.cityId">
+                    <el-select ref="city" v-model.number="store.store.cityId" filterable placeholder="市" prop="type" @change="selectDistrict">
+                        <el-option v-for="item in store.cityList" :key="item.cityId" :label="item.cityName" :value="item.cityId">
                         </el-option>
                     </el-select>
-                    <el-select v-model.number="store.areaId" filterable placeholder="区/县" prop="type" ref="district">
-                        <el-option v-for="item in districtList" :key="item.areaId" :label="item.areaName" :value="item.areaId">
+                    <el-select v-model.number="store.store.areaId" filterable placeholder="区/县" prop="type" ref="district">
+                        <el-option v-for="item in store.districtList" :key="item.areaId" :label="item.areaName" :value="item.areaId">
                         </el-option>
                     </el-select>
                     <el-button type="primary" @click="position">定位</el-button>
                 </el-form-item>
                 <el-form-item label="详细地址" class="required">
-                    <el-input class="detail-input inline-block" v-model="store.address" placeholder="详细至街道和门牌号"></el-input>
+                    <el-input class="detail-input inline-block" v-model="store.store.address" placeholder="详细至街道和门牌号"></el-input>
                     <el-button class="inline-block" type="primary" @click="searchKeywords">搜索</el-button>
                 </el-form-item>
                 <el-form-item>
                     <div class="amap-container">
-                        <el-amap ref="amap" vid="amapDemo" :plugin="plugin" class="amap" :zoom="zoom" :center="mapCenter" :events="events">
-                            <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
+                        <el-amap ref="amap" vid="amapDemo" :plugin="store.plugin" class="amap" :zoom="store.zoom" :center="store.mapCenter" :events="store.events">
+                            <el-amap-marker v-for="(marker,index) in store.markers" :key="index" :position="marker.position" :events="marker.events"></el-amap-marker>
                         </el-amap>
                     </div>
                 </el-form-item>
@@ -44,7 +33,7 @@
                         <div class="photo-title">店铺LOGO</div>
                         <div class="photo-upload">
                             <el-upload class="upload-demo" ref="logoUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadLogoUrl">
-                                <img v-if="logo" :src="logo" class="avatar">
+                                <img v-if="store.logo" :src="store.logo" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </div>
@@ -53,7 +42,7 @@
                         <div class="photo-title">门脸照</div>
                         <div class="photo-upload">
                             <el-upload class="upload-demo" ref="shopFaceUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopFaceUrl">
-                                <img v-if="store.shopFaceUrl" :src="UPLOADURL + store.shopFaceUrl + '/shopDetail.png'" class="avatar">
+                                <img v-if="store.store.shopFaceUrl" :src="UPLOADURL + store.store.shopFaceUrl + '/shopDetail.png'" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </div>
@@ -62,7 +51,7 @@
                         <div class="photo-title">店内照片</div>
                         <div class="photo-upload">
                             <el-upload class="upload-demo" ref="shopInnerUrl" action="" :auto-upload="false" :show-file-list="false" :on-change="uploadShopInnerUrl">
-                                <img v-if="store.shopInnerUrl" :src="UPLOADURL + store.shopInnerUrl +'/shopDetail.png'" class="avatar">
+                                <img v-if="store.store.shopInnerUrl" :src="UPLOADURL + store.store.shopInnerUrl +'/shopDetail.png'" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </div>
@@ -77,109 +66,16 @@
 import { shopCategoryList, saveShopBaseInfo, getShopBaseInfo, uploadFiles, setShopLogo } from '@/api/api'
 import { getProvinceList, getDistrictList, getCityListByProvinceId } from '@/api/region'
 export default {
-    data() {
-        var that = this;
-        return {
-            store: {
-                address: null,
-                areaId: null,
-                areaName: null,
-                busBeginTime: null,
-                busEndTime: null,
-                cityId: null,
-                cityName: null,
-                fee: null,
-                distributionScope: null,
-                latitude: null,
-                logoUrl: null,
-                longitude: null,
-                name: null,
-                provinceId: null,
-                provinceName: null,
-                shopCategoryIdList: [],
-                shopFaceUrl: null,
-                shopInnerUrl: null,
-                shopName: null,
-                shopType: null,
-                // distributionType: 'ANUBIS',
-                takeOutPhone: null,
-                subjectDocument: null,
-                regNumber: null
-            },
-            logo: '',
-            shopId: null,
-            // loginPhoneNumber: '',
-            province: [],
-            city: [],
-            district: [],
-            zoom: 14,
-            mapCenter: [0, 0],
-            markers: [],
-            plugin: [{
-                pName: 'ToolBar',
-                position: 'RT'
-            }, {
-                pName: 'Geolocation',
-                events: {
-                    init(o) {
-                        o.getCityInfo((status, result) => {
-                            that.mapCenter = result.center;
-                            that.$nextTick();
-                        })
-                    }
-                }
-            }],
-            events: {
-                click: function(e) {
-                    var lnglat = e.lnglat;
-                    that.store.longitude = lnglat.lng;
-                    that.store.latitude = lnglat.lat;
-                    that.markers = [{
-                        position: [e.lnglat.lng, e.lnglat.lat],
-                        events: {
-                            click: function(e) {
-                                var geocoder = new AMap.Geocoder({
-                                    city: that.store.cityId
-                                });
-                                geocoder.getAddress([e.lnglat.lng, e.lnglat.lat], function(status, result) {
-                                    if (status === 'complete' && result.info === 'OK') {
-                                        if (result && result.regeocode) {
-                                            that.store.address = result.regeocode.formattedAddress
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }];
-                    var geocoder = new AMap.Geocoder({
-                        city: that.store.cityId
-                    });
-                    geocoder.getAddress([e.lnglat.lng, e.lnglat.lat], function(status, result) {
-                        if (status === 'complete' && result.info === 'OK') {
-                            if (result && result.regeocode) {
-                                that.store.address = result.regeocode.formattedAddress
-                            }
-                        }
-                    });
-                }
-            },
-            provinceList: [],
-            cityList: [],
-            districtList: []
-        };
-    },
+    props:["store"],
     methods: {
-        back: function () {
-            this.$router.back()
-        },
         selectCity: function() {
-            getCityListByProvinceId(this.store.provinceId).then(res => {
-                this.cityList = res;
+            getCityListByProvinceId(this.store.store.provinceId).then(res => {
+                this.store.cityList = res;
             })
         },
         selectDistrict: function() {
-            getDistrictList(this.store.cityId).then(res => {
-                this.districtList = res;
+            getDistrictList(this.store.store.cityId).then(res => {
+                this.store.districtList = res;
             })
         },
         onSearchResult: function(pois) {
@@ -199,7 +95,7 @@ export default {
                                 geocoder.getAddress([e.lnglat.lng, e.lnglat.lat], function(status, result) {
                                     if (status === 'complete' && result.info === 'OK') {
                                         if (result && result.regeocode) {
-                                            that.store.address = result.regeocode.formattedAddress
+                                            that.store.store.address = result.regeocode.formattedAddress
                                         }
                                     }
                                 });
@@ -211,12 +107,12 @@ export default {
                     lng: lngSum / pois.length,
                     lat: latSum / pois.length
                 };
-                this.mapCenter = [center.lng, center.lat];
+                this.store.store.mapCenter = [center.lng, center.lat];
             }
         },
         position: function() {
             var that = this;
-            if (!that.store.cityId) {
+            if (!that.store.store.cityId) {
                 console.log('no cityId')
                 that.$message({
                     type: 'error',
@@ -237,7 +133,7 @@ export default {
         },
         searchKeywords: function(){
             var that = this;
-            if (!that.store.cityId) {
+            if (!that.store.store.cityId) {
                 console.log('no cityId')
                 that.$message({
                     type: 'error',
@@ -246,9 +142,9 @@ export default {
                 return;
             }
             var placeSearch= new AMap.PlaceSearch({
-                city: that.store.cityId
+                city: that.store.store.cityId
             });
-            placeSearch.search(that.store.address,function(status, result){
+            placeSearch.search(that.store.store.address,function(status, result){
                 //TODO : 按照自己需求处理查询结果
                 console.log(status,result)
                 if (status === 'complete' && result.info === 'OK') {
@@ -265,7 +161,7 @@ export default {
                                     geocoder.getAddress([e.lnglat.lng, e.lnglat.lat], function(status, result) {
                                         if (status === 'complete' && result.info === 'OK') {
                                             if (result && result.regeocode) {
-                                                that.store.address = result.regeocode.formattedAddress
+                                                that.store.store.address = result.regeocode.formattedAddress
                                             }
                                         }
                                     });
@@ -277,73 +173,85 @@ export default {
             })
         },
         showStore: function() {
-            if(this.store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS' && this.store.distributionScope == 0){
-                this.$message({
-                    type: 'error',
-                    message: '配送距离不能为0米'
+            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                if(this.store.store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS' && this.store.store.distributionScope == 0){
+                    this.$message({
+                        type: 'error',
+                        message: '配送距离不能为0米'
+                    })
+                    return;
+                }
+                if (this.store.store.latitude == null && this.store.store.longitude == null) {
+                    this.$message({
+                        type: 'error',
+                        message: '请地图上选择店铺位置'
+                    })
+                    return;
+                }
+                if (!this.store.store.areaId) {
+                    this.$message({
+                        type: 'error',
+                        message: '请选择店铺所在省-市-区'
+                    })
+                    return;
+                }
+                if (!this.store.store.address) {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入详细地址'
+                    })
+                    return;
+                }
+                if (!this.store.store.logoUrl) {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传店铺logo'
+                    })
+                    return;
+                }
+                if (!this.store.store.shopFaceUrl) {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传店铺门脸照'
+                    })
+                    return;
+                }
+                if (!this.store.store.shopInnerUrl) {
+                    this.$message({
+                        type: 'error',
+                        message: '请上传店内照片'
+                    })
+                    return;
+                }
+                
+                this.store.store.provinceName = this.$refs.province.query;
+                this.store.store.cityName = this.$refs.city.query;
+                this.store.store.areaName = this.$refs.district.query;
+                // return
+                saveShopBaseInfo(this.store.store).then(res => {
+                    this.$message({
+                        type: 'success',
+                        message: '保存成功!'
+                    });
                 })
-                return;
-            }
-            if (this.store.latitude == null && this.store.longitude == null) {
+            }).catch(() =>{
                 this.$message({
-                    type: 'error',
-                    message: '请地图上选择店铺位置'
-                })
-                return;
-            }
-            if (!this.store.areaId) {
-                this.$message({
-                    type: 'error',
-                    message: '请选择店铺所在省-市-区'
-                })
-                return;
-            }
-            if (!this.store.address) {
-                this.$message({
-                    type: 'error',
-                    message: '请输入详细地址'
-                })
-                return;
-            }
-            if (!this.store.logoUrl) {
-                this.$message({
-                    type: 'error',
-                    message: '请上传店铺logo'
-                })
-                return;
-            }
-            if (!this.store.shopFaceUrl) {
-                this.$message({
-                    type: 'error',
-                    message: '请上传店铺门脸照'
-                })
-                return;
-            }
-            if (!this.store.shopInnerUrl) {
-                this.$message({
-                    type: 'error',
-                    message: '请上传店内照片'
-                })
-                return;
-            }
-            
-            this.store.provinceName = this.$refs.province.query;
-            this.store.cityName = this.$refs.city.query;
-            this.store.areaName = this.$refs.district.query;
-            console.log(this.store)
-            // return
-            saveShopBaseInfo(this.store).then(res => {
-                console.log(res)
-            })
-
+                    type: 'info',
+                    message: '已取消保存'
+                }); 
+            }) 
         },
         uploadLogoUrl: function(e) {
             var file = e.raw;
             var fd = new FormData();
             fd.append('file', file);
             setShopLogo(fd).then(data => {
-                this.logo = e.url;
-                this.store.logoUrl = data;
+                this.store.logo = e.url;
+                this.store.store.logoUrl = data;
             }).catch(err => {
                 console.log(err)
             })
@@ -355,7 +263,7 @@ export default {
             fd.path = '/store';
             uploadFiles(fd).then(data => {
                 console.log(data)
-                this.store.shopFaceUrl = data.originalUrl;
+                this.store.store.shopFaceUrl = data.originalUrl;
             }).catch(err => {
                 console.log(err)
             })
@@ -367,55 +275,9 @@ export default {
             fd.path = '/store';
             uploadFiles(fd).then(data => {
                 console.log(data)
-                this.store.shopInnerUrl = data.originalUrl;
+                this.store.store.shopInnerUrl = data.originalUrl;
             }).catch(err => {
                 console.log(err)
-            })
-        }
-    },
-    created: function() {
-        var shopId = localStorage.getItem('shopId');
-        this.shopId = shopId;
-        
-        shopCategoryList().then(res => {
-            console.log(res)
-            this.shopCategory = res.list;
-        })
-        getProvinceList().then(res => {
-            this.provinceList = res;
-        })
-        if(shopId){
-            getShopBaseInfo().then(res => {
-                console.log(res)
-                this.store = {
-                    address: res.detail.address || null,
-                    areaId: res.detail.areaId || null,
-                    busBeginTime: res.detail.busBeginTime.slice(0,5) || null,
-                    busEndTime: res.detail.busEndTime.slice(0,5) || null,
-                    cityId: res.detail.cityId || null,
-                    fee: res.detail.fee || 0,
-                    distributionScope: res.detail.distributionScope || 0,
-                    latitude: res.detail.latitude != 0 ? res.detail.latitude : null,
-                    logoUrl: res.detail.logoUrl || null,
-                    longitude: res.detail.longitude != 0 ? res.detail.longitude : null,
-                    name: res.detail.name || null,
-                    provinceId: res.detail.provinceId || null,
-                    shopCategoryIdList: res.shopCategoryIdList || null,
-                    shopFaceUrl: res.detail.shopFaceUrl || null,
-                    shopInnerUrl: res.detail.shopInnerUrl || null,
-                    shopName: res.detail.shopName || null,
-                    shopType: res.detail.shopType,
-                    // distributionType: res.detail.distributionType,
-                    takeOutPhone: res.detail.takeOutPhone || null
-                }
-                this.logo = res.detail.logoUrl ? this.UPLOADURL + res.detail.logoUrl : null
-                // console.log(this.logo)
-                if (res.detail.latitude && res.detail.longitude) {
-                    this.mapCenter = [res.detail.longitude, res.detail.latitude]
-                    this.markers = [{
-                        position: [res.detail.longitude, res.detail.latitude]
-                    }];
-                }
             })
         }
     }
@@ -444,7 +306,6 @@ export default {
     position: relative;
     height: 500px;
 }
-
 .search-box {
     position: absolute;
     top: 15px;
