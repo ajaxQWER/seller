@@ -178,6 +178,10 @@ export const getGoodsLists = params => {
 export const deleteGoodsById = id => {
     return ajax.delete('seller/goods/' + id);
 };
+// 批量删除商品
+export const batchDelGoods = paramas => {
+    return ajax.post('seller/goods/delete', paramas);
+};
 //下架商品
 export const soldOutGoods = paramas => {
     return ajax.post('seller/goods/soldOut', paramas);
@@ -198,7 +202,10 @@ export const updateGoodsById = (goodsId,params) => {
 export const addGoods = params => {
     return ajax.put('seller/goods', params);
 };
-
+// 商品分类排序
+export const setSortOrder = params => {
+    return ajax.post('seller/goodsCategory/sortOrder/'+params.goodsCategoryId+'/'+params.sortOrder);
+};
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);

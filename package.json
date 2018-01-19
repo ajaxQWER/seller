@@ -20,7 +20,8 @@
     "vue": "^2.5.2",
     "vue-amap": "^0.4.1",
     "vue-echarts-v3": "^1.0.5",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

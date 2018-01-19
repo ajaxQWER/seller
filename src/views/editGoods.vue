@@ -327,13 +327,12 @@
                     pageSize:99999,
                 }
                 getGoodsCategoryLists(paramas).then( res =>{
-                    if (res && res.list) {
-                        this.goodsCategoryLists = res.list;
+                    if (res && res.length) {
+                        this.goodsCategoryLists = res;
                         var goodsId = this.$route.query.goodsId;
                         this.goodsId = goodsId;
                         if (goodsId) {
                             getGoodsById(goodsId).then(res => {
-                                console.log(res)
                                 this.editGoodsForm = res;
                                 this.goodsId = res.goodsId;
                                 this.editGoodsForm.addSpecs = [];
