@@ -29,25 +29,14 @@ export default {
     },
     methods: {
         saveDistributionMessage(){
-            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                saveShopDistributionInfo(this.distributionMessage.distribution).then(res => {
-                    getShopDistributionInfo().then(data => {
-                        this.distributionMessage.distribution = data
-                        this.$message({
-                            type: 'success',
-                            message: '保存成功!'
-                        });
-                    })
+            saveShopDistributionInfo(this.distributionMessage.distribution).then(res => {
+                getShopDistributionInfo().then(data => {
+                    this.distributionMessage.distribution = data
+                    this.$message({
+                        type: 'success',
+                        message: '保存成功!'
+                    });
                 })
-            }).catch(() =>{
-                this.$message({
-                    type: 'info',
-                    message: '已取消保存'
-                }); 
             })
         }
     }

@@ -173,77 +173,66 @@ export default {
             })
         },
         showStore: function() {
-            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                if(this.store.store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS' && this.store.store.distributionScope == 0){
-                    this.$message({
-                        type: 'error',
-                        message: '配送距离不能为0米'
-                    })
-                    return;
-                }
-                if (this.store.store.latitude == null && this.store.store.longitude == null) {
-                    this.$message({
-                        type: 'error',
-                        message: '请地图上选择店铺位置'
-                    })
-                    return;
-                }
-                if (!this.store.store.areaId) {
-                    this.$message({
-                        type: 'error',
-                        message: '请选择店铺所在省-市-区'
-                    })
-                    return;
-                }
-                if (!this.store.store.address) {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入详细地址'
-                    })
-                    return;
-                }
-                if (!this.store.store.logoUrl) {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传店铺logo'
-                    })
-                    return;
-                }
-                if (!this.store.store.shopFaceUrl) {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传店铺门脸照'
-                    })
-                    return;
-                }
-                if (!this.store.store.shopInnerUrl) {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传店内照片'
-                    })
-                    return;
-                }
-                
-                this.store.store.provinceName = this.$refs.province.query;
-                this.store.store.cityName = this.$refs.city.query;
-                this.store.store.areaName = this.$refs.district.query;
-                // return
-                saveShopBaseInfo(this.store.store).then(res => {
-                    this.$message({
-                        type: 'success',
-                        message: '保存成功!'
-                    });
-                })
-            }).catch(() =>{
+            if(this.store.store.distributionType == 'SELF_DELIVERY_BY_MERCHANTS' && this.store.store.distributionScope == 0){
                 this.$message({
-                    type: 'info',
-                    message: '已取消保存'
-                }); 
-            }) 
+                    type: 'error',
+                    message: '配送距离不能为0米'
+                })
+                return;
+            }
+            if (this.store.store.latitude == null && this.store.store.longitude == null) {
+                this.$message({
+                    type: 'error',
+                    message: '请地图上选择店铺位置'
+                })
+                return;
+            }
+            if (!this.store.store.areaId) {
+                this.$message({
+                    type: 'error',
+                    message: '请选择店铺所在省-市-区'
+                })
+                return;
+            }
+            if (!this.store.store.address) {
+                this.$message({
+                    type: 'error',
+                    message: '请输入详细地址'
+                })
+                return;
+            }
+            if (!this.store.store.logoUrl) {
+                this.$message({
+                    type: 'error',
+                    message: '请上传店铺logo'
+                })
+                return;
+            }
+            if (!this.store.store.shopFaceUrl) {
+                this.$message({
+                    type: 'error',
+                    message: '请上传店铺门脸照'
+                })
+                return;
+            }
+            if (!this.store.store.shopInnerUrl) {
+                this.$message({
+                    type: 'error',
+                    message: '请上传店内照片'
+                })
+                return;
+            }
+            
+            this.store.store.provinceName = this.$refs.province.query;
+            this.store.store.cityName = this.$refs.city.query;
+            this.store.store.areaName = this.$refs.district.query;
+            // return
+            saveShopBaseInfo(this.store.store).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                });
+            })
         },
         uploadLogoUrl: function(e) {
             var file = e.raw;

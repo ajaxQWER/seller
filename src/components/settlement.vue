@@ -51,57 +51,46 @@ export default {
             })
         },
         save: function() {
-            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                if (!this.settlement.settlement.openName) {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入开户人'
-                    })
-                    return;
-                }
-                if (!this.settlement.settlement.bankNumber) {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入银行卡号'
-                    })
-                    return;
-                }
-                if (!this.settlement.settlement.provinceId) {
-                    this.$message({
-                        type: 'error',
-                        message: '请选择开户省份'
-                    })
-                    return;
-                }
-                if (!this.settlement.settlement.cityId) {
-                    this.$message({
-                        type: 'error',
-                        message: '请选择开户城市'
-                    })
-                    return;
-                }
-                if (!this.settlement.settlement.openBank) {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入开户支行'
-                    })
-                    return;
-                }
-                saveShopSettleInfo(this.settlement.settlement).then(res => {
-                    this.$message({
-                        type: 'success',
-                        message: '保存成功!'
-                    });
-                })
-            }).catch(() =>{
+            if (!this.settlement.settlement.openName) {
                 this.$message({
-                    type: 'info',
-                    message: '已取消保存'
-                }); 
+                    type: 'error',
+                    message: '请输入开户人'
+                })
+                return;
+            }
+            if (!this.settlement.settlement.bankNumber) {
+                this.$message({
+                    type: 'error',
+                    message: '请输入银行卡号'
+                })
+                return;
+            }
+            if (!this.settlement.settlement.provinceId) {
+                this.$message({
+                    type: 'error',
+                    message: '请选择开户省份'
+                })
+                return;
+            }
+            if (!this.settlement.settlement.cityId) {
+                this.$message({
+                    type: 'error',
+                    message: '请选择开户城市'
+                })
+                return;
+            }
+            if (!this.settlement.settlement.openBank) {
+                this.$message({
+                    type: 'error',
+                    message: '请输入开户支行'
+                })
+                return;
+            }
+            saveShopSettleInfo(this.settlement.settlement).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                });
             })
         },
         getBankCardInfo: function() {

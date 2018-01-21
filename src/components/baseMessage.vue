@@ -75,72 +75,61 @@ export default {
     props:["baseMessage"],
     methods: {
         showStore() {
-            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                if(!this.baseMessage.store.shopName){
+            if(!this.baseMessage.store.shopName){
+                this.$message({
+                    type: 'error',
+                    message: '请输入店铺名称'
+                })
+                return;
+                }
+                if(!this.baseMessage.store.takeOutPhone){
                     this.$message({
                         type: 'error',
-                        message: '请输入店铺名称'
+                        message: '请输入联系电话'
                     })
                     return;
-                    }
-                    if(!this.baseMessage.store.takeOutPhone){
-                        this.$message({
-                            type: 'error',
-                            message: '请输入联系电话'
-                        })
-                        return;
-                    }
-                    if(!this.baseMessage.store.name){
-                        this.$message({
-                            type: 'error',
-                            message: '联系人姓名'
-                        })
-                        return;
-                    }
-                    if(!this.baseMessage.store.shopCategoryIdList.length){
-                        this.$message({
-                            type: 'error',
-                            message: '请选择店铺分类'
-                        })
-                        return;
-                    }
-                    if (this.isAllDay == 'true') {
-                        this.baseMessage.store.busBeginTime = '00:00:00';
-                        this.baseMessage.store.busEndTime = '23:59:59';
-                    }else{
-                        this.baseMessage.store.busBeginTime = this.beginHour + ':' + this.beginMin;
-                        this.baseMessage.store.busEndTime = this.endHour + ':' + this.endMin;
-                    }
-                    if(!this.baseMessage.store.busBeginTime){
-                        this.$message({
-                            type: 'error',
-                            message: '请输营业开始时间'
-                        })
-                        return;
-                    }
-                    if(!this.baseMessage.store.busEndTime){
-                        this.$message({
-                            type: 'error',
-                            message: '请输营业结束时间'
-                        })
-                        return;
-                    }
-                    saveShopBaseInfo(this.baseMessage.store).then(res => {
-                        this.$message({
-                            type: 'success',
-                            message: '保存成功!'
-                        });
+                }
+                if(!this.baseMessage.store.name){
+                    this.$message({
+                        type: 'error',
+                        message: '联系人姓名'
                     })
-            }).catch(() => {
+                    return;
+                }
+                if(!this.baseMessage.store.shopCategoryIdList.length){
+                    this.$message({
+                        type: 'error',
+                        message: '请选择店铺分类'
+                    })
+                    return;
+                }
+                if (this.isAllDay == 'true') {
+                    this.baseMessage.store.busBeginTime = '00:00:00';
+                    this.baseMessage.store.busEndTime = '23:59:59';
+                }else{
+                    this.baseMessage.store.busBeginTime = this.beginHour + ':' + this.beginMin;
+                    this.baseMessage.store.busEndTime = this.endHour + ':' + this.endMin;
+                }
+                if(!this.baseMessage.store.busBeginTime){
+                    this.$message({
+                        type: 'error',
+                        message: '请输营业开始时间'
+                    })
+                    return;
+                }
+                if(!this.baseMessage.store.busEndTime){
+                    this.$message({
+                        type: 'error',
+                        message: '请输营业结束时间'
+                    })
+                    return;
+                }
+            saveShopBaseInfo(this.baseMessage.store).then(res => {
                 this.$message({
-                    type: 'info',
-                    message: '已取消保存'
-                });          
-            }); 
+                    type: 'success',
+                    message: '保存成功!'
+                });
+            }) 
         },
 
         isAllDayChange: function(val){

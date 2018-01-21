@@ -377,127 +377,116 @@ export default {
             this.qualification.industry.endTime = this.moment(time).format('YYYY-MM-DD')
         },
         submitQualification: function() {
-            this.$confirm('此操作将对资料进行保存, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                if (this.qualification.document.documentType == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请选择证件类型'
-                    })
-                    return;
-                }
-                if (this.qualification.document.readyName == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入真实姓名'
-                    })
-                    return;
-                }
-                if (this.qualification.document.documentNum == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入证件号码'
-                    })
-                    return;
-                }
-                if (this.qualification.document.fullFacePhotoUrl == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传证件正面照'
-                    })
-                    return;
-                }
-                if (this.qualification.document.reverseSideAsUrl == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传证件反面照'
-                    })
-                    return;
-                }
-                if (this.qualification.document.handFullFacePhotoUrl == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传手持证件照'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.subjectDocument == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请选择主体资质'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.unitName == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入单位名称'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.legal == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入法定代表人'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.regNumber == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入注册号'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.regAddress == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请输入注册地址'
-                    })
-                    return;
-                }
-                if (this.qualification.subject.longTerm) {
-                    delete this.qualification.subject.beginTime;
-                    delete this.qualification.subject.endTime;
-                } else {
-                    console.log(this.qualification.subject.beginTime)
-                    if (!this.qualification.subject.beginTime) {
-                        this.$message({
-                            type: 'error',
-                            message: '请选择证件生效日期'
-                        })
-                        return;
-                    }
-                    if (!this.qualification.subject.endTime) {
-                        this.$message({
-                            type: 'error',
-                            message: '请选择证件失效日期'
-                        })
-                        return;
-                    }
-                }
-                if (this.qualification.subject.businessUrl == '') {
-                    this.$message({
-                        type: 'error',
-                        message: '请上传主体资质照片'
-                    })
-                    return;
-                }
-                console.log(this.qualification)
-                saveShopQualificationInfo(this.qualification).then(res => {
-                    this.$message({
-                        type: 'success',
-                        message: '保存成功!'
-                    });
-                })
-            }).catch(() =>{
+            if (this.qualification.document.documentType == '') {
                 this.$message({
-                    type: 'info',
-                    message: '已取消保存'
-                }); 
+                    type: 'error',
+                    message: '请选择证件类型'
+                })
+                return;
+            }
+            if (this.qualification.document.readyName == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入真实姓名'
+                })
+                return;
+            }
+            if (this.qualification.document.documentNum == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入证件号码'
+                })
+                return;
+            }
+            if (this.qualification.document.fullFacePhotoUrl == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请上传证件正面照'
+                })
+                return;
+            }
+            if (this.qualification.document.reverseSideAsUrl == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请上传证件反面照'
+                })
+                return;
+            }
+            if (this.qualification.document.handFullFacePhotoUrl == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请上传手持证件照'
+                })
+                return;
+            }
+            if (this.qualification.subject.subjectDocument == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请选择主体资质'
+                })
+                return;
+            }
+            if (this.qualification.subject.unitName == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入单位名称'
+                })
+                return;
+            }
+            if (this.qualification.subject.legal == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入法定代表人'
+                })
+                return;
+            }
+            if (this.qualification.subject.regNumber == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入注册号'
+                })
+                return;
+            }
+            if (this.qualification.subject.regAddress == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请输入注册地址'
+                })
+                return;
+            }
+            if (this.qualification.subject.longTerm) {
+                delete this.qualification.subject.beginTime;
+                delete this.qualification.subject.endTime;
+            } else {
+                console.log(this.qualification.subject.beginTime)
+                if (!this.qualification.subject.beginTime) {
+                    this.$message({
+                        type: 'error',
+                        message: '请选择证件生效日期'
+                    })
+                    return;
+                }
+                if (!this.qualification.subject.endTime) {
+                    this.$message({
+                        type: 'error',
+                        message: '请选择证件失效日期'
+                    })
+                    return;
+                }
+            }
+            if (this.qualification.subject.businessUrl == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请上传主体资质照片'
+                })
+                return;
+            }
+            console.log(this.qualification)
+            saveShopQualificationInfo(this.qualification).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                });
             })
         }
     },
