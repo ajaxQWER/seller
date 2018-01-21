@@ -25,9 +25,9 @@
             </el-col>
             <el-col :span="8" :offset="2">
                 <h4 class="subtitle">联系我们</h4>
-                <p class="p-margin">电话:022-88888888</p>
+                <p class="p-margin">电话:028-67673333</p>
                 <p class="p-margin">邮箱:xinyuangongxiang@888tal.com</p>
-                <p class="p-margin">四川省成都市高新区通威国际中心19楼</p>
+                <p class="p-margin">地址:四川省成都市高新区通威国际中心19楼</p>
             </el-col>
         </el-row>
         <el-row class="footer-bar">
