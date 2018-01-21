@@ -484,12 +484,14 @@ export default {
                 sortOrder : this.sortOrder
             }
             //商品排序
-            setSortOrder(params).then(res=>{
-                this.$message({
-                    type: 'success',
-                    message: '排序成功'
-                });
-            })
+            if(params.sortOrder&&params.goodsCategoryId){
+              setSortOrder(params).then(res=>{
+                  this.$message({
+                      type: 'success',
+                      message: '排序成功'
+                  });
+              })
+            }
         }
     },
     created(){
