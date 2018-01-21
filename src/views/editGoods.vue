@@ -517,12 +517,15 @@
             //     })
             //     return;
             // }
-            if(!this.addGoodsSpecs.stock){
-                this.$message({
-                    message: '请输入库存数量',
-                    type: 'warning'
-                })
-                return;
+            //yy
+            if(!this.addGoodsSpecs.infiniteInventory){
+                if(!this.addGoodsSpecs.stock){
+                    this.$message({
+                        message: '请输入库存数量',
+                        type: 'warning'
+                    })
+                    return;
+                }
             }
             if(!this.addGoodsSpecs.boxesNumber){
                 this.$message({
