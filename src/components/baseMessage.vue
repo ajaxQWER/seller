@@ -59,9 +59,9 @@
                 </el-form-item>
                 <el-form-item label="店铺类型" class="required">
                     <el-radio-group v-model="baseMessage.store.shopType">
-                        <el-radio class="radio" label="RESERVE">预定</el-radio>
-                        <el-radio class="radio" label="TAKEOUT">外卖</el-radio>
-                        <el-radio class="radio" label="RESERVE_TAKEOUT">预定加外卖</el-radio>
+                        <el-radio class="radio" label="RESERVE" disabled>预定</el-radio>
+                        <el-radio class="radio" label="TAKEOUT" disabled>外卖</el-radio>
+                        <el-radio class="radio" label="RESERVE_TAKEOUT" disabled>预定加外卖</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-button  class="saveBase" type="primary" size="large" @click="showStore">保存</el-button>

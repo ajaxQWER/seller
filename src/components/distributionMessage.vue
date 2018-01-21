@@ -4,9 +4,9 @@
             <el-form :model="distributionMessage.distribution" ref="distribution" label-width="100px">
                 <el-form-item label="配送信息" class="required" v-if="distributionMessage.shopTypeCheck == false">
                     <el-radio-group v-model="distributionMessage.distribution.distributionType">
-                        <el-radio class="radio" label="ANUBIS" value="ANUBIS">蜂鸟配送</el-radio>
-                        <el-radio class="radio" label="ARES" value="ARES">蜂鹰配送</el-radio>
-                        <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS" value="SELF_DELIVERY_BY_MERCHANTS">商家自送</el-radio>
+                        <el-radio class="radio" label="ANUBIS" value="ANUBIS" disabled>蜂鸟配送</el-radio>
+                        <el-radio class="radio" label="ARES" value="ARES" disabled>蜂鹰配送</el-radio>
+                        <el-radio class="radio" label="SELF_DELIVERY_BY_MERCHANTS" value="SELF_DELIVERY_BY_MERCHANTS" disabled>商家自送</el-radio>
                     </el-radio-group>
                     <span v-if="distributionMessage.distribution.distributionType == 'SELF_DELIVERY_BY_MERCHANTS'">
                         配送距离 <el-input class="small-input fee" v-model="distributionMessage.distribution.distributionScope" placeholder="配送距离"></el-input>米
@@ -14,9 +14,9 @@
                       </span>
                 </el-form-item>
                 <el-form-item label="起送费" class="required">
-                    <el-input class="detail-input inline-block" v-model="distributionMessage.distribution.minDeliveryPrice"></el-input>
+                    <el-input class="detail-input inline-block" v-model="distributionMessage.distribution.minDeliveryPrice" disabled></el-input>
                 </el-form-item>
-                <el-button type="primary" size="large" @click="saveDistributionMessage" class="savePositon">保存</el-button>
+                <el-button type="primary" size="large" @click="saveDistributionMessage" class="savePositon" disabled>保存</el-button>
             </el-form>
         </el-row>
     </div>
